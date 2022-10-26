@@ -2,6 +2,7 @@ Diploma/
 
 CzechThesisExample/
 
+*.Identifier
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
