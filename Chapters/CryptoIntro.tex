@@ -1,11 +1,84 @@
 \chapter{Kryptoměny a obchodování na burzách}
 \label{sec:CryptoAndTrading}
 
-\section{Coiny, Tokeny a chytré kontrakty}
+Fenomén Bitcoinu, který jako první odstartoval kryptoměnový boom, způsobil várku mnoha nových
+kryptoměn, založených buďto na podobných principech a technologiích, nebo s novými inovativními myšlenkami.
+Spolu s kryptoměnami přišlo spoustu nového názvosloví, byly nimi inspirovány NFT\footnote{Non-fungible tokens} a vzniklo
+nové odvětví digitálních finance, označované jako DeFi (decentralizované finance).
+Tato kapitola postupně popíše, co to jsou kryptoměny, s využítím jakých technologiích fungují, jak jsou ověřovány
+a obchodovány na burzách.
+
+
+\section{Coiny, chytré kontrakty a tokeny}
 \label{sec:CoinsTokensSmartContracts}
+Často se lze setkat s pojmy \enquote{token} nebo \enquote{coin}. Obojí se označuje za kryptoměnu a mnohdy se zaměnují
+za jednu a stejnou věc. Jak token, tak i coin žijí na blockchainu.
+Koncept blockchainu je vysvětlen v následují sekci. Co je to vlastně token nebo coin? Jak již bylo zmíněno, obojí využívá
+blockchain, avšak hlavní rozdíl spočívá v tom, co reprezentují. Coin označuje kryptoměnu používanou k uchovávání
+nebo směny hodnoty. Jako příklad možné považovat například známí Bitcoin. Token slouží k digitální reprezentaci
+aktiva, které se dá směnit pomocí blockchainu. Token může reprezentovat nejen fyzickou věc, jako například zlato, ale i
+duševní vlastnictví. Důvodem, proč se tyto pojmy často zaměnují, je že token může reprezentovat \emph{coin} na jiném blockchainu.
+
+Myšlenka chytrých kontraktů poprvné zazněla už v roce 1997. Chytrý kontrakt měl odstranit potřebu důvěry třetí strany, při
+jednání, nebo "sjednání smlouvy", s někým druhým. Tímto typickým problémem je skupinové financování (crowdfunding). Prostřednictvím
+nějakého poskytovale si kdokoli může vytvořit svůj projekt a požádat veřejnost o pomoc k dosažení finančního cíle. Jesliže se najde dostatek
+jednolivců, ochotných přispět na onen projekt a vysbírá se dostatek finančích prostředků, peníze popotují k zadavateli a ten s touto podporou
+svůj projekt uskuteční. V opačném případě, kdy se nepodaří splnit minimální finační cíl, měly by se peníze vrátit zpět všem, kteří přispěli.
+
+Chytré kontrakty na blockchainu jsou vlastně malé programy, napsány ve speciálním programovacím jazyce, plnící přesně tuto funkci prostředníka.
+Jakmile je jednou chytrý kontrakt publikován, je neměnný a distribuovaný síti. Skutečnost, že je kontrakt distribuovaný
+taktéž znamená, že jeho platnost je ověřována všemi členy na daní síti.
+Jelikož se jedná o program, jakmile je např. dosaženo nějakého cíle, okamžitě se vykoná finální akce. Z předchozího příkladu veřejného
+financování, by se dal chytrý kontrakt naprogramovat tak, aby kontrakt držel všechny přijaté platby dokud není dosaženo minimální částky.
+Tento proces je však naprosto transparentní a automatizovaný.
+
 
 \section{Ověřování transakcí}
 \label{sec:BlockchainSecurity}
+Hlavní motivace kryptoměn je možnost platit pomocí Internetu bez toho, aniž by platba byla závislá na centrální autoritě, která by měla
+být ověřený a důvěryhodný prostředník. Může se však stát, že i tato centrální autorita nesplní své závazky vůči oběma stranám.
+
+V roce 2008 zveřejnil neznámý autor, či skupina autorů, pod názvem Satoshi Nakamoto kryptoměnu Bitcoin a s ní i systém bezpečného
+ověřování plateb bez nutnosti centrální autority. Dva nejdůležitější faktory tohoto zabezpečení spočívají v počítáčové kryptografii
+a distribuci dat. Co to teda vlastně je blockchain a jak funguje je vysvětleno na následujícím příkladu.
+
+Nechť existují 4 osoby, Alice, Bob, Ctirad a David. Tyto osoby, aby si nemusely pořád předávat peníze, si vedou jednotnou digitální účetní knihu,
+pro kohokoli z této čtveřice dostupnou. Pokud má Alice zaplatit Bobovi 20 Kč, zapíšou si údaj o této transakci do účetní knihy. Vždy na
+konci měsíce se všichni 4 sejdou a opravdové peníze mezi sebou vymění. V tento moment se naráží na první závažnou chybu v tomto systému.
+Účetní kniha je veřejně dostupná a každý do ní může zapsat jakoukoli transakci. Nic nebrání tomu, aby si David do účetní knihy zapsal, že
+mu mají všichni zaplatit 10 Kč a tyto záznamy nejdou ověřit a nedá se jim věřit. Řešení této situace spočívá právě v použití kryptografie,
+konkrétně digitálních podpisů. Ke každému záznamu bude muset být přiložen podpis o tom, že osobá předávající peníze tuto transakci předem
+viděla a schválila. Digitální podpisy se zakládají na dvojici privátního a veřejného klíče. Je nutné privátní klíč udržet v tajnosti,
+pouze pro sebe. Samotný podpis můžeme chápat jako funkci, která na základě vstupní zprávy a privátního klíče, vygeneruje číslo o pevné velikosti,
+nejčastěji 256 bitů. Výhodou digitálního podpisu je právě to, že je závislý na vstupu. Pokud se jakkoli změní, je vygenerovaný podpis
+naprosto odlišný. Aby šlo ověřit, že podpis je skutečně platně podepsaný osobou vlastnící privátní klíč, existuje druhá funkce, schopná
+toto ověření provést. Ověření probíhá na základě původní vstupní zprávy, podpisu a veřejného klíče. Výstupem této funkce je pravdivostní
+hodnota říkající, zda-li podpis dané zprávy byl vygenerován za použití přidruženého privátního klíče. Tímto je skoro vyřešen problém ověření
+pravdivosti transakce v účetní knize. Aby se předešlo falšování pouhým kopírovaním předešlého podepsaného záznamu, přiřadí se k záznamu
+transakce taktéž její číselné pořadí.
+
+Nyní nastává další problém. Co se stane, pokud Ctirad nasbírá na účetní knize obrovské dluhy a na konci měsíce se prostě neukáže a uteče?
+Pořád je nutná určitá část důvěry. Řešení je jednoduché. Je potřeba mít na úplném začátku knihy záznamy o tom, že všichni 4 dostanou
+určitou částku peněz, kterou nejdříve všichni vloží do nějakého tajného trezoru. Dále už jen stačí jednoduše nedovolit nikomu přidávat
+nový záznám o transakci, jestliže si už to nemůže dovolit.
+
+Zbývá poslední překážka a to správa o samotnou digitální účetní knihu. Ta někde musí existovat a musí být poskytována všem. To pořád, ale
+znamená centrální umístění. Ke zbavení se této obtíže a decentralizace, každý účastník dostane svou kopii účetní knihy. V digitálním světě to znamená, že
+každý účastník bude mít nějaké zařízení, na kterém bude mít kompletní kopii digitální účetní knihy a bude zveřejněna všem ostatním účastníkům,
+na jakékoliv síti. Nyní, když všichni mají svou vlastní kopii, musí si umět navzájem vyměnovat informace o proběhlých transakcích a to formou
+zpráv posílaných po síti. Aby měli všichni účastníci jistotu, že příjmají stejné zprávy a ve stejném pořadí jako ostatní, vyvstává finální
+ověřovací krok. Účetní kniha se rozdělí do jednotlivých bloků, obsahující \emph{N} transakcí. Na závěr každého bloku se přidá speciální
+číslo --- \emph{nonce}. Přidání \emph{nonce} se řídí určitým pravidlem, které říká, že prvních M čísel hashe bloku budou samé nuly.
+Hash bloku je vypočten kryptografickou hashovací funkcí ze všech záznamu na zapsaných na bloku a přidaného nonce. Kvůli vlastnostem hashovacích
+funkcí, nelze nonce nějak jednoduše vypočíst, ale je nutné jej uhádnout brutální výpočetní silou. Jakmile někdo z účastníků na této síti
+transakcí přijde na nonce nějakého bloku, rozešle tento blok s transakcemi a přidaným nonce. Ostatní účastnici ověří platnost bloku
+a uloží si ho. Navíc, aby nešlo pořadí bloků zaměňovat, každý nový blok musí v pomyslné hlavičce obsahovat hash předchozího bloku.
+Tímto dochází ke zřetězení bloků (odtud název blockchain).
+
+Takto funguje princip ověřování transakcí na základě tzv. proof-of-work. Věří se vždy tomu blockchainu, do kterého bylo dáno nejvíce
+výpočtení síly, tzn. tomu nejdelšímu řetězu bloků.
+
+
 
 \section{Burzy}
 \label{sec:Exchanges}
