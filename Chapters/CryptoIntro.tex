@@ -69,7 +69,7 @@ každý účastník bude mít nějaké zařízení, na kterém bude mít komplet
 na jakékoliv síti. Nyní, když všichni mají svou vlastní kopii, musí si umět navzájem vyměnovat informace o proběhlých transakcích a to formou
 zpráv posílaných po síti. Aby měli všichni účastníci jistotu, že příjmají stejné zprávy a ve stejném pořadí jako ostatní, vyvstává finální
 ověřovací krok. Účetní kniha se rozdělí do jednotlivých bloků, obsahující \emph{N} transakcí. Na závěr každého bloku se přidá speciální
-číslo --- \emph{nonce}. Přidání \emph{nonce} se řídí určitým pravidlem, které říká, že prvních M čísel hashe bloku budou samé nuly.
+číslo --- \emph{nonce}. Přidání \emph{nonce} se řídí určitým pravidlem, které říká, že prvních \emph{M} čísel hashe bloku budou samé nuly.
 Hash bloku je vypočten kryptografickou hashovací funkcí ze všech záznamu na zapsaných na bloku a přidaného nonce. Kvůli vlastnostem hashovacích
 funkcí, nelze nonce nějak jednoduše vypočíst, ale je nutné jej uhádnout brutální výpočetní silou. Jakmile někdo z účastníků na této síti
 transakcí přijde na nonce nějakého bloku, rozešle tento blok s transakcemi a přidaným nonce. Ostatní účastnici ověří platnost bloku
@@ -77,8 +77,37 @@ a uloží si ho. Navíc, aby nešlo pořadí bloků zaměňovat, každý nový b
 Tímto dochází ke zřetězení bloků (odtud název blockchain).
 
 Takto funguje princip ověřování transakcí na základě tzv. proof-of-work. Věří se vždy tomu blockchainu, do kterého bylo dáno nejvíce
-výpočtení síly, tzn. tomu nejdelšímu řetězu bloků.
+výpočtení síly, tzn. tomu nejdelšímu řetězu bloků. V reálném světě účastníkem v nějaké kryptoměnové síti jsou počítače, zvané nody.
+Na nodech se ukládá blockchain a jak již avizováno, věří se vždy tomu nejdelšímu řetezu bloků. Svůj vlastní node si může u sebe doma spustit
+téměr kdokoli. Pravidla pro přidávání nonce se mohou lišit v závislosti na kryptoměně.
 
+Zde je také vhodné zodpovědět otázku, jak vlastně kryptoměna vzniká. V uvedené analogii si 4 osoby vložili peníze do společného banku.
+Ve světě blockchainu je to takzvaným Genesis blokem (někdy také nazýván \enquote{Block 0}). Jako Genesis blok se označuje úplně první
+vytěžený, na který všechny ostatní bloky v blockchainu navazují. Těžbou bloků se zde myslí právě nalezení nonce, který se přidává do patičky
+bloku. Těžař jako odměnu za vynaložené usílí a výpočetní výkonu dostává kryptoměnu ve formě speciální transakce přidané na konci vytěženého bloku.
+Maximální velikost odměny je specifikována protokolem, kterým těžba probíhá a těžaři respektují.
+
+\subsection{Alternativní ověřování --- proof-of-stake}
+Ověřování na základě proof-of-work má 2 zásadní nevýhody. První z nich je ta, že odměny na základě těžby bloků nepřímo podněcují centralizaci.
+Jelikož vyšší výpočetní výkon znamená vyšší šanci na úspěch při těžbě bloků, stává se, že těžaři se spojují do tzv. \enquote{mining pools}.
+V těchto poolech je odměna za vytěžení bloku rozdělena mezi jednotlivé účastníky. Jestliže však mining pool naroste do rozměru, kdy by tvořil
+alespoň 51 \% výpočetního výkonu kryptoměnové sítě, teoreticky bude tento pool schopen tvořit nové bloky s falešnými transakcemi. Tato situace
+bývá označována jako \enquote{51\% útok} a při provedení tohoto útoku dochází ke kolapsu kryptoměny. K dosažení tohoto útoku je nicméně
+nutno mít nemálo prostředků.
+
+% TODO: Vložit citaci na https://ccaf.io/cbeci/index a https://ourworldindata.org/energy/country/czech-republic#how-is-energy-consumption-changing-from-year-to-year
+
+Druhým problémem proof-of-work je vysoká energetická náročnost. V době psaní této práce se odhaduje roční energetická náročnost těžby pouze Bitcoinu
+na 88,5 TWh. Pro srovnání, celá Česká republika za rok 2021 spotřebovala okolo 466 TWh. Tato spotřeba zatěžuje jak rozvodné elektrické sítě tak i těžaře.
+
+Převážně z důvodu velké spotřeby elektřiny v roce 2012 byl představen alternativní přístup k ověřování transakcí, označovaný jako proof-of-stake (dále jen PoS).
+PoS upravuje tradiční terminilogii, těžaře nahrazuje \emph{validátory} a namísto \enquote{těžby} bloků se bloky \emph{\enquote{razí}}. PoS je
+postaven na konsenzu mezi účastníky v síti. Bloky jsou ověřovány náhodně vybranými validátory, kteří jednotlivé transakce ověří a označí za platné.
+Tento validovaný blok je následně přidán do blockchainu. Aby se z účastníka stal validátor, stačí se jednoduše do sítě nabídnout a vložit určitou
+\enquote{sázku} (stake). Výše této sázky ovlivňuje pravděpodobnost výběru při selekci validátorů k ověření bloku. Pokud by validátor označil
+blok obsahující falešné transakce jako platný, je mu část nebo celá vložená sázka odebrána. Tento postih má být motivací, aby validátoři doopravdy
+odváděli svou práci správně. Kriticky důležitý krok při ověřování je výběr validátorů. I u této metody ověřování existuje možnost 51\% útoku,
+avšak k dosažení je nutné nabídnout alespoň o něco víc než polovinu tržní kapitalizace kryptoměny, čehož není jednoduché dosáhnout.
 
 
 \section{Burzy}
