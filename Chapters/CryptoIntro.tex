@@ -70,11 +70,11 @@ na jakékoliv síti. Nyní, když všichni mají svou vlastní kopii, musí si u
 zpráv posílaných po síti. Aby měli všichni účastníci jistotu, že příjmají stejné zprávy a ve stejném pořadí jako ostatní, vyvstává finální
 ověřovací krok. Účetní kniha se rozdělí do jednotlivých bloků, obsahující \emph{N} transakcí. Na závěr každého bloku se přidá speciální
 číslo --- \emph{nonce}. Přidání \emph{nonce} se řídí určitým pravidlem, které říká, že prvních \emph{M} čísel hashe bloku budou samé nuly.
-Hash bloku je vypočten kryptografickou hashovací funkcí ze všech záznamu na zapsaných na bloku a přidaného nonce. Kvůli vlastnostem hashovacích
-funkcí, nelze nonce nějak jednoduše vypočíst, ale je nutné jej uhádnout brutální výpočetní silou. Jakmile někdo z účastníků na této síti
-transakcí přijde na nonce nějakého bloku, rozešle tento blok s transakcemi a přidaným nonce. Ostatní účastnici ověří platnost bloku
-a uloží si ho. Navíc, aby nešlo pořadí bloků zaměňovat, každý nový blok musí v pomyslné hlavičce obsahovat hash předchozího bloku.
-Tímto dochází ke zřetězení bloků (odtud název blockchain).
+Hash bloku je vypočten kryptografickou hashovací funkcí\footnote{Nejčastěji se jedná o funkci SHA-256} ze všech záznamu na zapsaných na bloku
+a přidaného nonce. Kvůli vlastnostem hashovacích funkcí, nelze nonce nějak jednoduše vypočítat, ale je nutné jej uhádnout brutální výpočetní silou.
+Jakmile někdo z účastníků na této síti transakcí přijde na nonce nějakého bloku, rozešle tento blok s transakcemi a přidaným nonce.
+Ostatní účastnici ověří platnost bloku a uloží si ho. Navíc, aby nešlo pořadí bloků zaměňovat, každý nový blok musí v pomyslné hlavičce
+obsahovat hash předchozího bloku. Tímto dochází ke zřetězení bloků (odtud název blockchain).
 
 Takto funguje princip ověřování transakcí na základě tzv. proof-of-work. Věří se vždy tomu blockchainu, do kterého bylo dáno nejvíce
 výpočtení síly, tzn. tomu nejdelšímu řetězu bloků. V reálném světě účastníkem v nějaké kryptoměnové síti jsou počítače, zvané nody.
@@ -88,6 +88,7 @@ bloku. Těžař jako odměnu za vynaložené usílí a výpočetní výkonu dost
 Maximální velikost odměny je specifikována protokolem, kterým těžba probíhá a těžaři respektují.
 
 \subsection{Alternativní ověřování --- proof-of-stake}
+\label{proof-of-stake-subsection}
 Ověřování na základě proof-of-work má 2 zásadní nevýhody. První z nich je ta, že odměny na základě těžby bloků nepřímo podněcují centralizaci.
 Jelikož vyšší výpočetní výkon znamená vyšší šanci na úspěch při těžbě bloků, stává se, že těžaři se spojují do tzv. \enquote{mining pools}.
 V těchto poolech je odměna za vytěžení bloku rozdělena mezi jednotlivé účastníky. Jestliže však mining pool naroste do rozměru, kdy by tvořil
@@ -110,7 +111,64 @@ odváděli svou práci správně. Kriticky důležitý krok při ověřování j
 avšak k dosažení je nutné nabídnout alespoň o něco víc než polovinu tržní kapitalizace kryptoměny, čehož není jednoduché dosáhnout.
 
 
-\section{Burzy}
+\section{Kryptoměnové burzy}
 \label{sec:Exchanges}
+Dříve, když byly kryptoměny na svém počátku neexistovalo mnoho možností jak tuto digitální měnu získat. Volby byly buďto měnu vytěžit, nebo
+si na internetovém fóru dohodnout P2P obchod. Jedním z takových internetových fór byl Bitcointalk, který založil sám Satoshi Nakamoto právě proto,
+aby se něm vedla diskuze ohledně Bitcoinu. P2P obchody mohly být riskantní, jelikož obchod byl domluvený s cizincem přes internetové fóru, kterému
+se uživatel rozhodl důvěřovat. V roce 2010 se začali objevovat první směnárny, největší z nich se stala Mt. Gox. Tato smenárna se starala o více jak polovinu
+všech světových bitcoinových transakcí, avšak kvůli častým bezpečnostním průlomům a vykrádání musela v roce 2014 ukončit činnost.
+
+V současné době existuje větší rozmanitost kryptoměnových burz. Tyto nové burzy už neplní pouze funkci směnárny, ale skutečně nabízejí možnosti
+kryptoměny obchodovat, podobně jako například na akciovém trhu. Jako další metodou investice lze také využít \emph{staking}. Na první pohled se staking
+může zdát jako jakýsi ekvivalent termínovaného vkladu v té podobě, že člověk zastaví svá aktvita na nějakou určitou dobu. Na konci tohoto období dostane
+odměnu v podobně coinů, nebo v případě termínovaných vkladů, peněz. V realitě se ale termínovaný vklad od stakingu ve své podstatě liší. U termínovaného
+vkladu dává zákazník bance určitou částku peněz k obchodu a investicím. Banka jako odměnu vyplatí část peněz zpět ve formě předem domluveného úroku.
+Na druhou stranu, staking je aktviní podílení se na ověřování transakcí na \emph{proof-of-stake} blockchainu popsané v předchozí části
+\ref{proof-of-stake-subsection}. Tak jako u proof-of-work existují mining pooly, tak i u proof-of-stake vznikají staking pooly, ve kterých uživatelé
+blockchainu společně vloží své coiny a stanou se validátorem. Odměnu si pak rozdělí podle vložených coinů. Burzy v tomto ohledu velice zjednodušují
+celý princip stakingu, jelikož tyto pooly řídí na pozadí a uživatel si pouze vybírá, se kterým coinem chce stakovat a na jak dlouhou dobu. Navíc k tomu
+burza může uživateli poskytnout lepší odhady o získané odměně, risku apod.
+
+
+
+\subsection{Obchodní příkazy}
+Automatizovanou burzu tvoří 2 základní pilíře obchodování. První z nich je obchodní \enquote{kniha} neboli \emph{order book}. Order book není v podstatě nic
+jiného než jen seznam nákupních a prodejních příkazů nějakého aktiva (například kryptoměny). Tento seznam bývá zorganizovaný podle ceny v těchto příkazech.
+Druhý pilíř je systém, který se stará o párování těchto prodejních a nákupních příkazů, označovaný jako \emph{matching engine}. Ten tedy napáruje obchodní příkazy
+a provede mezi nimi obchod. Ať už jeden, nebo i vícero obchodů.
+
+Moderní burzy poskytují 2 odlišné typy příkazů. Příkaz \emph{market} jde ihned na order book a otevírá pozici na momentální tržní ceně aktiva. Pokud uživatel
+pošle/zadá tento příkaz, je okamžitě vykonán a to jak v prodejní tak i případné nákupní podobě. Druhým příkazem, který už nabízí jakousi možnost automatizace
+je \emph{limit}.
+Limit se zadává s hraniční cenou, za kterou je uživatel aktivum ochotný nakoupit nebo prodat. Matchin engine se snaží spárovat limit tak, aby byla splněna podmínka
+hranični ceny se spárovaným příkazem. Tato situace je jak pro prodej tak i pro nákup zachycena na obrázku \ref{fig:limit-orders}.
+
+V kombinaci s limit příkazem lze využít další 2 možné příkazy, označované jako \emph{stop-limit} a \emph{trailing stop-limit}. Oba přidávají další možnosti,
+jak obchodování automatizovat. Stop-limit příkaz umožňuje přidat další cenový parametr, označovaný jako stop-cena. Tato stop-cena se chová jako zábrana, jelikož
+nepustí příkaz na order book, dokud není překročena. Například, pokud je aktuální tržní cena aktiva na 100\texteuro, uživatel zadává na burzu stop-limit příkaz k
+prodeji se stop-cenou nastavenou na 110\texteuro a limit cenou na 95\texteuro. I přestože je splněna podmínka pro prodej k je tržní cena vyšší než limitní
+a mohlo by dojít k zobchodování matching engine nemůže příkaz zobchodovat, jelikož stop-cena drží příkaz mimo order book. V momentě, kdy tržní cena vyšplhá na
+alespoň 110\texteuro, je příkaz puštěn na order book a matching engine může vykonat obchod. % TODO: Dodělat obrázky pro stop-limit
+Trailing stop-limit bere tuto myšlenku ještě o krok dále a umožňuje lepší zachycení trendu tržní ceny. Tento příkaz počítá procentuální změnu ceny od lokálního
+extrému (minimum pro nákup, maximum pro prodej), jakmile rozdíl ceny překročí uživatelem nastavenou hranici, je příkaz zapsán do order booku. Trailing-stop-limit
+může taktéž mít nastavenou stop-cenu, tedy musí být splněna podmínka jak stop-ceny tak i procentuálního rozdílu.  % TODO: Dodělat obrázky pro trailing a zachytit je zde
+Správné nastavení těchto parametrů je důležitým aspektem pro úspěšné zobchodování zadavaného příkazu. Například, pokud při zadávání trailing stop-limit příkazu
+je zadaný rozdíl od extrému příliš malý, může být příkaz zobchodován dřív než by to doopravdy bylo výhodné nebo chtěné. Naopak, jesliže by rozdíl byl příliš velký
+nemusí k zobchodování dojít vůbec a příkaz bude na burze nebude nic dělat.
+
+\begin{figure}[ht]
+    \centering
+    \subfloat[\centering Oblast pro nákup]{{\includegraphics[width=0.45\textwidth]{Figures/limit-chart-buy.pdf}}}
+    \qquad
+    \subfloat[\centering Oblast pro prodej]{{\includegraphics[width=0.45\textwidth]{Figures/limit-chart-sell.pdf}}}
+    \caption{Příkaz limit s hraniční cenou}
+    \label{fig:limit-orders}
+\end{figure}
+
+
+% Scalping, swinging, staking
+% \subsection{Strategie obchodování}
+
 
 \endinput
