@@ -1,11 +1,71 @@
 \chapter{Technická analýza}
 \label{chap:TechnicalAnalysis}
+Dělat informovaná rozhodnutí je podstata každého obchodníka. V akciových trzích se významně používá fundamentální analýza používaná pro budoucí odhad
+chování trendu trhu. Fundament se zabývá vnitřní hodnotou trhu, která je spjatá s obchodními výsledky podniků obchodovaných na burze. Tyto dvě faktory,
+tedy dlouhodobé obchodní výsledky podniků často korelují právě s hodnotou akcií. Vnitřní hodnota trhu je pak odhadována za momentální hodnotou jmění
+těchto firem. Odhady lze dělat z veřejně dostupných dat, například ze zveřejněných účetních uzávěrek, vyplacených dividend, nové produkty nebo různých ekonomických zpráv.
+Oproti tomu, technická analýza se snaží odhadnout budoucí pohyb tržních cen aktiv (forex, akcie, kryptoměny) na základě dostupných historických dat, převážně
+z ceny a objemu minulých uzavřených obchodů. Momentální kapitola se podrobněji věnuje technické analýza, její historií, z čeho technická analýza vychází
+a zaobírá se několika prostředcích používané při této metodě předpovědi trhu.
+
+
+\section{Historie}
+První náznaky principů technické analýzy se začaly objevovat už v 17. století v práci Josepha de la Vegy o holandských trzích. O století později začíná
+rozvoj dalších metody v Asii, která se postupně vyvíjí v použití svíčkové technicky. Dnes se jedná o nejpoužívanější nástroj pro vytváření finančních grafů.
+V první půlce 20. století vznikají první knihy zaměřené na technickou analýzu trhu. V té době se jedná převážně o techniky zaměřené na analýzy trendu a
+grafové vzory, jelikož výpočetní síla počítačů pro statistickou analýzu nebyla dostupná. Některé z těchto knih, převážně práce Roberta D. Edwardse a Johna
+Mageeho \emph{Technical Analysis of Stock Trends}, se považují za klíčové v tomto oboru a zůstávají platné dodnes. V posledních dekádách bylo vytvořeno
+mnoho dalších technických nástrojů a teorií, čím dál více opírající se počítačové podpořené výpočetní techniky.
+
+
+\section{Principy}
+Techničtí analytici věří ve 3 hlavní principy. První z nich zní takto: \emph{Ceny se pohybují v trendech}. Tedy, že tržní cena buďto roste, klesá, nebo se pohybuje
+pouze do strany přičemž poslední varianta je též označována jako stagnace. Druhý z těchto principů je: \emph{Historie má tendenci se opakovat}. Pokud se historie
+opakuje, musí v grafech, které vizualizují vývoj trhu, existovat jisté vzory předpovídající nastávající trend. Posledním principem je tvrzení, že \emph{tržní očekávání
+    je reflektováno a započteno na hodnotě aktiva}. Pokud existují novinky, předpovídající, nebo naznačující vzestup například zemědělského trhu díky úrodné sezóně, je toto
+očekávání již pozitivně reflektováno na hodnotě akcií zemědělských firem a lze to tím pádem vyčíst i z grafů. Jelikož vzory hrají velkou roli v oboru technické analýzy
+je následují sekce zaměřená na popis, identifikaci a význam několika vzorů.
+
+
+\section{Grafové vzory}
+\label{sec:ChartPatterns}
+Grafové vzory jsou opakovaně formující se útvary a v technické analýze jsou využívané jako signály buďto přetrvávání nebo obratu momentálního trendu. Vzory se formují při vykreslení
+tržních cen na grafu. Typickým a nejčastěji používaným grafem, jak již bylo zmíněno, je graf svíčkový, vyobrazený na obrázku \iffalse TODO: Pridat referenci na obrazek grafu \ref{} \fi.
+Vzory lze pak
+pozorovat na posloupnosti několika po sobě jdoucích svíček. Důležitým faktorem při rozpoznávání vzorů je zobrazené časové rozpětí, které investor pozoruje. Ne vždy mohou
+být vzory dobře rozpoznatelné lidským okem. Užitečnost vzoru časem klesá. Čím později je detekován, tím je méně použitelný.
+Existují pokusy použít strojové učení pro detekci těchto vzorů, jako například práce autorů \emph{Marc Velay a Fabrice Daniel}, kterým
+se podařilo dosáhnout 97\% recallu, ale model uměl detekovat pouze 1 vzor.
+% TODO: Přidat citaci
+
+
+\subsection{Head and shoulders}
+První a zároveň z jeden více známých obratových vzorů je \enquote{Head and shoulders} (Hlava a ramena), viditelný na obrázku \iffalse TODO: Dat obrazek \fi. Jak název napovídá, formace svíček tvoří podobu ramen a hlavy způsobenou
+3 kopci a 2 dolinami z čehož je prostřední kopec vyšší než zbývající krajní. V dolinách se cena zastaví na přibližně stejné hodnotě, tvořící tzv. \enquote{neckline} neboli krk.
+Během formace levého ramene a hlavy se při stoupající ceně taktéž obchoduje ve vyšších objemech než při klesání. V průběhu tvorby pravého ramene objem obchodů začíná klesat společně s cenou.
+Jakmile cena prorazí \emph{neckline} a začne padat pod její úroveň, je vzor jednoznačně dokončen a očekává se pokles ceny. Reálně nemusí formace vypadat naprosto ideálně. Často
+může být jedno rameno o něco nižší, případně i širší, než druhé a neckline nemusí být skvěle zarovnaná.
+
+
+\subsection{Cup and handle}
+Formace připomínající šálek s rukojetí (obrázek \iffalse TODO: Ref na obrazek \fi) je symbolem pro rostoucí trend na trhu. Identifikovatelný je tvorbou široké, ale ne příliš hluboké doliny, přičemž na končící ceně této doliny dojde k
+dalšímu, již méně razantnímu poklesu v ceně. Tento menší pokles připomíná právě onu rukojeť a musí vždy následovat až po šálku. Toto pořadí je nezaměnitelné. Dolina by měla své dno
+zaoblené a připomínat například misku. Šálek ve tvaru \enquote{V} není platným ukazatelem nastávajícího vzoru. Objem obchodů je relativně nizky, ale v období tvorby rukojeti se rapidně zvyšuje.
+
+
+
+\subsection{Double top a Double bottom}
+
+
 
 \section{Trendové čáry}
 \label{sec:TrendingLines}
 
+
 \section{Indikátory}
 \label{sec:Indicators}
+
+\section{Využití}
 
 \section{Výběr krytoměnových párů}
 \label{sec:ChoosingCryptopairs}
