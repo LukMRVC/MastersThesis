@@ -94,8 +94,114 @@ V předchozí sekci zabývající se grafovými vzory se několikrát objevily u
 klesá, jakmile se přiblíží k ceně supportu tak se spíše odrazí a cena aktiva začne opět stoupat. Naopak k tomu resistance je hranice, která tvoří \enquote{zábranu} stoupajícím cenám.
 V momentě kdy se svíčky blíží úrovně rezistance je velká pravděpodobnost že se odrazí a dojde ke klesání.
 
+Existuje několik způsobů jak identifikovat tyto odporové úrovně. Nejčastější metoda je s pomocí trendových čar. Trendové linie se jednoduše zakreslí spojením spodních a horních stínů svíček.
+Čím více jsou tyto úrovně otestovány tím, že se cena od nich odráží, tím větší význam můžeme těmto úrovním skutečně připsat. Jakmile dojde k proražení rezistance, stává se ona úroveň
+supportem. Pravdivý je i opačný případ, kdy dojde k proražení supportu a stává se z toho nová rezistance.
+Pokud se cena aktiva pravidelně pohybuje v těchto úrovních, nejjednodušší využití tohoto cyklu je nakupovat, když se cena pohybuje v blízkosti supportu a prodávat v okolí rezistance.
+Samozřejmě je důležité uvážit časové okno pro zakreslování těchto úrovní a doba obchodování.
+
 \section{Indikátory}
 \label{sec:Indicators}
+Indikátory jsou signifikantní součástí technické analýzy. Technické indikátory se opírají o matematické výpočty a počítají sa za nějaké období. Jako vstupem do výpočtu se nejčastěji
+bere tržní cena nebo objem obchodů. Na základě těchto informací jsou dané výstupy, které dodávají další informace k obchodování.
+Obecně se technické indikátory dělí na indikátory hybnosti (momentum indikátory), trendové indikátory a oscilátory. Momentum indikátory měří dynamiku ceny, tedy rychlost změny.
+Trendové indikátory se zaměřují na odhad aktuálního trendu a případnou predikci jeho otočení. Jako oscilátory se označují indikátory, které se pohybují v daném rozmezí (např. -1 až 1).
+Tato sekce se zabývá několika nejpoužívanějšími technickými indikátory, rozebírá způsob jejich výpočtu a dodanou informační hodnotu.
+
+\subsection{Indikátor objemu (OBV, On-balance volume)}
+Jedná se o kumulativní indikátor objemu obchodů a tím měří nákupní a prodejní tlak a spojuje tržní cena v souvislosti na velikostech obchodů. Pokud se OBV zvyšuje, více obchodníků
+je ochotných zaplatit za aktivum v jeho momentální tržní ceně. Pokud je trh ve vzestupném trhu a navíc k tomu stoupá i hodnota tohoto indikátoru, potvrzuje se tímto onen trend.
+Jestliže cena stoupá ale hodnota OBV nijak neroste, je trh spíše zmatený. Výpočet OBV je znázorněn na \ref{eq:obv}
+
+\begin{equation}
+    OBV = OBV_{pred} +
+    \begin{cases}
+        objem, & close \ge close_{pred} \\
+        0,     & close = close_{pred}   \\
+        objem, & close \le close_{pred}
+    \end{cases}
+    \label{eq:obv}
+\end{equation}
+% TODO: Udělat vysvětlivku, že C označuje cena, C_s označuje cenu svíčky, C_{s - 1} označuje cenu obsaženou v předchozí svíčce
+\subsection{Klouzavý průměr (MA, Moving average)}
+Klouzavý průměr má hned několik variant výpočtu. Klouzavý se nazývá protože se jeho hodnota počítá pouze za určené období. Oblíbené časové úseky jsou 10, 40, nebo 200 dní zpětně.
+Navzdory představě tento indikátor není \enquote{pouze jedno číslo}, ale celá série, jelikož průměr je počítán pro každý datový bod, tedy pro každou svíčku zvlášť. Propojením vypočítaných
+hodnot vzniká na grafu linie představující plovoucí odporovou úroveň s výhodou jakési odolnosti proti krátkodobým fluktuacím v cenách aktiva. Tato odolnost usnadňuje predikci spíše dlouhodobějších trendů.
+Jestliže se trh nachází v sestupném trendu, MA se chová jako úroveň rezistance a jeho proražení dává signál k nákupu, předpovídající vzestupný trend.
+Opačný případ je taktéž pravdivý, kdy ve vzestupném trhu MA zastává roli supportu.
+
+Dva nejpoužívanější typy výpočtu MA jsou \emph{Simple Moving Average (SMA)} a \emph{Exponential Moving Average (EMA)}. SMA je jednoduchý pro výpočet a jedná se o obyčejný průměr na období
+o velikosti \emph{n} a způsob výpočtu je vyobrazena na rovnici \ref{eq:sma}. EMA využívá váženého průměru, ve kterém se váha starších datový bodů se exponenciálně snižuje, preferující spíše novější hodnoty.
+Při výpočtu tohoto váženého průměru se používá i takzvaný vyhlazovací koeficient \emph{k}, přičemž nejčastější nastavení tohoto koeficientu je $ k = \frac{2}{n+1}$.
+Rovnice pro výpočet je na \ref{eq:ema}. Výhodou exponenciálního klouzavého průměru je větší důraz na čerstvější data, čím může lépe reagovat na změny trhu.
+
+\begin{equation}
+    SMA_t = \frac{C_t + C_{t - 1} + ... + C_{t - (n - 1)}}{n}
+    \label{eq:sma}
+\end{equation}
+
+\begin{equation}
+    EMA_t = k * C_t + (1 - k) * EMA_{t - 1}
+    \label{eq:ema}
+\end{equation}
+% TODO: Pridat ukázky SMA a EMA
+
+\subsection{Index relativní síly (RSI, Relative strength index)}
+Index relativní síly patří mezi oscilující indikátory, pohybující se v rozmezí on 0 do 100. Jeho cílem je odhalit rychlost a velikost změny \enquote{close} cen aktiv a tím identifikovat
+přeprodaný nebo překoupený trh. Důležité signály nastávají v momentě, kdy se hodnota tohoto indikátoru zvedne nad hladinu 70 nebo klesne pod hladinu 30 a interpretace je následující:
+\begin{itemize}
+    \item Pokud hodnota $RSI > 70$ je trh překoupený a má vyšší hodnotu, než by měl mít; následuje korekce nebo otočení trendu.
+    \item Pokud hodnota $RSI < 30$ je trh přeprodaný a má nižší hodnotu, než by měl mít; následuje korekce nebo otočení trendu.
+    \item Při opětovném sestupu pod hranici 70 je identifikován sestupný sentiment.
+    \item Při opětovném vzestupu nad hranici 30 je identifikován vzestupný sentiment.
+\end{itemize}
+
+Pro výpočet indexu relativní síly je nutné nejdříve spočítat relativní sílu. Abychom zjistili relativní sílu, musíme zjistit horní (\emph{U}) a dolní (\emph{D}) změnu:
+\begin{equation}
+    U = \begin{cases}
+        C_t - C_{t - 1}, & close_t > close_{t - 1}   \\
+        0,               & close_t \le close_{t - 1} \\
+    \end{cases}
+    ,
+    D = \begin{cases}
+        C_{t - 1} - C_t, & close_t < close_{t - 1}   \\
+        0,               & close_t \ge close_{t - 1} \\
+    \end{cases}
+    \label{eq:du}
+\end{equation}
+Pak můžeme vypočíst relativní sílu \emph{RS} za období délky \emph{n}:
+\begin{equation}
+    RS =
+    \begin{cases}
+        \frac{EMA(U, n)}{EMA(D, n)}, & {EMA(D, n)} > 0 \\
+        100,                         & {EMA(D, n)} = 0
+    \end{cases}
+    \label{eq:rs}
+\end{equation}
+A nakonec dopočítat index:
+\begin{equation}
+    RSI = 100 - \frac{100}{1 + RS}
+    \label{eq:rsi}
+\end{equation}
+
+\subsection{MACD indikátor (Moving average convergence-divergence indicator)}
+Indikátor sbíhavosti a rozbíhavosti klouzavých průměrů se skládá z několika komponent. První je samotný MACD, což je rozdíl dvou exponenciálních klouzavých průměrů, počítané
+za kratší a delší období. Další složkou je signální čára, vypočítaná jako EMA právě onoho MACD. Poslední složka je histogram ukazující rozdíl mezi MACD a signální čárou.
+
+\begin{equation}
+    MACD = EMA(n_1) - EMA(n_2), n_2 > n_1
+    \label{eq:macd}
+\end{equation}
+
+\begin{equation}
+    Sig_{MACD} = EMA(MACD, n_3)
+    \label{eq:signal}
+\end{equation}
+
+\begin{equation}
+    Hist_{MACD} = MACD - Sig_{MACD}
+    \label{eq:macdhist}
+\end{equation}
 
 \section{Využití}
 
