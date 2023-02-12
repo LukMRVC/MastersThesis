@@ -185,8 +185,9 @@ A nakonec dopočítat index:
 \end{equation}
 
 \subsection{MACD indikátor (Moving average convergence-divergence indicator)}
-Indikátor sbíhavosti a rozbíhavosti klouzavých průměrů se skládá z několika komponent. První je samotný MACD, což je rozdíl dvou exponenciálních klouzavých průměrů, počítané
-za kratší a delší období. Další složkou je signální čára, vypočítaná jako EMA právě onoho MACD. Poslední složka je histogram ukazující rozdíl mezi MACD a signální čárou.
+Indikátor sbíhavosti a rozbíhavosti klouzavých průměrů se skládá z několika komponent. První je samotný MACD (\ref{eq:macd}), což je rozdíl dvou exponenciálních klouzavých průměrů, počítané
+za kratší a delší období. Další složkou je signální čára (\ref{eq:signal}), vypočítaná jako EMA právě onoho MACD. Poslední složka je histogram (\ref{eq:macdhist})
+ukazující rozdíl mezi MACD a signální čárou.
 
 \begin{equation}
     MACD = EMA(n_1) - EMA(n_2), n_2 > n_1
@@ -202,6 +203,34 @@ za kratší a delší období. Další složkou je signální čára, vypočíta
     Hist_{MACD} = MACD - Sig_{MACD}
     \label{eq:macdhist}
 \end{equation}
+
+Signál pro nákup nebo prodej aktiva nastává v momentě, kdy MACD protne signální čáru. Pro zachycení vzestupného trendu musí MACD protnout signální čáru zespodu. Pro zachycení
+trendu sestupného je situace opačná, kdy MACD musí protnout signální čáru shora. % TODO: Dodelat obrazky
+
+\subsection{Stochastický oscilátor}
+Další ze skupiny oscilátorů je hojně využívaný stochastický oscilátor, rovněž určený k zachycení rychlosti změny ceny a identifikace překoupeného nebo přeprodaného trhu. Jeho
+hodnoty se typicky pohybují v rozmezí 0 až 100 (případně 0 až 1). Myšlena tohoto oscilátoru spočívá v úvaze, že ceny, před obratem trendu, mají tendenci se uzavírat blízko extrémů
+nedávných obchodů. Jako klíčové hodnoty pro označení překoupeného respektive přeprodaného trhu se považují 80 a 20. Ruku v ruce s tímto oscilátorem se taktéž využívá vyhlazovací
+klouzavý průměr periody o velikosti 3.
+
+\begin{equation}
+    STO = 100 * \frac{C  - L_{obd}}{H_{obd} - L_{obd}}
+    \label{eq:sto}
+\end{equation}
+
+
+\subsection{Bollingerova pásma (BB, Bollinger Bands)}
+Poslední z indikátorů jsou Bollingerova pásma, měřící volatilitu trhu. Skládá se celkem ze 3 pásem - horní, střední a spodní pásmo. Tato pásma nejsou nic jiného než klouzavé průměry
+s drobnou změnou. Jako klouzavý průměr se nejčastěji využitá jednoduchý SMA, ale lze využít i jakýkoli jiný typ, například EMA. Horní a spodní pásmo se získá připočtením a odečtením
+(obvykle 2) násobku standardní odchylky $\sigma$ \ref{eq:bb}. Se snižující nebo zvyšující se volatilitou dochází k tzv. kontrakci nebo roztažení pásem. Pokud je volatilita poněkud nízká, budou mít
+pásma tendenci přibližovat se k sobě a dochází ke kontrakci. Opačným případem je roztažení. Signál překoupení aktiva nastává pokud se tržní cena přiblíží hornímu pásmu. Naopak přeprodání
+jesliže se cena nachází v blízkosti spodního pásma. Může dojít i k proražení těchto pásem, což může naznačovat extrémní tržní podmínky.
+
+\begin{equation}
+    Band_{up + down} = MA \pm K\sigma
+    \label{eq:bb}
+\end{equation}
+
 
 \section{Využití}
 
