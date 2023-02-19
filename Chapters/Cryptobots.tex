@@ -8,7 +8,32 @@ nepřetržitě. Existuje celá řada těchto botů a tato kapitola se zaměřuje
 zanalyzuje jejich způsob fungování, funkce a tvorbu pravidel. V poslední části kapitoly se nachází srovnání několika vybraných kryptobotů.
 
 \section{Kryptoboti}
+Kryptoměnových botů za odbobí existence tohoto typu trhu již vznikla celá řada. Lze vybírat jak z placených cloudových služeb, tak zdarma dostupných. Dokonce existují i open
+source boti, které je možné si zprovoznit na svém vlastním zařízení. Boti z velké části spoléhají na technickou analýzu a technické indikátory popsané v kapitole \ref{chap:TechnicalAnalysis}.
+Tyto indikátory vzájemně kombinují, případně si uživatel může sám nakonfigurovat, aby bot zaslal na burzu prodejní a nákupní příkazy v momentě, kdy vybrané indikátory
+prorazí zadané hranice. Pokročilejší boti umí taky využít sílu strojového učení k predikci tržní ceny. Pro zjišťování optimálních parametrů, případně přeučování modelu
+určeného k predikci se využívá \emph{backtesting}. Backtesting spočívá v odhadování úspěšnosti obchodní strategie na základě historických dat. Hlavním cílem celého procesu
+je zjistit, jak dobře vybraná strategie funguje v časech, kdy se trh hýbe mezi sestupným a vzestupným trendem, případně když stagnuje.
+Kryptoboty lze dělit do 3 kategorií:
+\begin{enumerate}
+    \item trend sledující boti,
+    \item DCA (Dollar cost averaging),
+    \item skalpovací boti.
+\end{enumerate}
 
+\subsection{Trend sledující boti}
+První z typu botů je zaměřen charakteristické chování kryptoměn, které se nese ve znamení vysoké volatility. Trh často zažívá velké jak propady, ale i rychlé zvyšování cen.
+Právě tohoto střídání trendů se snaží využit trend sledující boti, kteří nakupují v období bull marketu a měnu drží dokud se nezačne trend otáčet. Až v momentě, kdy se objevují
+náznaky otočení tržního sentimentu dochází k prodeji a výběru zisku.
 
+\subsection{DCA boti}
+Dollar cost averaging je dlouhodobou strategií používající víceméně pouze nákupy. Tyto nákupy se dějí v pravidelných intervalech a s pravidelně investovanou částkou.
+Hlavní motivace spočívá v důvěru dlouhodobého výnosu ze získaných kryptoměn, přičemž nákupy se mohou dít v období kdy se trh nachází v cenách jak podprůměrných tak
+nadprůměrných. Tím by se měla hodnota zprůměrovat a snížit riziko výrazné finanční ztráty.
+
+\subsection{Skalpovací boti}
+Skalpovací boti obchodují v krátkodobých intervalech, jak bylo popsáno v předchozí části \ref{subsubsec:scalping}. Zadávají více příkazů na burzy a výdělek se snaží
+získat na mnoha úspěšných obchodech. Provedené obchody nemusí být extra velké ani extrémně výdělečné, postačí i menší zisk. Obchody vznikají především jako důsledek
+malých fluktuací tržní ceny. Tyto fluktuace se boti snaží zachytit především použitím technických indikátorů.
 
 \endinput
