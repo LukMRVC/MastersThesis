@@ -10,10 +10,24 @@ zanalyzuje jejich způsob fungování, funkce a tvorbu pravidel. V poslední č�
 \section{Kryptoboti}
 Kryptoměnových botů za odbobí existence tohoto typu trhu již vznikla celá řada. Lze vybírat jak z placených cloudových služeb, tak zdarma dostupných. Dokonce existují i open
 source boti, které je možné si zprovoznit na svém vlastním zařízení. Boti z velké části spoléhají na technickou analýzu a technické indikátory popsané v kapitole \ref{chap:TechnicalAnalysis}.
-Tyto indikátory vzájemně kombinují, případně si uživatel může sám nakonfigurovat, aby bot zaslal na burzu prodejní a nákupní příkazy v momentě, kdy vybrané indikátory
+Tyto indikátory vzájemně kombinují, případně si uživatel může sám nakonfigurovat aby bot zaslal na burzu prodejní a nákupní příkazy v momentě, kdy vybrané indikátory
 prorazí zadané hranice. Pokročilejší boti umí taky využít sílu strojového učení k predikci tržní ceny. Pro zjišťování optimálních parametrů, případně přeučování modelu
 určeného k predikci se využívá \emph{backtesting}. Backtesting spočívá v odhadování úspěšnosti obchodní strategie na základě historických dat. Hlavním cílem celého procesu
 je zjistit, jak dobře vybraná strategie funguje v časech, kdy se trh hýbe mezi sestupným a vzestupným trendem, případně když stagnuje.
+
+Automatizované obchodování v sobě skrývá několik výhod. Člověk musí spát. Ovšem Země je velká, když se na jedné části spí, na druhé trh může stále neomezeně obchodovat.
+Obchodník se tím nevědomě může ochudit o zisk, nebo dokonce v nejhorším případě celé aktivum se rapidně propadne. Avšak bot nikdy nespí a sleduje trh nepřetržitě. Na změny
+dokáže rychle reagovat. V situace kdy vyhodnotí velký propad může se nakoupených aktiv zbavit. Stačí mu pouze předat dostatečnou konfiguraci.
+
+Program se chová systematicky. Má přesně dané pravidla, kterými se řídí. V závislosti na těchto pravidlech se může jednat o velký úspěch nebo naopak ztrátu. Zde lze
+najít další výhodu. Každý obchod je reakce na aktuální situaci na trhu a to podle nastavených pravidel. Pravidla se dají zpětně ověřovat a měnit. Tento proces je již
+dříve zmiňovaný \enquote{backtesting}. Navíc systematičnost eliminuje lidské emoce. Emoce jsou faktor, který obchodníka význačně ovlivňuje. Technická analýza je pouhá
+statistika a na fundament nijak nereaguje. To co člověk může považovat za špatné tržní podmínky může ve skutečnosti znamenat šanci zisku.
+
+Poslední zmíněnou výhodou je obrovská diverzifikace portfolia. Schopnost zvládat obchodovat více aktiv najednou není pro jednotlivce jednoduchý úkol. Zrakový vjem
+na to prostě nestačí. Boti mají opět velikou výhodu, jelikož je zajímají jen konkrétní data. A sledovat více různých streamů dat najednou není složité. Jeho uživateli
+to pak přináší výhodu ve větší rozmanitosti obchodovaných aktiv, což může v dlouhém měřítku snižovat ztrátu a chránit zisk.
+
 Kryptoboty lze dělit do 3 kategorií:
 \begin{enumerate}
     \item trend sledující boti,
@@ -35,5 +49,28 @@ nadprůměrných. Tím by se měla hodnota zprůměrovat a snížit riziko výra
 Skalpovací boti obchodují v krátkodobých intervalech, jak bylo popsáno v předchozí části \ref{subsubsec:scalping}. Zadávají více příkazů na burzy a výdělek se snaží
 získat na mnoha úspěšných obchodech. Provedené obchody nemusí být extra velké ani extrémně výdělečné, postačí i menší zisk. Obchody vznikají především jako důsledek
 malých fluktuací tržní ceny. Tyto fluktuace se boti snaží zachytit především použitím technických indikátorů.
+
+
+\section{Analýza a srovnání existujících kryptobotů}
+Za dobu existence funkčních kryptoměnových burz se taktéž hodně rozšířili i kryptoboti. Avšak dost těchto botů je zpoplatněno a nabízí vícero možných plánů, poskytující
+pokročilejší funkce. Tato část se více zaměří právě na analýzu a srovnání těchto existujících řešení.
+
+\subsection{Pionex}
+Pionex je burza se zabudovanými kryptoboty. Jedním z hlavních lákadel je takzvaný \enquote{grid bot}. Grid bot se dá dobře představit na grafu kryptoměny. Tento bot
+vytvoří několik cenových úrovní podle zadaných parametrů nad i pod aktuální tržní cenou. Kdyby se tyto úrovně vykreslily, na grafu by vznikla jakýsi mřížka, odtud název
+grid. Jakmile se cena pohybuje pod střední hodnotou, každé proražení nižší cenové úrovně způsobí nákup kryptoměny. Při opačném případě, kdy cena stoupá nad střední hodnotu,
+znamená každé proražení cenové úrovně prodej.
+
+Společně s tímto botem obsahuje Pionex dalších 15 ostatních zabudovaných botů. Jejich používání není zpoplatněno, ale Pionex si ukrojí z každého obchodu 0,05 \% jako poplatek.
+S touto monetizační politikou může být vhodný pro začátečníky.
+
+\subsection{Cryptohopper}
+
+
+\subsection{Coinrule}
+
+
+\subsection{Shrimpy}
+
 
 \endinput
