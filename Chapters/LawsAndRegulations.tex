@@ -7,7 +7,6 @@ kryptoměn, chystané zákony a regulace (zejména ČR a EU), případně jejich
 
 
 \section*{Česká legislativa}
-V čes
 Česká národní banka v souvislosti ke kryptoměnám vydala v roce 2018 stanovisko v následujícím znění: \quote{Převodní tokeny nejsou penězi v ekonomickém ani právním smyslu.} %TODO: Citace na https://www.zakonyprolidi.cz/cs/1992-586#f1458009
 Dále se v tom vyjádření objevuje, že tokeny nevykazují znaky investičních nástrojů. Tímto se ČNB od kryptoměnového světa dostatečně distancovala. Její povolení k určité činnosti
 je vyžadováno pouze ve 3 případech:
@@ -20,12 +19,56 @@ je vyžadováno pouze ve 3 případech:
 
 Ministerstvo financí ČR potvrdilo, že neexistuje žádná legislativa upravující způsob vykazování a účtování digitálních měn. % TODO: citace https://www.financnisprava.cz/assets/cs/prilohy/d-seznam-dani/Info-kryptomeny_priloha1-Sdeleni-MF-k-uctovani-a-vykazovani-.pdf
 Tudíž, z právního hlediska, je kryptoměna \emph{nehmotná, zastupitelná, movitá věc}. Tato definice je postačují na daň z příjmu, která je stanovena již na úrovni Evropské unie.
-Zde se situace trochu komplikuje. Generální finanční ředitelství již rozlišuje i jakým způsobem byla kryptoměny získána a kdo ji získal, zda právnická či fyzická osoba.
-Při vykazování transakcí a nabytí kryptoměny je nutné uvést její získanou hodnotu v Kč, přičemž lze využít přepočtu přes třetí měnu (typicky např. USD, EUR).
-Pro účely obchodování je potřeba kryptoměnu nakoupit nebo prodat za fiat měnu. Jelikož kryptoměna není považována za měnu, nejedná se o směnárenskou činnost a tím pádem
-se směna daní jako příjem (v případě nákupu jako výdaj) z prodeje nehmotné movité věci.
+Zde se situace trochu komplikuje. Generální finanční ředitelství již rozlišuje i jakým způsobem byla kryptoměna získána (těžbou, převodem) a kdo ji získal, zda právnická či fyzická osoba.
+Při vykazování transakcí a nabytí kryptoměny je nutné uvést její získanou hodnotu v Kč. Protože pro kryptoměny neexistuje jasný převodní kurz na českou korunu, povoluje se použití přepočtu přes
+třetí měnu (nejčastěji např. USD, EUR). V těchto fiat měnách burzy už uvádějí kurz, ke kterým je jednoznačný převod na Kč.   
+Pro účely obchodování je potřeba kryptoměnu nakoupit nebo prodat za fiat měnu. Jelikož kryptoměna není považována za měnu, není ani směna kryptoměny za fiat měnu z pohledu
+daní z příjmu směnárenskou činností a tím pádem se směna daní jako příjem (v případě nákupu jako výdaj) z prodeje nehmotné movité věci.
 
+% TODO: Pridat citaci https://eur-lex.europa.eu/resource.html?uri=cellar:f69f89bb-fe54-11ea-b44f-01aa75ed71a1.0012.02/DOC_1&format=PDF
 \section*{Evropská MiCA}
+Chystaná evropská regulace MiCA byla poprvé představena v září roku 2020 Evropskou komisí a měla by vstoupit v planost v roce 2024. Důležitou skutečností je to, že se jedná o regulaci
+a měla by tedy předčit zákony členských států EU, zabývající se stejnou problematikou. Dosud si každý členský stát EU mohl vytvořit vlastní zákony a regulace pro obchodování, danění
+a práci s kryptoaktivy. Tato volnost přinášela možné mezinárodní podnikatele v branži kryptoaktiv do složitých situací, jelikož pro fungování ve více státech se museli řídit odlišnými
+zákony. Hlavní cíle regulace MiCA je posílit regulaci kryptoměnového trhu a poskytnout právní jistotu tohoto trhu v EU. Tohoto chce docílit zvýšení transparentnosti kryptoaktiv a burz,
+zavedení větší kontroly na burzami a poskytovatelů digitálních peněženek a v neposlední radě také pojištění investorů. 
+MiCA rozděluje kryptoaktiva do 3 kategorií, kterými se zabývá:
+\begin{itemize}
+    \item \enquote{užitný token},
+    \item \enquote{token vázaný na aktiva},
+    \item \enquote{elektronický peněžní token (e-token)}.
+\end{itemize}
+Každé z těchto kategorií se věnují následující podsekce.
+
+\subsection{Užitné tokeny}
+Užitné tokeny (angl. \enquote{utility tokens}) jsou definovány jako druh kryptoaktiva, který je dostupný pouze na DLT (nejčastěji tedy blockchain), je přijímán pouze vydavatelem tohoto
+tokenu a slouží k poskytování digitálního přístupu ke zboží nebo službě. Jejich hlavní účel tedy není obchodování a placení. Součástí této kategorie jsou tzv. \enquote{governance tokeny},
+které umožňují jejich držiteli podílet se na aktivním řízení a hlasování o dalším směru nějakého decentralizovaného/blockchainového projektu (dApps). Hlasování probíhá typicky
+použitím chytrých kontraktů popisovaných v předešlé sekci \ref{sec:CoinsTokensSmartContracts}. Hodně těchto tokenů je implementovaných použitím standardu ERC-20 na blockchainu Etherea.
+ERC-20 usnadňuje právě tvůrcům tokenů, chytrých kontraktů, peněženek a burzám implementovat nové projekty. Příkladem těchto tokenů je například BAT, využívaný prohlížečem Brave.
+BAT je token, který uživatel dostane jako odměnu, když si nechá zobrazit reklamu. Druhým příklad je token MANA (Decentraland) sloužící k nakupování služeb a pozemků ve VR aplikaci
+Decentraland.
+
+Podle regulace MiCA mají emitenti těchto tokenů povinnost vydat a zveřejnit \enquote{bílý papír} (whitepaper). Zajímavá je nová povinnost,
+kterou MiCA ukládá. Pokud emitent vydá whitepaper, musí autor zahájit svůj projekt do 12 měsíců od jeho zveřejnění. Součástí regulace je spousta dalších povinností, která jsou nad rámec
+této práce a proto se autor rozhodl je zde dále nevypisovat. Pro čtenáře lze originální materiál dohledat dle citace.
+
+\subsection{Tokeny vázané na aktiva}
+Token vázaný na aktivum kvůli snaze udržet si stabilní hodnotu. Váže se buďto na několik fiat měn, které jsou zákonným platidlem, případně jednu nebo více komodit (plyn, uhlí, ropa, \ldots)
+nebo na další kryptoaktiva. Součástí definice je také hodnota kombinace aktiv, tedy vázání hodnoty na určitý fond složený z uvedených možností. Tato kategorie již dostává regulací přísnější
+podmínky než předešlá; vydavatel:
+\begin{enumerate}
+    \item musí mít povolení příslušného orgánu svého domovského členského státu,
+    \item musí být právnická osoba usazena v Unii,
+    \item vypracuje a zveřejní bílou knihu schválenou příslušným orgánem,
+    \item má zodpovědnost za újmu způsobenou uvedením špatných informací.
+\end{enumerate}
+Jelikož je emitent tohoto tokenu plně zodpovědný za jeho korektní a legální vedení, může držitel těchto kryptoaktiv požadovat odškodné za případnou újmu. Povinností je taktéž
+průběžné zveřejňování transparentních informací o množství tokenů v oběhu na webových stránkách a to alespoň jednou za měsíc. Celkově se specifikuje daleko více věcí, jako povinnost
+finančních rezerv, řízení rizik a tím zvýšit důvěryhodnost u potenciálních investorů. Bílý papír musí obsahovat varovná sdělení, upozorňující na možná rizika spojená s těmito
+tokeny.
+
+\subsection{Elektronické peněžní tokeny}
 
 
-\endinput 
+\endinput
