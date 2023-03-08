@@ -1,0 +1,27 @@
+\chapter{Implementace kryptobota}
+\label{chap:impl}
+
+Hlavní cíl této diplomové práce spočívá v implementaci kryptobota. Tento kryptobot má vytvořené pravidla vycházející z předem provedené technické analýzy.
+Pravidla se následně aplikují na reálný trh a bot provádí obchody. Jeho postup a stav lze uživatelský přivětivě pozorovat z webové stránky, případně jeho akce
+zastavit, nebo dokonce kompletně opustit tržní pozici. Implementovaný kryptobot je schopen obchodovat na burze Binance, která je jedna z největších a nejpopulárnějších
+světových burz.
+
+\section{Fungování kryptobota}
+Pro kompletní fungování je zapotřebí několika kroků. Každý z těchto kroků je vysoce důležitý a výpadek jakékoli části může mít kritické dopady. Proto je každá část systému navržena
+a implementována co nejrobustněji a počítá s možností nedostupných služeb, případně databáze. Prvním krokem, který bude vzápětí popsán podrobněji se stahování dat. Navazující
+je technická analýza. Z analýzy vycházejí příkazy k obchodování. Ty budou taktéž podrobněji popsány. Poslední krok je následná realizace příkazů, komunikace s burzou
+a vyhodnocování výsledků obchodování.
+
+\subsection{Historická data}
+Úplným základem bota jsou historická data. Naštěstí burza Binance tato data poskytuje bezplatně a volně ke stažení, prakticky komukoli. Lze si stáhnout svíčky,
+jednotlivé obchody nebo agregované obchody. Svíčky jsou poskytovaný v granularitách od 1 vteřiny až po celý den. Z tohoto zdroje Binance zpřístupňuje data s jednodenním
+zpožděním. Pro potřebu bota v rámci této práce se stahují minutové svíčky se zmiňovaným jednodenním zpožděním. Důvod proč je toto dostačující je uveden dále v této práci.
+Náležitě se musí ošetřit situace, kdy není server Binance dostupný nebo chybí data svicek kryptoměnového páru. Pokud k tomuto dojde, systém si zařadí do fronty svých úloh opětovnou
+akci stažení potřebných dat. Jakmile jsou svíčky na lokálním serveru, provádí se importování do databáze. Po úspěšném zapsání do databáze následuje technická analýza.
+
+\subsection{Technická analýza}
+
+
+
+
+\endinput
