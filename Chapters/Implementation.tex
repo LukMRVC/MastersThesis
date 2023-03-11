@@ -20,8 +20,75 @@ Náležitě se musí ošetřit situace, kdy není server Binance dostupný nebo 
 akci stažení potřebných dat. Jakmile jsou svíčky na lokálním serveru, provádí se importování do databáze. Po úspěšném zapsání do databáze následuje technická analýza.
 
 \subsection{Technická analýza}
+Fundamentální krok kryptobota je samotné provedení technické analýzy ve spolupráci s backtestingem. Z tohoto vyplývají nastavení obchodních příkazů se prokazuje výhodné
+a má cenu je obchodovat. Řešeni vytvořené v rámci je založené na rozboru kopců a dolin vytvořených zavíracími cenami svíček. Kolísání cen nahoru a dolů by ve spojitém grafu
+tvořilo čáru, ve kterých lze identifikovat lokální minima a maxima. Právě tyto lokální extrémy tvoří kopce a doliny. Cílem analýzy je pak odhalit kryptoměnové páry s dostatečně
+velkým počtem těchto extrémů včetně jejich rozpětí. Jestliže by rozpětí bylo příliš malé, nemusely by být obchody ziskové. Z důvodu, že se takto snaží odhalit dlouhodobě
+ziskové páry nevadí, že se stahují a analyzují data s denní zpožděním. Toto řešení není založené na okamžité reakci, nýbrž na vidině dlouhodobé ziskovosti.
+
+% TODO: Obrázek kopců a doliny s vizualizací nástupní a sestupní hrany
+Scénář obchodování pro strategii kopců a dolin je následující: v momentě, kdy se dosáhlo minima, cena se odráží a začíná stoupat. Tím je započata nákupní fáze
+se snahou uzavřít obchod s co nejnižší cenou. Další stoupání ceny je příznivou situací, během které se zhodnocuje investice. Dosáhnutím lokálního maxima se trend láme a začíná klesat
+-- nastává prodejní fáze opět se snahou prodat, tentokrát za co nejvyšší cenu. Konkrétní realizace je pak popsána v sekci \ref{subsec:executioner}.
+
+
+\subsection{Výběr párů a realizace obchodních příkazů}
+\label{subsec:trade-orders}
+Vytvoření obchodních příkazů je starostí předchozího kroku, zabývající se technickou analýzou. Ovšem počet způsobů, jak tyto příkazy vytvořit není pouze jeden a je závislý právě na
+nastavení. Pro analýzu kopců a dolin jsou nezbytně důležité 2 parametry: velikost vzestupu a sestupu. Ty zastávají procentuální změnu, o kterou se musí aktuální cena zvednout nebo klesnou,
+aby se situace v časovém okně označily jako dolina, respektive kopec. Díky těmto dvěma jednoduchým parametrům lze získat důležité informace o kryptoměnovém páru, konkrétně:
+\begin{enumerate}
+    \item délka kopce,
+    \item délka doliny,
+    \item ziskovost.
+\end{enumerate}
+Společně z dat získaných ze svíček (počet obchodů, objemy obchodů, \ldots) a statisticky získaných dat (medián a průměr objemu obchodů) se vydolují další rozhodující informace.
+Těmi je poměr počtu obchodů, poměr velikost objemu obchodů a počet obchodů vykonaných za den. Během backtestingu se simuluje obchodování o velikosti o mediánu obchodů. Jestliže
+algoritmus odhalí například 200 kopců během jednoho dne, znamenalo by to vykonání 200 obchodů. Toto číslo se dá do poměru s celkovým počtem vykonaných obchodů na kryptoměnovém páru.
+Obdobně se získá poměr velikosti objemů jednotlivých obchodů. Tyto poměry, společně s celkovým počtem obchodů, jsou důležité z pohledu ovlivňování trhu a zachování likvidity.
+Pokud by velikost těchto poměrů byla příliš velká, bylo by obchodování daného kryptoměnového páru riskantní, jelikož každý obchod kryptobota by mohl výrazně ovlivnit situaci na trhu
+a způsobovat výkyvy ceny. Zároveň by obchody nemusely být vypořádané, jednoduše protože by se trh stával nelikvidním a rozpětí mezi poptávkou a nabídkou by se rozšířilo.
+
+Informace o délce kopců a dolin slouží jako pomocník pro nastavení maximální doby, po kterou se má bot pokoušet nakoupit. A samozřejmě, ziskovost slouží jako hlavní indikátor
+pro výběr páru. Ovšem ziskovost záleží na vybraném stylu obchodování a opakování příkazu, které si zaslouží podrobnější popis.
+
+\subsubsection{Opakování příkazu}
+% TODO: Obrázek dělení příkazu na jednotlivé iterace, každé iterace má 2 fáze.
+Samotný příkaz se skládá z několika opakování (iterací). Každá iterace má 2 fáze -- nákupní a prodejní. Pro úplnost je ještě nutné definovat, co znamená ukončení jedné iterace.
+Ukončení iterace nastává ve 2 případech:
+\begin{itemize}
+    \item nepovedla se nákupní fáze (tj. nic se nekoupilo),
+    \item ukončila se prodejní fáze.
+\end{itemize}
+Prodejní fáze je uzavřena opět ve 2 situacích:
+\begin{itemize}
+    \item úspěšný prodej,
+    \item překročením maximální doby a prodej příkazem \textsc{market}.
+\end{itemize}
+
+% TODO: Obrázek kaskády vs sekvence
+Existují 2 řešené postupy pro opakování příkazů. Prvních z nich je jednoduše v sekvenci, kdy se před začátkem iterace $n_i$ čeká na ukončení iterace $n_{i - 1}$, přičemž $i$ je pořadové
+číslo iterace. Výhodou tohoto přístupu je jednoduché sledování aktuálního stavu otevřené pozici na trhu. Avšak nevýhoda je šance na zanedbání dlouhého kopce a nevyužití případné ziskové situace.
+Proto byla vymyšlena druhá metoda opakování.
+
+Schopnost iterace v kaskádě s sebou přináší řešení na dlouhé kopce, ve kterých cena roste delší dobu. Kaskáda se oproti sekvenci liší v možnosti spuštění následujícího opakování příkazu
+už v momentě, kdy je úspěšně ukončena nákupní fáze. V rámci tohoto může docházet k více otevřeným pozicím na trhu. Nevýhodou je opět eventuální otevření pozice těsně před koncem stoupání
+kopce. Jelikož se následně čeká na na procentuální \enquote{propad} ceny dolů, je vysoká pravděpodobnost, že tato pozice bude prodělečná. Další nežádoucí situací je příliš rychlé otevírání
+nových pozic a musí se limit buďto časově nebo maximálním počtem otevřených pozic v kaskádě. Bot v tomto případě podporuje obě možnosti.
+
+\subsubsection{Způsoby obchodování}
+Implementovaný kryptobot rozlišuje 2 způsoby obchodování, fixní a složené úročení. Fixní způsob otevírá pozice na vždy stejnou obchodovanou částku. Ve své podstatě se jedná o jakýsi DCA. Pokud se
+povede utržit zisk, je již \enquote{odložen mimo}. V případě ztráty na obchodě je nutné ji kompenzovat, ať už ze ziskanych zisků nebo ze zásob.
+Složené úročení, jak již název napovídá, reinvestuje vše co bylo získáno nebo ztraceno. Účelem je takto maximalizovat zisk. Ovšem tento styl obchodování s sebou přináší riziko ovlivňování trhu. Jestliže
+by investovaná částka narostla do velkých rozměrů může obchod způsobit ovlivnění tržní ceny a snížit likviditu trhu. Proto je nutné tento složené úročení limitovat maximální investovanou částkou.
+
+
+\subsubsection{Skutečné obchodní příkazy}
 
 
 
+\subsection{Komunikace s burzou}
+\label{subsec:executioner}
+asdf
 
 \endinput
