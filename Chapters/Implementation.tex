@@ -29,7 +29,7 @@ ziskové páry nevadí, že se stahují a analyzují data s denní zpožděním.
 % TODO: Obrázek kopců a doliny s vizualizací nástupní a sestupní hrany
 Scénář obchodování pro strategii kopců a dolin je následující: v momentě, kdy se dosáhlo minima, cena se odráží a začíná stoupat. Tím je započata nákupní fáze
 se snahou uzavřít obchod s co nejnižší cenou. Další stoupání ceny je příznivou situací, během které se zhodnocuje investice. Dosáhnutím lokálního maxima se trend láme a začíná klesat
--- nastává prodejní fáze opět se snahou prodat, tentokrát za co nejvyšší cenu. Konkrétní realizace je pak popsána v sekci \ref{subsec:executioner}.
+-- nastává prodejní fáze opět se snahou prodat, tentokrát za co nejvyšší cenu. Konkrétní realizace je pak popsána v sekci \ref{subsec:exchanges-comm}.
 
 
 \subsection{Výběr párů a realizace obchodních příkazů}
@@ -98,13 +98,19 @@ aktivační ceny. Nejenže tedy by nákup trval dlouhou dobu, ale výrazná čá
 Realizace prodejní fáze se potýká s podobnými problémy. Při použití příkazu \textsc{trailing stop-limit} bez aktivační ceny může dojít k drobnému záchvěvu ceny a předčasným prodejem, což může
 vést ke ztrátovému obchodu. Naopak pokud se použije aktivační cena, může dojít k rychlému skoku do klesajícího trendu, aktivační cena nebude nikdy proražena a prodejní fáze bude ukončena na základě
 časového limitu s obrovskou ztrátou. Existuje ještě jedna střední cesta a tím je příkaz \textsc{oco} (\enquote{One Cancels the Other}). Jedná se vlastně o kombinaci dvou příkazů, \textsc{limit} a
-\textsc{stop limit}. \textsc{oco} příkaz je speciální v tom, že pokud je 1 příkaz jakkoli ukončen, automaticky je zrušen i ten druhý. A v tomto případě \textsc{limit} zastřešuje horní hranici, nad
-kterou dojde k prodeji, a \textsc{stop limit} spodní hranici v případě pádu tržní ceny. Vytvořený bot umí využít těchto \textsc{oco} příkazů v maximální prospěch kontrolováním tržní ceny a vlastní
-kontroly procentuální změny. Pokud se cena dostatečně zvýší, zruší momentálně nastavený \textsc{oco} příkaz a zadá nový s cenami posunutými nahoru. K prodeji pak dojde pouze v případě poklesu tržní
+\textsc{stop limit}. \textsc{oco} příkaz je speciální v tom, že pokud je 1 příkaz jakkoli ukončen, automaticky je zrušen i ten druhý. V tomto případě \textsc{limit} zastřešuje horní hranici, nad
+kterou dojde k prodeji, a \textsc{stop limit} spodní hranici v případě pádu tržní ceny. Vytvořený bot umí využít těchto \textsc{oco} příkazů v maximální prospěch periodickým kontrolováním tržní ceny
+a vlastním přepočtem procentuální změny. Pokud se cena dostatečně zvýší, zruší momentálně nastavený \textsc{oco} příkaz a zadá nový s cenami posunutými nahoru. K prodeji pak dojde pouze v případě poklesu tržní
 ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek.
 
 \subsection{Komunikace s burzou}
-\label{subsec:executioner}
+\label{subsec:exchanges-comm}
+Přestože většina logiky kryptobota je realizovaná v databázi pomocí uložených procedur a funkcí, nelze všechno takto provést. Obchodní příkazy kryptobota obsahují drobnou abstrakci, kterou je
+nutné převést na reálné hodnoty, především limitní a aktivační ceny. Komunikace s burzou probíhá s pomocí 2 samostatných komponent. Obě mají trochu jiný účel a zaslouží si vlastní krátkou sekci.
+
+\subsubsection{Executioner}
+
+\subsubsection{Stream listener}
 
 
 \endinput
