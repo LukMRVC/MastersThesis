@@ -37,11 +37,11 @@ se snahou uzavřít obchod s co nejnižší cenou. Další stoupání ceny je p�
 Vytvoření obchodních příkazů je starostí předchozího kroku, zabývající se technickou analýzou. Ovšem počet způsobů, jak tyto příkazy vytvořit není pouze jeden a je závislý právě na
 nastavení. Pro analýzu kopců a dolin jsou nezbytně důležité 2 parametry: velikost vzestupu a sestupu. Ty zastávají procentuální změnu, o kterou se musí aktuální cena zvednout nebo klesnou,
 aby se situace v časovém okně označily jako dolina, respektive kopec. Díky těmto dvěma jednoduchým parametrům lze získat důležité informace o kryptoměnovém páru, konkrétně:
-\begin{enumerate}
+\begin{itemize}
     \item délka kopce,
     \item délka doliny,
     \item ziskovost.
-\end{enumerate}
+\end{itemize}
 Společně z dat získaných ze svíček (počet obchodů, objemy obchodů, \ldots) a statisticky získaných dat (medián a průměr objemu obchodů) se vydolují další rozhodující informace.
 Těmi je poměr počtu obchodů, poměr velikost objemu obchodů a počet obchodů vykonaných za den. Během backtestingu se simuluje obchodování o velikosti o mediánu obchodů. Jestliže
 algoritmus odhalí například 200 kopců během jednoho dne, znamenalo by to vykonání 200 obchodů. Toto číslo se dá do poměru s celkovým počtem vykonaných obchodů na kryptoměnovém páru.
@@ -56,15 +56,15 @@ pro výběr páru. Ovšem ziskovost záleží na vybraném stylu obchodování a
 % TODO: Obrázek dělení příkazu na jednotlivé iterace, každé iterace má 2 fáze.
 Samotný příkaz se skládá z několika opakování (iterací). Každá iterace má 2 fáze -- nákupní a prodejní. Pro úplnost je ještě nutné definovat, co znamená ukončení jedné iterace.
 Ukončení iterace nastává ve 2 případech:
-\begin{itemize}
+\begin{enumerate}
     \item nepovedla se nákupní fáze (tj. nic se nekoupilo),
     \item ukončila se prodejní fáze.
-\end{itemize}
+\end{enumerate}
 Prodejní fáze je uzavřena opět ve 2 situacích:
-\begin{itemize}
+\begin{enumerate}
     \item úspěšný prodej,
     \item překročením maximální doby a prodej příkazem \textsc{market}.
-\end{itemize}
+\end{enumerate}
 
 % TODO: Obrázek kaskády vs sekvence
 Existují 2 řešené postupy pro opakování příkazů. Prvních z nich je jednoduše v sekvenci, kdy se před začátkem iterace $n_i$ čeká na ukončení iterace $n_{i - 1}$, přičemž $i$ je pořadové
@@ -84,11 +84,27 @@ by investovaná částka narostla do velkých rozměrů může obchod způsobit 
 
 
 \subsubsection{Skutečné obchodní příkazy}
+Obchodování na základě kopců a dolin je pro burzy naprosto irelevantní. Burzy přijímají pouze příkazy popsané v části \ref{subsec:market-trade-orders}. Nezbytností je tedy napasovat scénáře
+obchodování do kombinací s těmito příkazy.
 
+Zachycení začátku vzestupného trendu a tedy i začínajícího kopce se dá realizovat jednoduše s použitím příkazu \textsc{trailing stop-limit}. Důležitý
+je právě onen \emph{trailing}, který na počítá procentuální změnu tržní ceny. Problémové může být krátkodobé zachvění ceny, které by způsobilo zařazení příkazu do orderbooku, ale ve skutečnosti
+by trh pokračoval v klesajícím trendu. Možnost, jak se tomuto vyvarovat nabízí nepovinná \emph{stop} neboli \enquote{aktivační} cena. Teprve v momentě, kdy je proražena stop cena se začíná počítat trailing
+delta. Avšak v této situaci nastává komplikace s reálnou burzou: stop cena a limitní cena nelze zadat jako procento aktuálního kurzu, ale musí to být konkrétní hodnoty. Pokud by v nákupní fázi
+byla použita stop cena, může dojít k okolnostem, během kterých tržní cena výrazně klesne. Jakmile se odrazí a tržní cena opět stoupne, nedojde k nákupu, neboť se čeká, dokud se neprotne hranice
+aktivační ceny. Nejenže tedy by nákup trval dlouhou dobu, ale výrazná část kopce by se \enquote{zaspala} a to rozhodně není žádoucí. Přestože bot poskytuje možnost nakoupit příkazy \textsc{market,
+    limit, trailing stop-limit}, skutečně se používá pouze \textsc{trailing stop-limit} bez použití aktivační ceny.
 
+Realizace prodejní fáze se potýká s podobnými problémy. Při použití příkazu \textsc{trailing stop-limit} bez aktivační ceny může dojít k drobnému záchvěvu ceny a předčasným prodejem, což může
+vést ke ztrátovému obchodu. Naopak pokud se použije aktivační cena, může dojít k rychlému skoku do klesajícího trendu, aktivační cena nebude nikdy proražena a prodejní fáze bude ukončena na základě
+časového limitu s obrovskou ztrátou. Existuje ještě jedna střední cesta a tím je příkaz \textsc{oco} (\enquote{One Cancels the Other}). Jedná se vlastně o kombinaci dvou příkazů, \textsc{limit} a
+\textsc{stop limit}. \textsc{oco} příkaz je speciální v tom, že pokud je 1 příkaz jakkoli ukončen, automaticky je zrušen i ten druhý. A v tomto případě \textsc{limit} zastřešuje horní hranici, nad
+kterou dojde k prodeji, a \textsc{stop limit} spodní hranici v případě pádu tržní ceny. Vytvořený bot umí využít těchto \textsc{oco} příkazů v maximální prospěch kontrolováním tržní ceny a vlastní
+kontroly procentuální změny. Pokud se cena dostatečně zvýší, zruší momentálně nastavený \textsc{oco} příkaz a zadá nový s cenami posunutými nahoru. K prodeji pak dojde pouze v případě poklesu tržní
+ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek.
 
 \subsection{Komunikace s burzou}
 \label{subsec:executioner}
-asdf
+
 
 \endinput

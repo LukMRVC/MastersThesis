@@ -137,18 +137,19 @@ zobrazit otevírací, nejvyšší, nejnižší a závěrečnou cenu kryptoměny 
 
 
 \subsection{Obchodní příkazy}
+\label{subsec:market-trade-orders}
 Automatizovanou burzu tvoří 2 základní pilíře obchodování. První z nich je obchodní \enquote{kniha} neboli \emph{order book}. Order book není v podstatě nic
 jiného než jen seznam nákupních a prodejních příkazů nějakého aktiva (například kryptoměny). Tento seznam bývá zorganizovaný podle ceny v těchto příkazech.
 Druhý pilíř je systém, který se stará o párování těchto prodejních a nákupních příkazů, označovaný jako \emph{matching engine}. Ten tedy napáruje obchodní příkazy
 a provede mezi nimi obchod. Ať už jeden, nebo i vícero obchodů.
 
-Moderní burzy poskytují 2 odlišné typy příkazů. Příkaz \emph{market} jde ihned na order book a otevírá pozici na momentální tržní ceně aktiva. Pokud uživatel
+Moderní burzy poskytují 2 odlišné typy příkazů. Příkaz \textsc{market} jde ihned na order book a otevírá pozici na momentální tržní ceně aktiva. Pokud uživatel
 pošle/zadá tento příkaz, je okamžitě vykonán a to jak v prodejní tak i případné nákupní podobě. Druhým příkazem, který už nabízí jakousi možnost automatizace
-je \emph{limit}.
-Limit se zadává s hraniční cenou, za kterou je uživatel aktivum ochotný nakoupit nebo prodat. Matchin engine se snaží spárovat limit tak, aby byla splněna podmínka
+je \textsc{limit}.
+Limit se zadává s hraniční cenou, za kterou je uživatel aktivum ochotný nakoupit nebo prodat. Matching engine se snaží spárovat limit tak, aby byla splněna podmínka
 hranični ceny se spárovaným příkazem. Tato situace je jak pro prodej tak i pro nákup zachycena na obrázku \ref{fig:limit-orders}.
 
-V kombinaci s limit příkazem lze využít další 2 možné příkazy, označované jako \emph{stop-limit} a \emph{trailing stop-limit}. Oba přidávají další možnosti,
+V kombinaci s limit příkazem lze využít další 2 možné příkazy, označované jako \textsc{stop-limit} a \textsc{trailing stop-limit}. Oba přidávají další možnosti,
 jak obchodování automatizovat. Stop-limit příkaz umožňuje přidat další cenový parametr, označovaný jako stop-cena. Tato stop-cena se chová jako zábrana, jelikož
 nepustí příkaz na order book, dokud není překročena. Například, pokud je aktuální tržní cena aktiva na 100\texteuro, uživatel zadává na burzu stop-limit příkaz k
 prodeji se stop-cenou nastavenou na 110\texteuro a limit cenou na 95\texteuro. I přestože je splněna podmínka pro prodej k je tržní cena vyšší než limitní
@@ -157,8 +158,8 @@ alespoň 110\texteuro, je příkaz puštěn na order book a matching engine mů�
 Trailing stop-limit bere tuto myšlenku ještě o krok dále a umožňuje lepší zachycení trendu tržní ceny. Tento příkaz počítá procentuální změnu ceny od lokálního
 extrému (minimum pro nákup, maximum pro prodej), jakmile rozdíl ceny překročí uživatelem nastavenou hranici, je příkaz zapsán do order booku. Trailing-stop-limit
 může taktéž mít nastavenou stop-cenu, tedy musí být splněna podmínka jak stop-ceny tak i procentuálního rozdílu.  % TODO: Dodělat obrázky pro trailing a zachytit je zde
-Správné nastavení těchto parametrů je důležitým aspektem pro úspěšné zobchodování zadavaného příkazu. Například, pokud při zadávání trailing stop-limit příkazu
-je zadaný rozdíl od extrému příliš malý, může být příkaz zobchodován dřív než by to doopravdy bylo výhodné nebo chtěné. Naopak, jesliže by rozdíl byl příliš velký
+Správné nastavení těchto parametrů je důležitým aspektem pro úspěšné zobchodování zadávaného příkazu. Například, pokud při zadávání trailing stop-limit příkazu
+je zadaný rozdíl od extrému příliš malý, může být příkaz zobchodován dřív než by to doopravdy bylo výhodné nebo chtěné. Naopak, jestliže by rozdíl byl příliš velký
 nemusí k zobchodování dojít vůbec a příkaz bude na burze nebude nic dělat.
 
 \begin{figure}[ht]
@@ -179,7 +180,7 @@ Každý uživatel si může zvolit svou vlastní strategii, tak aby mu vyhovoval
 
 \subsubsection{Day trading}
 Denní obchodování nebo-li \emph{day trading} se zaměřuje, jak název napovídá, na obchody netrvající déle než den. Tito obchodníci se snaží najít co nejvýhodnější
-bod pro nákup a prodej aktiva v rámci jednoho dne a snaží se držet svou pozici nejdelší rozumnou dobu, aby mohli následně svou pozici uzavřit (prodat) se ziskem.
+bod pro nákup a prodej aktiva v rámci jednoho dne a snaží se držet svou pozici nejdelší rozumnou dobu, aby mohli následně svou pozici uzavřít (prodat) se ziskem.
 Těchto pozic neotevírají hodně, spíš jen pár za celý obchodní den.
 
 \subsubsection{Scalping}
