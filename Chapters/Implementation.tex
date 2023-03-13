@@ -1,6 +1,8 @@
 \chapter{Implementace kryptobota}
 \label{chap:impl}
 
+% TODO: base/quote currency (podkladová/kotovaná měna) = dopsat toto rozdělení
+
 Hlavní cíl této diplomové práce spočívá v implementaci kryptobota. Tento kryptobot má vytvořené pravidla vycházející z předem provedené technické analýzy.
 Pravidla se následně aplikují na reálný trh a bot provádí obchody. Jeho postup a stav lze uživatelský přivětivě pozorovat z webové stránky, případně jeho akce
 zastavit, nebo dokonce kompletně opustit tržní pozici. Implementovaný kryptobot je schopen obchodovat na burze Binance, která je jedna z největších a nejpopulárnějších
@@ -101,16 +103,37 @@ vést ke ztrátovému obchodu. Naopak pokud se použije aktivační cena, může
 \textsc{stop limit}. \textsc{oco} příkaz je speciální v tom, že pokud je 1 příkaz jakkoli ukončen, automaticky je zrušen i ten druhý. V tomto případě \textsc{limit} zastřešuje horní hranici, nad
 kterou dojde k prodeji, a \textsc{stop limit} spodní hranici v případě pádu tržní ceny. Vytvořený bot umí využít těchto \textsc{oco} příkazů v maximální prospěch periodickým kontrolováním tržní ceny
 a vlastním přepočtem procentuální změny. Pokud se cena dostatečně zvýší, zruší momentálně nastavený \textsc{oco} příkaz a zadá nový s cenami posunutými nahoru. K prodeji pak dojde pouze v případě poklesu tržní
-ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek.
+ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek. Teto metodě využítí \textsc{oco} příkazů přezdívá autor \emph{peaking}.
 
-\subsection{Komunikace s burzou}
+\section{Komunikace s burzou}
 \label{subsec:exchanges-comm}
 Přestože většina logiky kryptobota je realizovaná v databázi pomocí uložených procedur a funkcí, nelze všechno takto provést. Obchodní příkazy kryptobota obsahují drobnou abstrakci, kterou je
 nutné převést na reálné hodnoty, především limitní a aktivační ceny. Komunikace s burzou probíhá s pomocí 2 samostatných komponent. Obě mají trochu jiný účel a zaslouží si vlastní krátkou sekci.
 
-\subsubsection{Executioner}
+\subsection{Executioner}
+Komponenta executioner má na starosti obchodní příkazy. Konkrétně jejich zaslání na burzu a jejich zrušení a dohled na vlastní přepočet při použití výše popsané metody \emph{peaking}. Komponenta
+využívá asynchronní úlohy, mezi kterými přepíná.
 
-\subsubsection{Stream listener}
+\subsubsection{Zaslání příkazu na burzu}
+% TODO: Obrázek cyklu/diagram
+Kontrola zaslání příkazu se provádí periodicky, každých pár vteřin. Z databáze (tabulka \emph{trade\_order\_progress}) se načtou potřebné parametry příkazů. Následuje kontrola
+dostatku volných prostředků (podkladová měna kryptoměnového páru). Jestliže není dostatek podkladové měny, konkrétní příkaz se neprovede a do databáze se zapíše chybný stav. V případě
+úspěchu se pokračuje převedením procentuálních hodnot na reálné částky. Z burzy se skrze API stáhne aktuální kurz kryptoměnového páru, na jehož základě se dopočtou ony reálné částky, které
+se chtějí obchodovat. Před závěrečným zasláním příkazu na burzu dochází k poslední kontrole a to na pravidla samotného trhu (minimální nominální hodnota, minimální kvantita, \ldots).
+Konečně je příkaz odeslán pomocí REST API ke zpracování na Binance. Součástí odpovědi je pak jednoznačný identifikátor daného příkazu na Binance, ten se uloží do databáze. Tím končí jedna
+iterace zasílání příkazu.
+
+\subsubsection{Rušení příkazu}
+Po zaslání příkazu na Binance je současně uloženo časové razítko, kdy byl příkaz odeslán. Opět, periodicky, se kontroluje překročení maximální doba trvání příkazu. Pokud se tato doba přesáhne,
+je na Binance, přes API, zaslána žádost o zrušení toho příkazu. Pokud se jedná o prodejní příkaz, bot navíc reaguje vznikem nového příkazu pro okamžitý prodej přes \textsc{market}.
+
+\subsubsection{Peaking}
+Zvládnutí peakingu s sebou nese starost a vlastní přepočet změny kurzu. Tato změna se počítá od kurzu v momentě zasílání posledního příkazu. Peaking běží v rámci komponenty jako samostatná úloha.
+Cyklicky co chvíli si stahuje z Binance momentální kurz kryptoměnového páru a spočítá procentuální přírustek kurzu. Pouze v případě, že se jedná o pozitivní změnu vyšší než zadaná hranice, je
+aktuální \textsc{oco} příkaz zrušen a vytvořen nový s posunutými cenami nahoru. I v rámci této rychlé vyměny příkazů se provádí stejné kontroly jako při normálním zasílání přikazu.
+
+
+\subsection{Stream listener}
 
 
 \endinput
