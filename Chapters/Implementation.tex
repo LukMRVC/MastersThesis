@@ -103,7 +103,7 @@ vést ke ztrátovému obchodu. Naopak pokud se použije aktivační cena, může
 \textsc{stop limit}. \textsc{oco} příkaz je speciální v tom, že pokud je 1 příkaz jakkoli ukončen, automaticky je zrušen i ten druhý. V tomto případě \textsc{limit} zastřešuje horní hranici, nad
 kterou dojde k prodeji, a \textsc{stop limit} spodní hranici v případě pádu tržní ceny. Vytvořený bot umí využít těchto \textsc{oco} příkazů v maximální prospěch periodickým kontrolováním tržní ceny
 a vlastním přepočtem procentuální změny. Pokud se cena dostatečně zvýší, zruší momentálně nastavený \textsc{oco} příkaz a zadá nový s cenami posunutými nahoru. K prodeji pak dojde pouze v případě poklesu tržní
-ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek. Teto metodě využítí \textsc{oco} příkazů přezdívá autor \emph{peaking}.
+ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek. Teto metodě využití \textsc{oco} příkazů přezdívá autor \emph{peaking}.
 
 \section{Komunikace s burzou}
 \label{subsec:exchanges-comm}
@@ -129,11 +129,28 @@ je na Binance, přes API, zaslána žádost o zrušení toho příkazu. Pokud se
 
 \subsubsection{Peaking}
 Zvládnutí peakingu s sebou nese starost a vlastní přepočet změny kurzu. Tato změna se počítá od kurzu v momentě zasílání posledního příkazu. Peaking běží v rámci komponenty jako samostatná úloha.
-Cyklicky co chvíli si stahuje z Binance momentální kurz kryptoměnového páru a spočítá procentuální přírustek kurzu. Pouze v případě, že se jedná o pozitivní změnu vyšší než zadaná hranice, je
-aktuální \textsc{oco} příkaz zrušen a vytvořen nový s posunutými cenami nahoru. I v rámci této rychlé vyměny příkazů se provádí stejné kontroly jako při normálním zasílání přikazu.
+Cyklicky co chvíli si stahuje z Binance momentální kurz kryptoměnového páru a spočítá procentuální přírůstek kurzu. Pouze v případě, že se jedná o pozitivní změnu vyšší než zadaná hranice, je
+aktuální \textsc{oco} příkaz zrušen a vytvořen nový s posunutými cenami nahoru. I v rámci této rychlé výměny příkazů se provádí stejné kontroly jako při normálním zasílání příkazu.
 
 
 \subsection{Stream listener}
+Úkolem stream listeneru je nepřetržité získávání zpráv o událostech od Binance. Spojení se navazuje technologií \emph{websocketů}. Ačkoli websockety nabízí možnost plně duplexní komunikace, Binance
+neumožňuje zasílání příkazů přes tento komunikační kanál. Jedná se tedy pouze o pasivní naslouchání. Aby bylo spojení dovoleno, je zapotřebí si vyžádat spojení se speciálním klíčem v URL parametru.
+Tento klíč lze získat voláním REST API a je nutné ho nadále označovat za aktivní (taktéž voláním REST API). Z přicházejí zprávy o 3 událostech:
+\begin{enumerate}
+    \item aktualizace účtu,
+    \item aktualizace zůstatku,
+    \item aktualizace příkazu.
+\end{enumerate}
+Aktualizace účtu nastává v momentě, kdy se jakkoli změní zůstatek na účtu, např. zablokováním aktiv v rámci obchodování. Aktualizace zůstatku je zaslána jakmile nastane vklad, výběr nebo převod z účtu.
+Aktualizace příkazu, jak již název napovídá, je přijat při změně stavu příkazu způsobeným třeba zrušením příkazu, vypršením nebo vyplněním. Kryptobot reaguje na události týkající se aktualizací příkazů
+a aktualizace účtu. Každá aktualizace příkazu je ihned uložena do databáze.
+
+Aby bot měl dostupné vždy korektní informace provádí stream listener při svém spuštění kontrolu příkazů z databáze vůči burze. Pokud detekuje, že v databázi chybí nějaké informace z důvodu nějakého výpadku,
+stáhne potřebné data skrze API a uloží je. Druhým opatřením, kterým stream listener disponuje, je ukládání zpráv do vyrovnávací paměti, pokud by došlo k výpadku databáze.
+
+
+\subsection{Databázové procedury}
 
 
 \endinput
