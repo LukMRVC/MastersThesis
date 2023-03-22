@@ -151,6 +151,13 @@ stáhne potřebné data skrze API a uloží je. Druhým opatřením, kterým str
 
 
 \subsection{Databázové procedury}
+Většina abstraktnější logiky rozhodování je schována v databázových procedurách. Tyto procedury jsou navíc volány taktéž triggery, případně periodicky v rámci databázové události (event), které
+databázový systém MySQL nabízí. Na tabulky \emph{trade\_order\_iteration} a \emph{trade\_order\_progress} jsou navázany \emph{after insert} a \emph{after update} triggery. V momentě, kdy je vložen
+nový záznam iterace, automaticky je skrze trigger zavolána procedura, která vytvoří nový záznam do tabulky \emph{trade\_order\_progress}. S touto tabulkou už pak pracuje \emph{Executioner}, který
+příkaz zašle na burzu.
 
+Jednotlivé části obchodu získávané \emph{Stream listenerem} se vkládají do tabulky \emph{trade\_order\_progress\_part}. I pro tuto tabulku existuje after insert trigger. Jakmile je detekován
+záznam ohledně ukončení obchodu, korektně se zaktualizuje související záznam z \emph{trade\_order\_progress}, spojený cizím klíčem. Po provedení aktualizace je opětovně volána procedura aktualizující
+\emph{trade\_order\_iteration} a následně i samotná \emph{trade\_order}.
 
 \endinput
