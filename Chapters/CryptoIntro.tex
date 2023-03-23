@@ -164,8 +164,8 @@ Limit se zadává s hraniční cenou, za kterou je uživatel aktivum ochotný na
 hraniční ceny se spárovaným příkazem. Tato situace je jak pro prodej tak i pro nákup zachycena na obrázku \ref{fig:limit-orders}.
 
 V kombinaci s limit příkazem lze využít další 2 možné příkazy, označované jako \textsc{stop-limit} a \textsc{trailing stop-limit}. Oba přidávají další možnosti,
-jak obchodování automatizovat. Stop-limit příkaz umožňuje přidat další cenový parametr, označovaný jako stop-cena. Tato stop-cena se chová jako zábrana, jelikož
-nepustí příkaz na order book, dokud není překročena. Například, pokud je aktuální tržní cena aktiva na 100\texteuro, uživatel zadává na burzu stop-limit příkaz k
+jak obchodování automatizovat. Stop-limit příkaz umožňuje přidat další cenový parametr, označovaný jako stop-cena neboli taky aktivační cena.
+Tato stop-cena se chová jako zábrana, jelikož nepustí příkaz na order book, dokud není překročena. Například, pokud je aktuální tržní cena aktiva na 100\texteuro, uživatel zadává na burzu stop-limit příkaz k
 prodeji se stop-cenou nastavenou na 110\texteuro a limit cenou na 95\texteuro. I přestože je splněna podmínka pro prodej k je tržní cena vyšší než limitní
 a mohlo by dojít k zobchodování matching engine nemůže příkaz zobchodovat, jelikož stop-cena drží příkaz mimo order book. V momentě, kdy tržní cena vyšplhá na
 alespoň 110\texteuro, je příkaz puštěn na order book a matching engine může vykonat obchod. % TODO: Dodělat obrázky pro stop-limit
@@ -176,11 +176,16 @@ Správné nastavení těchto parametrů je důležitým aspektem pro úspěšné
 je zadaný rozdíl od extrému příliš malý, může být příkaz zobchodován dřív než by to doopravdy bylo výhodné nebo chtěné. Naopak, jestliže by rozdíl byl příliš velký
 nemusí k zobchodování dojít vůbec a příkaz bude na burze nebude nic dělat.
 
+
 \begin{figure}[ht]
     \centering
     \subfloat[\centering Oblast pro nákup]{{\includegraphics[width=0.45\textwidth]{Figures/limit-chart-buy.pdf}}}
     \qquad
     \subfloat[\centering Oblast pro prodej]{{\includegraphics[width=0.45\textwidth]{Figures/limit-chart-sell.pdf}}}
+
+    \subfloat[\centering Stop limit nákup]{{\includegraphics[width=0.45\textwidth]{Figures/stop-limit.pdf}}}
+    \qquad
+    \subfloat[\centering Trailing]{{\includegraphics[width=0.45\textwidth]{Figures/trailing-delta.pdf}}}
     \caption{Příkaz limit s hraniční cenou}
     \label{fig:limit-orders}
 \end{figure}
