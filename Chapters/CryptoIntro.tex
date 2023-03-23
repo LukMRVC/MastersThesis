@@ -124,7 +124,7 @@ kryptoměny obchodovat, podobně jako například na akciovém trhu. Jako dalš�
 může zdát jako jakýsi ekvivalent termínovaného vkladu v té podobě, že člověk zastaví svá aktvita na nějakou určitou dobu. Na konci tohoto období dostane
 odměnu v podobně coinů, nebo v případě termínovaných vkladů, peněz. V realitě se ale termínovaný vklad od stakingu ve své podstatě liší. U termínovaného
 vkladu dává zákazník bance určitou částku peněz k obchodu a investicím. Banka jako odměnu vyplatí část peněz zpět ve formě předem domluveného úroku.
-Na druhou stranu, staking je aktviní podílení se na ověřování transakcí na \emph{proof-of-stake} blockchainu popsané v předchozí části
+Na druhou stranu, staking je aktivní podílení se na ověřování transakcí na \emph{proof-of-stake} blockchainu popsané v předchozí části
 \ref{proof-of-stake-subsection}. Tak jako u proof-of-work existují mining pooly, tak i u proof-of-stake vznikají staking pooly, ve kterých uživatelé
 blockchainu společně vloží své coiny a stanou se validátorem. Odměnu si pak rozdělí podle vložených coinů. Burzy v tomto ohledu velice zjednodušují
 celý princip stakingu, jelikož tyto pooly řídí na pozadí a uživatel si pouze vybírá, se kterým coinem chce stakovat a na jak dlouhou dobu. Navíc k tomu
@@ -133,21 +133,35 @@ burza může uživateli poskytnout lepší odhady o získané odměně, risku ap
 K vizualizaci trendů a aktuální tržní ceny využívají burzy grafické znázornění ve formě grafů. Typicky poskytují 3 typy grafů --- spojnicový, sloupcový a svíčkový.
 Investoři si samozřejmě mohou vybrat nejvíce vyhovující jejich gestu. Rozdíly mezi grafy nejsou pouze vizuální, avšak také v množství informací, jaké z nich lze vyčíst.
 Obvykle se v těchto grafech zobrazují ceny kryptoměn za nějak veliké časové okno (1 minuta, 1 hodina, \ldots). Oproti spojnicovému grafu dokáže sloupcový a svíčkový
-zobrazit otevírací, nejvyšší, nejnižší a závěrečnou cenu kryptoměny v daném okně. % TODO: Obrazky techto grafu, s popisem open-high-low-close a svíčky
+zobrazit otevírací, nejvyšší, nejnižší a závěrečnou cenu kryptoměny v daném okně.
+
+\begin{figure}[ht]
+    \centering
+    \subfloat[\centering Spojnivový graf]{{\includegraphics[width=0.45\textwidth]{Figures/linechart.pdf}}}
+    \qquad
+    \subfloat[\centering Sloupcový graf]{{\includegraphics[width=0.45\textwidth]{Figures/barchart.pdf}}}
+
+    \subfloat[\centering Svíčkový graf]{{\includegraphics[width=0.45\textwidth]{Figures/candlestickchart.pdf}}}
+    \qquad
+    \subfloat[\centering Svíčka]{{\includegraphics[width=0.45\textwidth]{Figures/candle.pdf}}}
+
+    \caption{Používané grafy pro a popis svíčky}
+    \label{fig:most-used-charts}
+\end{figure}
 
 
 \subsection{Obchodní příkazy}
 \label{subsec:market-trade-orders}
 Automatizovanou burzu tvoří 2 základní pilíře obchodování. První z nich je obchodní \enquote{kniha} neboli \emph{order book}. Order book není v podstatě nic
 jiného než jen seznam nákupních a prodejních příkazů nějakého aktiva (například kryptoměny). Tento seznam bývá zorganizovaný podle ceny v těchto příkazech.
-Druhý pilíř je systém, který se stará o párování těchto prodejních a nákupních příkazů, označovaný jako \emph{matching engine}. Ten tedy napáruje obchodní příkazy
+Druhý pilíř je systém, který se stará o párování těchto prodejních a nákupních příkazů, označovaný jako \emph{matching engine}. Ten tedy spáruje obchodní příkazy
 a provede mezi nimi obchod. Ať už jeden, nebo i vícero obchodů.
 
 Moderní burzy poskytují 2 odlišné typy příkazů. Příkaz \textsc{market} jde ihned na order book a otevírá pozici na momentální tržní ceně aktiva. Pokud uživatel
 pošle/zadá tento příkaz, je okamžitě vykonán a to jak v prodejní tak i případné nákupní podobě. Druhým příkazem, který už nabízí jakousi možnost automatizace
 je \textsc{limit}.
 Limit se zadává s hraniční cenou, za kterou je uživatel aktivum ochotný nakoupit nebo prodat. Matching engine se snaží spárovat limit tak, aby byla splněna podmínka
-hranični ceny se spárovaným příkazem. Tato situace je jak pro prodej tak i pro nákup zachycena na obrázku \ref{fig:limit-orders}.
+hraniční ceny se spárovaným příkazem. Tato situace je jak pro prodej tak i pro nákup zachycena na obrázku \ref{fig:limit-orders}.
 
 V kombinaci s limit příkazem lze využít další 2 možné příkazy, označované jako \textsc{stop-limit} a \textsc{trailing stop-limit}. Oba přidávají další možnosti,
 jak obchodování automatizovat. Stop-limit příkaz umožňuje přidat další cenový parametr, označovaný jako stop-cena. Tato stop-cena se chová jako zábrana, jelikož
