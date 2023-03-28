@@ -105,6 +105,86 @@ kterou dojde k prodeji, a \textsc{stop limit} spodní hranici v případě pádu
 a vlastním přepočtem procentuální změny. Pokud se cena dostatečně zvýší, zruší momentálně nastavený \textsc{oco} příkaz a zadá nový s cenami posunutými nahoru. K prodeji pak dojde pouze v případě poklesu tržní
 ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek. Teto metodě využití \textsc{oco} příkazů přezdívá autor \emph{peaking}.
 
+\begin{center}
+    \small
+    \begin{longtable}{ |l|c|c|c|p{0.45\linewidth}| }
+        \hline
+        Sloupec                            & TOT        & TO         & Typ      & Popis                                                                                             \\
+        \hline
+        id                                 & \tikzcmark & \tikzcmark & int      & primární klíč                                                                                     \\
+        pairname                           & \tikzcmark & \tikzcmark & varchar  & název kryptoměnového páru                                                                         \\
+        source                             & \tikzcmark & \tikzcmark & enum     & Odkud se vzala doporučení (manual, peak\_valley)                                                  \\
+        rank\_trading                      & \tikzcmark & \tikzcmark & int      & Hodnocení obchodování                                                                             \\
+        rank\_fundamental                  & \tikzcmark & \tikzcmark & int      & Hodnocení fundamentu                                                                              \\
+        rank\_total                        & \tikzcmark & \tikzcmark & int      & Celkové hodnocení pravidla pro obchodování,                                                       \\
+        rank\_winning\_order               & \tikzcmark & \tikzcmark & int      & Vítězné pořadí pro doporučení (1 = nejlepší)                                                      \\
+        market                             & \tikzcmark & \tikzcmark & enum     & Trh k obchodování (spot, futures)                                                                 \\
+        type                               & \tikzcmark & \tikzcmark & enum     & Strana obchodu (buy, sell, both)                                                                  \\
+        repeat                             & \tikzcmark & \tikzcmark & enum     & Opakování obchodu (once, sequence, cascade)                                                       \\
+        investment\_strategy               & \tikzcmark & \tikzcmark & enum     & Investiční strategie (fixed, compound)                                                            \\
+        reference\_currency                & \tikzcmark & \tikzcmark & enum     & Referenční měna (base, quote)                                                                     \\
+        start\_limit                       & \tikzcmark & \tikzcmark & double   & Investovaná částka (pro fixed, pro compound pouze první investice)                                \\
+        compound\_interest\_max\_limit     & \tikzcmark & \tikzcmark & double   & Maximální investovaná částka pro strategii compound (medián)                                      \\
+        status                             & \tikzcmark & \tikzcmark & enum     & Status doporučení (active, suspended, cancelled, blocked)                                         \\
+        substatus                          & \tikzxmark & \tikzcmark & enum     & Podrobnější status pro trade\_order (first\_add, progress, finish\_last, pause)                   \\
+        repeat\_count                      & \tikzcmark & \tikzcmark & int      & Maximální počet iterací pro trade\_order                                                          \\
+        cascade\_max\_parallel\_count      & \tikzcmark & \tikzcmark & int      & Maximální počet aktivních iterací v kaskádě                                                       \\
+        cascade\_max\_parallel\_limit      & \tikzcmark & \tikzcmark & double   & Maximální investovaná částka aktivních iterací v kaskádě                                          \\
+        label                              & \tikzcmark & \tikzcmark & varchar  & Označení                                                                                          \\
+        description                        & \tikzcmark & \tikzcmark & varchar  & Popis                                                                                             \\
+        datetime\_begin                    & \tikzcmark & \tikzcmark & datetime & Začáteční datum obchodování                                                                       \\
+        datetime\_end                      & \tikzcmark & \tikzcmark & datetime & Konečné datum obchodování                                                                         \\
+        duration\_buy                      & \tikzcmark & \tikzcmark & int      & Maximální doba pro nákup                                                                          \\
+        duration\_hold                     & \tikzcmark & \tikzcmark & int      & Doba pro držení pozice                                                                            \\
+        duration\_sell                     & \tikzcmark & \tikzcmark & int      & Maximální doba pro prodej                                                                         \\
+        duration\_unit                     & \tikzcmark & \tikzcmark & enum     & Jednotka pro dobu prodeje/nákupu (minute, hour, day)                                              \\
+        delay\_before                      & \tikzcmark & \tikzcmark & int      & Prodleva před zahájením iterace (ve vteřinách)                                                    \\
+        delay\_after                       & \tikzcmark & \tikzcmark & int      & Prodleva po ukončení iterace (ve vteřinách)                                                       \\
+        delay\_id                          & \tikzcmark & \tikzcmark & int      & Odkaz na pokročilejší pravidla prodlev                                                            \\
+        buy\_trigger                       & \tikzcmark & \tikzcmark & enum     & Typ určující cenu nákupu pro spot/futures trh                                                     \\
+        buy\_type                          & \tikzcmark & \tikzcmark & enum     & Typ nákupního příkazu (market, limit, trailing, peaking, unsecured)                               \\
+        buy\_price\_value                  & \tikzcmark & \tikzcmark & double   & Cenová hodnota pro nákupní příkaz                                                                 \\
+        buy\_price\_percent                & \tikzcmark & \tikzcmark & double   & Procento od aktuálního kurzu páru pro nákupní příkaz (tzn. 1.01 je 1 \% nahoru od kurzu)          \\
+        buy\_trailing\_value               & \tikzcmark & \tikzcmark & double   & Cena, na kterou musí trailing vystoupat                                                           \\
+        buy\_trailing\_percent             & \tikzcmark & \tikzcmark & double   & Procento trailing změny                                                                           \\
+        buy\_stop\_price\_value            & \tikzcmark & \tikzcmark & double   & Aktivační cena                                                                                    \\
+        buy\_stop\_price\_percent          & \tikzcmark & \tikzcmark & double   & Procento od aktuálního kurzu páru pro aktivační příkaz při nákupu                                 \\
+        buy\_time\_in\_force               & \tikzcmark & \tikzcmark & enum     & Parametr pro expiraci nákupního příkazu (gtc, ioc, fok)                                           \\
+        sell\_trigger                      & \tikzcmark & \tikzcmark & enum     & Typ určující cenu prodeje pro spot/futures trh                                                    \\
+        sell\_type                         & \tikzcmark & \tikzcmark & enum     & Typ prodejního příkazu (market, limit, trailing, peaking, unsecured)                              \\
+        peaking\_period                    & \tikzcmark & \tikzcmark & int      & Jak často má probíhat kontrola pro peaking (ve vteřinách)                                         \\
+        sell\_price\_value                 & \tikzcmark & \tikzcmark & double   & Cenová hodnota pro prodejní příkaz                                                                \\
+        sell\_price\_percent               & \tikzcmark & \tikzcmark & double   & Procento od aktuálního kurzu páru pro prodejní příkaz                                             \\
+        sell\_trailing\_value              & \tikzcmark & \tikzcmark & double   & Cena, na kterou musí trailing vystoupat                                                           \\
+        sell\_trailing\_percent            & \tikzcmark & \tikzcmark & double   & Procento trailing změny                                                                           \\
+        sell\_stop\_price\_value           & \tikzcmark & \tikzcmark & double   & Aktivační cena                                                                                    \\
+        sell\_stop\_price\_percent         & \tikzcmark & \tikzcmark & double   & Procento od aktuálního kurzu páru pro aktivační příkaz při prodeji                                \\
+        sell\_stoploss\_value              & \tikzcmark & \tikzcmark & double   & Limitní stoploss cena, pokud je zadána, použije se OCO příkaz                                     \\
+        sell\_stoploss\_percent            & \tikzcmark & \tikzcmark & double   & Procento od aktuálního kurzu pro stoploss cenu, pokud je zadána, použije se OCO příkaz            \\
+        sell\_stoploss\_stop\_price\_value & \tikzcmark & \tikzcmark & double   & Aktivační cena pro stoploss                                                                       \\
+        sell\_stoploss\_stop\_price\       & \tikzcmark & \tikzcmark & double   & Procento od aktuálního kurzu pro aktivační cenu pro stoploss                                      \\
+        sell\_time\_in\_force              & \tikzcmark & \tikzcmark & enum     & Parametr pro expiraci nákupního příkazu (gtc, ioc, fok, gtc+market)                               \\
+        current\_volume                    & \tikzxmark & \tikzcmark & double   & Aktuálně obchodované množství (investiční strategie \enquote{compound})                           \\
+        profit\_volume\_last               & \tikzcmark & \tikzcmark & double   & Kolik vydělal (prodělal) poslední obchod                                                          \\
+        profit\_volume\_total              & \tikzcmark & \tikzcmark & double   & Kolik celkem bylo vyděláno dané měny                                                              \\
+        profit\_percent\_last              & \tikzcmark & \tikzcmark & double   & Procento zisku (ztráty) za poslední obchod                                                        \\
+        profit\_percent\_total             & \tikzcmark & \tikzcmark & double   & Celkové procento zisku (ztráty)                                                                   \\
+        profit\_count\_continuous          & \tikzcmark & \tikzcmark & int      & Počet po sobě provedených ziskových iterací                                                       \\
+        profit\_count\_total               & \tikzcmark & \tikzcmark & int      & Celkový počet provedených ziskových iterací                                                       \\
+        loss\_count\_continuous            & \tikzcmark & \tikzcmark & int      & Počet po sobě provedených prodělečných iterací                                                    \\
+        loss\_count\_total                 & \tikzcmark & \tikzcmark & int      & Celkový počet provedených prodělečných iterací                                                    \\
+        unrealized\_count\_continuous      & \tikzcmark & \tikzcmark & int      & Počet po sobě provedených neprovedených iterací                                                   \\
+        unrealized\_count\_total           & \tikzcmark & \tikzcmark & int      & Celkový počet provedených neprovedených iterací                                                   \\
+        max\_loss\_unrealized\_until\      & \tikzcmark & \tikzcmark & int      & Maximální počet po sobě jdoucích neprovedených + prodělečných iterací pro zastavení trade\_orderu \\
+        profit\_percent\_last\_5           & \tikzcmark & \tikzcmark & double   & Procento zisku (ztráty) za posledních 5 obchodů                                                   \\
+        suspend\_resumed\_total            & \tikzcmark & \tikzxmark & int      & Počet kolikrát byl TOT aktivován ze stavu \enquote{suspended} do stavu \enquote{active}           \\
+        created                            & \tikzcmark & \tikzcmark & datetime & Kdy byl záznam vytvořen                                                                           \\
+        changed                            & \tikzcmark & \tikzcmark & datetime & Kdy byl naposled záznam změněn.                                                                   \\
+        \hline
+        \caption{Porovnání tabulky trade\_order\_template a trade\_order}
+    \end{longtable}
+\end{center}
+
 \section{Komunikace s burzou}
 \label{subsec:exchanges-comm}
 Přestože většina logiky kryptobota je realizovaná v databázi pomocí uložených procedur a funkcí, nelze všechno takto provést. Obchodní příkazy kryptobota obsahují drobnou abstrakci, kterou je
@@ -159,5 +239,67 @@ příkaz zašle na burzu.
 Jednotlivé části obchodu získávané \emph{Stream listenerem} se vkládají do tabulky \emph{trade\_order\_progress\_part}. I pro tuto tabulku existuje after insert trigger. Jakmile je detekován
 záznam ohledně ukončení obchodu, korektně se zaktualizuje související záznam z \emph{trade\_order\_progress}, spojený cizím klíčem. Po provedení aktualizace je opětovně volána procedura aktualizující
 \emph{trade\_order\_iteration} a následně i samotná \emph{trade\_order}.
+
+\begin{center}
+    \small
+    \begin{longtable}{ |l|c|c|p{0.3\linewidth}| }
+        \hline
+        Sloupec TOT                           & View                      & Příklad             & Poznámka                                                     \\
+        \hline                                &                           &                     &                                                              \\ 
+        pairname                              & pairname                  & JOEBUSD             &                                                              \\
+        source                                & \tikzxmark                & peak\_valley        &                                                              \\
+        rank\_trading                         & \tikzxmark                & 9999                &                                                              \\
+        rank\_fundamental                     & \tikzxmark                & 9999                &                                                              \\
+        rank\_total                           & \tikzxmark                & 9999                &                                                              \\
+        rank\_winning\_order                  & \tikzxmark                & 1                   &                                                              \\
+        market                                & \tikzxmark                & spot                & Vždy \enquote{spot}                                          \\
+        type                                  & \tikzxmark                & both                & Vždy \enquote{both}                                          \\
+        repeat                                & \tikzxmark                & sequence            & Vždy \enquote{sequence}                                      \\
+        investment\_strategy                  & \tikzxmark                & fixed               & \enquote{fixed} nebo \enquote{compound}                      \\
+        reference\_currency                   & \tikzxmark                & base                & Vždy \enquote{base}                                          \\
+        start\_limit                          & all\_vol\_no\_trades\_med & 3000                & $0,6 * all\_vol\_\-no\_\-trades\_med$ pro \enquote{compound} \\
+        compound\_interest\_max\_limit        & all\_vol\_no\_trades\_med & 3000                &                                                              \\
+        status                                & \tikzxmark                & active              & Vždy \enquote{active}                                        \\
+        repeat\_count                         & peak\_count               & first\_add          & $0,5 * peak\_count$                                          \\
+        cascade\_max\_parallel\_count         & \tikzxmark                & 1                   &                                                              \\
+        cascade\_max\_parallel\_limit         & \tikzxmark                & 9000                &                                                              \\
+        label                                 & \tikzxmark                & JOEBUSD 20 USD      &                                                              \\
+        description                           & \tikzxmark                & JOEBUSD 20 USD      &                                                              \\
+        datetime\_begin                       & \tikzxmark                & 2023-03-28 12:00:00 &                                                              \\
+        datetime\_end                         & \tikzxmark                & 2023-04-10 12:00:00 &                                                              \\
+        duration\_buy                         & valley\_interval\_med     & 60                  &                                                              \\
+        duration\_hold                        & \tikzxmark                & NULL                &                                                              \\
+        duration\_sell                        & peak\_interval\_med       & 60                  &                                                              \\
+        duration\_unit                        & \tikzxmark                & minute              & \enquote{minute, hour, day}                                  \\
+        delay\_before                         & \tikzxmark                & NULL                &                                                              \\
+        delay\_after                          & \tikzxmark                & NULL                &                                                              \\
+        delay\_id                             & \tikzxmark                & NULL                &                                                              \\
+        buy\_trigger                          & \tikzxmark                & last                & \enquote{last}                                               \\
+        buy\_type                             & \tikzxmark                & trailing            & \enquote{market, limit, trailing, peaking, unsecured}        \\
+        buy\_price\_value                     & \tikzxmark                & NULL                &                                                              \\
+        buy\_price\_percent                   & change\_up                & 1.01                & $1 + change\_up$                                             \\
+        buy\_trailing\_value                  & \tikzxmark                & NULL                &                                                              \\
+        buy\_trailing\_percent                & change\_up                &                     & $change\_up$                                                 \\
+        buy\_stop\_price\_value               & \tikzxmark                & NULL                &                                                              \\
+        buy\_stop\_price\_percent             &                           &                     &                                                              \\
+        buy\_time\_in\_force                  & \tikzxmark                & ioc                 &                                                              \\
+        sell\_trigger                         & \tikzxmark                & last                & \enquote{last}                                               \\
+        sell\_type                            & \tikzxmark                & trailing            & \enquote{market, limit, trailing, peaking, unsecured}        \\
+        peaking\_period                       & \tikzxmark                & 30                  &                                                              \\
+        sell\_price\_value                    & \tikzxmark                & NULL                &                                                              \\
+        sell\_price\_percent                  & change\_down              &                     & $1 + change\_down$ nebo $1 - change\_down$                   \\
+        sell\_trailing\_value                 & \tikzxmark                & NULL                &                                                              \\
+        sell\_trailing\_percent               & change\_down              &                     & $change\_down$                                               \\
+        sell\_stop\_price\_value              & \tikzxmark                & NULL                &                                                              \\
+        sell\_stop\_price\_percent            & \tikzxmark                &                     &                                                              \\
+        sell\_stoploss\_value                 & \tikzxmark                & NULL                &                                                              \\
+        sell\_stoploss\_percent               & \tikzxmark                &                     &                                                              \\
+        sell\_stoploss\_stop\_price\_value    & \tikzxmark                & NULL                &                                                              \\
+        sell\_stoploss\_stop\_price\          & \tikzxmark                &                     &                                                              \\
+        sell\_time\_in\_force                 & \tikzxmark                & gtc+market          &                                                              \\
+        max\_loss\_unrealized\_until\_suspend & \tikzxmark                & 5                   &                                                              \\
+        \hline
+    \end{longtable}
+\end{center}
 
 \endinput
