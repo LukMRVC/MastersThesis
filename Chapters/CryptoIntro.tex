@@ -96,10 +96,9 @@ alespoň 51 \% výpočetního výkonu kryptoměnové sítě, teoreticky bude ten
 bývá označována jako \enquote{51\% útok} a při provedení tohoto útoku dochází ke kolapsu kryptoměny. K dosažení tohoto útoku je nicméně
 nutno mít nemálo prostředků.
 
-% TODO: Vložit citaci na https://ccaf.io/cbeci/index a https://ourworldindata.org/energy/country/czech-republic#how-is-energy-consumption-changing-from-year-to-year
-
 Druhým problémem proof-of-work je vysoká energetická náročnost. V době psaní této práce se odhaduje roční energetická náročnost těžby pouze Bitcoinu
-na 88,5 TWh. Pro srovnání, celá Česká republika za rok 2021 spotřebovala okolo 466 TWh. Tato spotřeba zatěžuje jak rozvodné elektrické sítě tak i těžaře.
+na 88,5 TWh \cite{crypto:energy-consumption-bitcon}. Pro srovnání, celá Česká republika za rok 2021 spotřebovala okolo 466 TWh \cite{crypto:energy-consumption-czechia}.
+Tato spotřeba zatěžuje jak rozvodné elektrické sítě tak i těžaře.
 
 Převážně z důvodu velké spotřeby elektřiny v roce 2012 byl představen alternativní přístup k ověřování transakcí, označovaný jako proof-of-stake (dále jen PoS).
 PoS upravuje tradiční terminilogii, těžaře nahrazuje \emph{validátory} a namísto \enquote{těžby} bloků se bloky \emph{\enquote{razí}}. PoS je
@@ -141,7 +140,7 @@ zobrazit otevírací, nejvyšší, nejnižší a závěrečnou cenu kryptoměny 
     \qquad
     \subfloat[\centering Sloupcový graf]{{\includegraphics[width=0.45\textwidth]{Figures/barchart.pdf}}}
 
-    \subfloat[\centering Svíčkový graf]{{\includegraphics[width=0.45\textwidth]{Figures/candlestickchart.pdf}}}
+    \subfloat[\centering Svíčkový graf]{{\includegraphics[width=0.45\textwidth]{Figures/candlestickchart.pdf}}\label{subfig:candlestickchart}}
     \qquad
     \subfloat[\centering Svíčka]{{\includegraphics[width=0.45\textwidth]{Figures/candle.pdf}}}
 
@@ -161,17 +160,18 @@ Moderní burzy poskytují 2 odlišné typy příkazů. Příkaz \textsc{market} 
 pošle/zadá tento příkaz, je okamžitě vykonán a to jak v prodejní tak i případné nákupní podobě. Druhým příkazem, který už nabízí jakousi možnost automatizace
 je \textsc{limit}.
 Limit se zadává s hraniční cenou, za kterou je uživatel aktivum ochotný nakoupit nebo prodat. Matching engine se snaží spárovat limit tak, aby byla splněna podmínka
-hraniční ceny se spárovaným příkazem. Tato situace je jak pro prodej tak i pro nákup zachycena na obrázku \ref{fig:limit-orders}.
+hraniční ceny se spárovaným příkazem. Tato situace je jak pro prodej tak i pro nákup zachycena na obrázcích \ref{subfig:limit-buy} a \ref{subfig:limit-sell}.
 
 V kombinaci s limit příkazem lze využít další 2 možné příkazy, označované jako \textsc{stop-limit} a \textsc{trailing stop-limit}. Oba přidávají další možnosti,
-jak obchodování automatizovat. Stop-limit příkaz umožňuje přidat další cenový parametr, označovaný jako stop-cena neboli taky aktivační cena.
+jak obchodování automatizovat. Stop-limit (\ref{subfig:stop-limit}) příkaz umožňuje přidat další cenový parametr, označovaný jako stop-cena neboli taky aktivační cena.
 Tato stop-cena se chová jako zábrana, jelikož nepustí příkaz na order book, dokud není překročena. Například, pokud je aktuální tržní cena aktiva na 100\texteuro, uživatel zadává na burzu stop-limit příkaz k
 prodeji se stop-cenou nastavenou na 110\texteuro a limit cenou na 95\texteuro. I přestože je splněna podmínka pro prodej k je tržní cena vyšší než limitní
 a mohlo by dojít k zobchodování matching engine nemůže příkaz zobchodovat, jelikož stop-cena drží příkaz mimo order book. V momentě, kdy tržní cena vyšplhá na
-alespoň 110\texteuro, je příkaz puštěn na order book a matching engine může vykonat obchod. % TODO: Dodělat obrázky pro stop-limit
-Trailing stop-limit bere tuto myšlenku ještě o krok dále a umožňuje lepší zachycení trendu tržní ceny. Tento příkaz počítá procentuální změnu ceny od lokálního
+alespoň 110\texteuro, je příkaz puštěn na order book a matching engine může vykonat obchod.
+Trailing stop-limit (\ref{subfig:trailing-delta}) bere tuto myšlenku ještě o krok dále a umožňuje lepší zachycení trendu tržní ceny.
+Tento příkaz počítá procentuální změnu ceny od lokálního
 extrému (minimum pro nákup, maximum pro prodej), jakmile rozdíl ceny překročí uživatelem nastavenou hranici, je příkaz zapsán do order booku. Trailing-stop-limit
-může taktéž mít nastavenou stop-cenu, tedy musí být splněna podmínka jak stop-ceny tak i procentuálního rozdílu.  % TODO: Dodělat obrázky pro trailing a zachytit je zde
+může taktéž mít nastavenou stop-cenu, tedy musí být splněna podmínka jak stop-ceny tak i procentuálního rozdílu.
 Správné nastavení těchto parametrů je důležitým aspektem pro úspěšné zobchodování zadávaného příkazu. Například, pokud při zadávání trailing stop-limit příkazu
 je zadaný rozdíl od extrému příliš malý, může být příkaz zobchodován dřív než by to doopravdy bylo výhodné nebo chtěné. Naopak, jestliže by rozdíl byl příliš velký
 nemusí k zobchodování dojít vůbec a příkaz bude na burze nebude nic dělat.
@@ -179,13 +179,13 @@ nemusí k zobchodování dojít vůbec a příkaz bude na burze nebude nic děla
 
 \begin{figure}[ht]
     \centering
-    \subfloat[\centering Oblast pro nákup]{{\includegraphics[width=0.45\textwidth]{Figures/limit-chart-buy.pdf}}}
+    \subfloat[\centering Oblast pro nákup]{{\includegraphics[width=0.45\textwidth]{Figures/limit-chart-buy.pdf}}\label{subfig:limit-buy}}
     \qquad
-    \subfloat[\centering Oblast pro prodej]{{\includegraphics[width=0.45\textwidth]{Figures/limit-chart-sell.pdf}}}
+    \subfloat[\centering Oblast pro prodej]{{\includegraphics[width=0.45\textwidth]{Figures/limit-chart-sell.pdf}}\label{subfig:limit-sell}}
 
-    \subfloat[\centering Stop limit nákup]{{\includegraphics[width=0.45\textwidth]{Figures/stop-limit.pdf}}}
+    \subfloat[\centering Stop limit nákup]{{\includegraphics[width=0.45\textwidth]{Figures/stop-limit.pdf}}\label{subfig:stop-limit}}
     \qquad
-    \subfloat[\centering Trailing]{{\includegraphics[width=0.45\textwidth]{Figures/trailing-delta.pdf}}}
+    \subfloat[\centering Trailing]{{\includegraphics[width=0.45\textwidth]{Figures/trailing-delta.pdf}}\label{subfig:trailing-delta}}
     \caption{Příkaz limit s hraniční cenou}
     \label{fig:limit-orders}
 \end{figure}
