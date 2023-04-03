@@ -209,12 +209,21 @@ využívá asynchronní úlohy, mezi kterými přepíná.
 
 \subsubsection{Zaslání příkazu na burzu}
 % TODO: Obrázek cyklu/diagram
-Kontrola zaslání příkazu se provádí periodicky, každých pár vteřin. Z databáze (tabulka \emph{trade\_order\_progress}) se načtou potřebné parametry příkazů. Následuje kontrola
+Kontrola zaslání příkazu se provádí periodicky, každých pár vteřin. Celý cyklus je znázorněn na aktivitním diagramu \ref{figure:sending-trade-order}.
+Z databáze (tabulka \emph{trade\_order\_progress}) se načtou potřebné parametry příkazů. Následuje kontrola
 dostatku volných prostředků (podkladová měna kryptoměnového páru). Jestliže není dostatek podkladové měny, konkrétní příkaz se neprovede a do databáze se zapíše chybný stav. V případě
 úspěchu se pokračuje převedením procentuálních hodnot na reálné částky. Z burzy se skrze API stáhne aktuální kurz kryptoměnového páru, na jehož základě se dopočtou ony reálné částky, které
 se chtějí obchodovat. Před závěrečným zasláním příkazu na burzu dochází k poslední kontrole a to na pravidla samotného trhu (minimální nominální hodnota, minimální kvantita, \ldots).
 Konečně je příkaz odeslán pomocí REST API ke zpracování na Binance. Součástí odpovědi je pak jednoznačný identifikátor daného příkazu na Binance, ten se uloží do databáze. Tím končí jedna
 iterace zasílání příkazu.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{Figures/Trading-bot-sequence.pdf}
+    \caption{Aktivitní diagram zasílání příkazu}
+    \label{figure:sending-trade-order}
+\end{figure}
 
 \subsubsection{Rušení příkazu}
 Po zaslání příkazu na Binance je současně uloženo časové razítko, kdy byl příkaz odeslán. Opět, periodicky, se kontroluje překročení maximální doba trvání příkazu. Pokud se tato doba přesáhne,
@@ -227,7 +236,8 @@ aktuální \textsc{oco} příkaz zrušen a vytvořen nový s posunutými cenami 
 
 
 \subsection{Stream listener}
-Úkolem stream listeneru je nepřetržité získávání zpráv o událostech od Binance. Spojení se navazuje technologií \emph{websocketů}. Ačkoli websockety nabízí možnost plně duplexní komunikace, Binance
+Úkolem stream listeneru je nepřetržité získávání zpráv o událostech od Binance. Vizuálně je proces naznačen na sekvenčním diagramu \ref{figure:listener}.
+Spojení s burzou se navazuje pomocí technologie \emph{websocketů}. Ačkoli websockety nabízí možnost plně duplexní komunikace, Binance
 neumožňuje zasílání příkazů přes tento komunikační kanál. Jedná se tedy pouze o pasivní naslouchání. Aby bylo spojení dovoleno, je zapotřebí si vyžádat spojení se speciálním klíčem v URL parametru.
 Tento klíč lze získat voláním REST API a je nutné ho nadále označovat za aktivní (taktéž voláním REST API). Z přicházejí zprávy o 3 událostech:
 \begin{enumerate}
@@ -238,6 +248,13 @@ Tento klíč lze získat voláním REST API a je nutné ho nadále označovat za
 Aktualizace účtu nastává v momentě, kdy se jakkoli změní zůstatek na účtu, např. zablokováním aktiv v rámci obchodování. Aktualizace zůstatku je zaslána jakmile nastane vklad, výběr nebo převod z účtu.
 Aktualizace příkazu, jak již název napovídá, je přijat při změně stavu příkazu způsobeným třeba zrušením příkazu, vypršením nebo vyplněním. Kryptobot reaguje na události týkající se aktualizací příkazů
 a aktualizace účtu. Každá aktualizace příkazu je ihned uložena do databáze.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{Figures/listener.pdf}
+    \caption{Sekvenční diagram komponenty Stream listener}
+    \label{figure:listener}
+\end{figure}
 
 Aby bot měl dostupné vždy korektní informace provádí stream listener při svém spuštění kontrolu příkazů z databáze vůči burze. Pokud detekuje, že v databázi chybí nějaké informace z důvodu nějakého výpadku,
 stáhne potřebné data skrze API a uloží je. Druhým opatřením, kterým stream listener disponuje, je ukládání zpráv do vyrovnávací paměti, pokud by došlo k výpadku databáze.
