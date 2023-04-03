@@ -55,8 +55,13 @@ Informace o délce kopců a dolin slouží jako pomocník pro nastavení maximá
 pro výběr páru. Ovšem ziskovost záleží na vybraném stylu obchodování a opakování příkazu, které si zaslouží podrobnější popis.
 
 \subsubsection{Opakování příkazu}
-% TODO: Obrázek dělení příkazu na jednotlivé iterace, každé iterace má 2 fáze.
-Samotný příkaz se skládá z několika opakování (iterací). Každá iterace má 2 fáze -- nákupní a prodejní. Pro úplnost je ještě nutné definovat, co znamená ukončení jedné iterace.
+Samotný příkaz se skládá z několika opakování, neboli iterací (\ref{fig:trade-order-parts}). Každá iterace má 2 fáze -- nákupní a prodejní. Pro úplnost je ještě nutné definovat, co znamená ukončení jedné iterace.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Figures/trade-order-parts.pdf}
+    \caption{Dělení obchodního příkazu}
+    \label{fig:trade-order-parts}
+\end{figure}
 Ukončení iterace nastává ve 2 případech:
 \begin{enumerate}
     \item nepovedla se nákupní fáze (tj. nic se nekoupilo),
@@ -68,12 +73,20 @@ Prodejní fáze je uzavřena opět ve 2 situacích:
     \item překročením maximální doby a prodej příkazem \textsc{market}.
 \end{enumerate}
 
-% TODO: Obrázek kaskády vs sekvence
-Existují 2 řešené postupy pro opakování příkazů. Prvních z nich je jednoduše v sekvenci, kdy se před začátkem iterace $n_i$ čeká na ukončení iterace $n_{i - 1}$, přičemž $i$ je pořadové
+Existují 2 řešené postupy pro opakování příkazů. Prvních z nich je jednoduše v sekvenci (\ref{subfig:sequence}), kdy se před začátkem iterace $n_i$ čeká na ukončení iterace $n_{i - 1}$, přičemž $i$ je pořadové
 číslo iterace. Výhodou tohoto přístupu je jednoduché sledování aktuálního stavu otevřené pozici na trhu. Avšak nevýhoda je šance na zanedbání dlouhého kopce a nevyužití případné ziskové situace.
 Proto byla vymyšlena druhá metoda opakování.
 
-Schopnost iterace v kaskádě s sebou přináší řešení na dlouhé kopce, ve kterých cena roste delší dobu. Kaskáda se oproti sekvenci liší v možnosti spuštění následujícího opakování příkazu
+\begin{figure}[ht]
+    \centering
+    \subfloat[\centering Opakování obchodu v sekvenci]{{\includegraphics[width=0.45\textwidth]{Figures/sequence.pdf}}\label{subfig:sequence}}
+    \qquad
+    \subfloat[\centering Opakování obchodu v kaskádě]{{\includegraphics[width=0.45\textwidth]{Figures/cascade.pdf}}\label{subfig:cascade}}
+    \caption{Strategie opakování obchodu}
+    \label{fig:trade-repeat}
+\end{figure}
+
+Schopnost iterace v kaskádě (\ref{subfig:cascade}) s sebou přináší řešení na dlouhé kopce, ve kterých cena roste delší dobu. Kaskáda se oproti sekvenci liší v možnosti spuštění následujícího opakování příkazu
 už v momentě, kdy je úspěšně ukončena nákupní fáze. V rámci tohoto může docházet k více otevřeným pozicím na trhu. Nevýhodou je opět eventuální otevření pozice těsně před koncem stoupání
 kopce. Jelikož se následně čeká na na procentuální \enquote{propad} ceny dolů, je vysoká pravděpodobnost, že tato pozice bude prodělečná. Další nežádoucí situací je příliš rychlé otevírání
 nových pozic a musí se limit buďto časově nebo maximálním počtem otevřených pozic v kaskádě. Bot v tomto případě podporuje obě možnosti.
