@@ -77,7 +77,7 @@ Ostatní účastnici ověří platnost bloku a uloží si ho. Navíc, aby nešlo
 obsahovat hash předchozího bloku. Tímto dochází ke zřetězení bloků (odtud název blockchain).
 
 Takto funguje princip ověřování transakcí na základě tzv. proof-of-work. Věří se vždy tomu blockchainu, do kterého bylo dáno nejvíce
-výpočtení síly, tzn. tomu nejdelšímu řetězu bloků. V reálném světě účastníkem v nějaké kryptoměnové síti jsou počítače, zvané nody.
+výpočetní síly, tzn. tomu nejdelšímu řetězu bloků. V reálném světě účastníkem v nějaké kryptoměnové síti jsou počítače, zvané nody.
 Na nodech se ukládá blockchain a jak již avizováno, věří se vždy tomu nejdelšímu řetezu bloků. Svůj vlastní node si může u sebe doma spustit
 téměr kdokoli. Pravidla pro přidávání nonce se mohou lišit v závislosti na kryptoměně.
 
@@ -101,15 +101,24 @@ na 88,5 TWh \cite{crypto:energy-consumption-bitcon}. Pro srovnání, celá Česk
 Tato spotřeba zatěžuje jak rozvodné elektrické sítě tak i těžaře.
 
 Převážně z důvodu velké spotřeby elektřiny v roce 2012 byl představen alternativní přístup k ověřování transakcí, označovaný jako proof-of-stake (dále jen PoS).
-PoS upravuje tradiční terminilogii, těžaře nahrazuje \emph{validátory} a namísto \enquote{těžby} bloků se bloky \emph{\enquote{razí}}. PoS je
+PoS upravuje tradiční terminologii, těžaře nahrazuje \emph{validátory} a namísto \enquote{těžby} bloků se bloky \emph{\enquote{razí}}. PoS je
 postaven na konsenzu mezi účastníky v síti. Bloky jsou ověřovány náhodně vybranými validátory, kteří jednotlivé transakce ověří a označí za platné.
 Tento validovaný blok je následně přidán do blockchainu. Aby se z účastníka stal validátor, stačí se jednoduše do sítě nabídnout a vložit určitou
 \enquote{sázku} (stake). Výše této sázky ovlivňuje pravděpodobnost výběru při selekci validátorů k ověření bloku. Pokud by validátor označil
 blok obsahující falešné transakce jako platný, je mu část nebo celá vložená sázka odebrána. Tento postih má být motivací, aby validátoři doopravdy
 odváděli svou práci správně. Kriticky důležitý krok při ověřování je výběr validátorů. I u této metody ověřování existuje možnost 51\% útoku,
 avšak k dosažení je nutné nabídnout alespoň o něco víc než polovinu tržní kapitalizace kryptoměny, čehož není jednoduché dosáhnout.
+Na proof-of-stake již funguje celá řada kryptoměn, mezi největší se řadí například Ethereum, BNB a Cardano.
 
-% TODO: Zmínit další, jako PoA, atd.
+Nově vznikají další metody jak dosáhnout společného konsenzu na blockchainu. Jedním z těchto nových způsobů je proof-of-authority (PoA). I tato
+metoda využívá validátory, nicméně tito validátoři ručí svou vlastní reputací a důvěryhodností. Validátoři jsou předem vybráni autoritou a mají
+za úkol ověřovat a přidávat nové bloky do blockchainu. Tento algoritmus pro dosažení konsenzu je vhodnější spíše pro privátní blockchainové sítě,
+jelikož v něm pracuje omezený počet validátorů a neumožňuje velkou decentralizaci.
+
+Dalším algoritmem je delegovaný proof-of-stake (DPoS). Omezený počet validátorů bloků je volen účastníky sítě. Váha volebního hlasu
+je určena množstvím kryptoměny, kterou uživatel na blockchainu disponuje. Zvoleným validátorům se taktéž přezdívá delegáti. Zvolený delegát má pak
+na starosti validaci transakcí a přidávání nových bloků do blockchainu. Aby se více pojistila důvěryhodnost delegátů, musí se zaručit množstvím
+své vlastní kryptoměny, o kterou, v případě pochybení, přijdou.
 
 
 \section{Kryptoměnové burzy}
