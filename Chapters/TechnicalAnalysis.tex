@@ -145,23 +145,31 @@ Indikátory jsou signifikantní součástí technické analýzy. Technické indi
 bere tržní cena nebo objem obchodů. Na základě těchto informací jsou dané výstupy, které dodávají další informace k obchodování.
 Obecně se technické indikátory dělí na indikátory hybnosti (momentum indikátory), trendové indikátory a oscilátory. Momentum indikátory měří dynamiku ceny, tedy rychlost změny.
 Trendové indikátory se zaměřují na odhad aktuálního trendu a případnou predikci jeho otočení. Jako oscilátory se označují indikátory, které se pohybují v daném rozmezí (např. -1 až 1).
-Tato sekce se zabývá několika nejpoužívanějšími technickými indikátory, rozebírá způsob jejich výpočtu a dodanou informační hodnotu.
+Tato sekce se zabývá několika nejpoužívanějšími technickými indikátory, rozebírá způsob jejich výpočtu a dodanou informační hodnotu. Pro následující rovnice znázorňující výpočet indikátoru
+vždy platí, že $C$ se značí \emph{close} cena období.
 
 \subsection{Indikátor objemu (OBV, On-balance volume)}
 Jedná se o kumulativní indikátor objemu obchodů a tím měří nákupní a prodejní tlak a spojuje tržní cena v souvislosti na velikostech obchodů. Pokud se OBV zvyšuje, více obchodníků
 je ochotných zaplatit za aktivum v jeho momentální tržní ceně. Pokud je trh ve vzestupném trhu a navíc k tomu stoupá i hodnota tohoto indikátoru, potvrzuje se tímto onen trend.
-Jestliže cena stoupá ale hodnota OBV nijak neroste, je trh spíše zmatený. Výpočet OBV je znázorněn na \ref{eq:obv}
+Jestliže cena stoupá ale hodnota OBV nijak neroste, je trh spíše zmatený. Výpočet OBV je znázorněn na \ref{eq:obv} a vizualizace na obrázku \ref{fig:obv}.
 
 \begin{equation}
-    OBV = OBV_{pred} +
+    OBV_t = OBV_{t-1} +
     \begin{cases}
-        objem, & close \ge close_{pred} \\
-        0,     & close = close_{pred}   \\
-        objem, & close \le close_{pred}
+        objem, & C_t \ge C_{t-1} \\
+        0,     & C_t = C_{t-1}   \\
+        objem, & C_t \le C_{t-1}
     \end{cases}
     \label{eq:obv}
 \end{equation}
-% TODO: Udělat vysvětlivku, že C označuje cena, C_s označuje cenu svíčky, C_{s - 1} označuje cenu obsaženou v předchozí svíčce
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{Figures/OBV.pdf}
+    \caption{Znázornění indikátoru OBV}
+    \label{fig:obv}
+\end{figure}
+
 \subsection{Klouzavý průměr (MA, Moving average)}
 Klouzavý průměr má hned několik variant výpočtu. Klouzavý se nazývá protože se jeho hodnota počítá pouze za určené období. Oblíbené časové úseky jsou 10, 40, nebo 200 dní zpětně.
 Navzdory představě tento indikátor není \enquote{pouze jedno číslo}, ale celá série, jelikož průměr je počítán pro každý datový bod, tedy pro každou svíčku zvlášť. Propojením vypočítaných
@@ -169,10 +177,11 @@ hodnot vzniká na grafu linie představující plovoucí odporovou úroveň s v�
 Jestliže se trh nachází v sestupném trendu, MA se chová jako úroveň rezistance a jeho proražení dává signál k nákupu, předpovídající vzestupný trend.
 Opačný případ je taktéž pravdivý, kdy ve vzestupném trhu MA zastává roli supportu.
 
-Dva nejpoužívanější typy výpočtu MA jsou \emph{Simple Moving Average (SMA)} a \emph{Exponential Moving Average (EMA)}. SMA je jednoduchý pro výpočet a jedná se o obyčejný průměr na období
+Dva nejpoužívanější typy výpočtu MA jsou \emph{Simple Moving Average (SMA)} a \emph{Exponential Moving Average (EMA)} (viditelné na obrázku \ref{fig:ma-sma-ema}). SMA je jednoduchý pro výpočet a jedná se o obyčejný průměr na období
 o velikosti \emph{n} a způsob výpočtu je vyobrazena na rovnici \ref{eq:sma}. EMA využívá váženého průměru, ve kterém se váha starších datový bodů se exponenciálně snižuje, preferující spíše novější hodnoty.
-Při výpočtu tohoto váženého průměru se používá i takzvaný vyhlazovací koeficient \emph{k}, přičemž nejčastější nastavení tohoto koeficientu je $ k = \frac{2}{n+1}$.
-Rovnice pro výpočet je na \ref{eq:ema}. Výhodou exponenciálního klouzavého průměru je větší důraz na čerstvější data, čím může lépe reagovat na změny trhu.
+Při výpočtu tohoto váženého průměru se používá i takzvaný vyhlazovací koeficient $\alpha$, přičemž nejčastější nastavení tohoto koeficientu je $ \alpha = \frac{2}{n+1}$.
+Rekurzivní rovnice pro výpočet je vyobrazena \ref{eq:ema}. Pro časové pohyblivé časové okno lze taky využít druhou možnost výpočtu EMA viditelnou na \ref{eq:ema-rolling}.
+Výhodou exponenciálního klouzavého průměru je větší důraz na čerstvější data, čím může lépe reagovat na změny trhu.
 
 \begin{equation}
     SMA_t = \frac{C_t + C_{t - 1} + ... + C_{t - (n - 1)}}{n}
@@ -180,10 +189,22 @@ Rovnice pro výpočet je na \ref{eq:ema}. Výhodou exponenciálního klouzavého
 \end{equation}
 
 \begin{equation}
-    EMA_t = k * C_t + (1 - k) * EMA_{t - 1}
+    EMA_t = \alpha * C_t + (1 - \alpha) * EMA_{t - 1}
     \label{eq:ema}
 \end{equation}
+
+\begin{equation}
+    EMA_t = \frac{C_t + (1 - \alpha) * C_{t-1} + (1 - \alpha)^2 * C_{t-2} + \ldots + (1 - \alpha)^t * C_0}{1 + (1 - \alpha) + (1 - \alpha)^2 + \ldots + (1 - \alpha)^t}
+    \label{eq:ema-rolling}
+\end{equation}
 % TODO: Pridat ukázky SMA a EMA
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{Figures/MA.pdf}
+    \caption{Znázornění indikátoru SMA a EMA}
+    \label{fig:ma-sma-ema}
+\end{figure}
 
 \subsection{Index relativní síly (RSI, Relative strength index)}
 Index relativní síly patří mezi oscilující indikátory, pohybující se v rozmezí on 0 do 100. Jeho cílem je odhalit rychlost a velikost změny \enquote{close} cen aktiv a tím identifikovat
@@ -194,17 +215,25 @@ přeprodaný nebo překoupený trh. Důležité signály nastávají v momentě,
     \item Při opětovném sestupu pod hranici 70 je identifikován sestupný sentiment.
     \item Při opětovném vzestupu nad hranici 30 je identifikován vzestupný sentiment.
 \end{itemize}
+Tyto situace lze vidět i na obrázku \ref{fig:rsi}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{Figures/RSI.pdf}
+    \caption{Indikátoru RSI se signály překoupeného a přeprodaného trhu}
+    \label{fig:rsi}
+\end{figure}
 
 Pro výpočet indexu relativní síly je nutné nejdříve spočítat relativní sílu. Pro zjištění relativní síly, se musí nejdříve zjistit horní (\emph{U}) a dolní (\emph{D}) změna:
 \begin{equation}
     U = \begin{cases}
-        C_t - C_{t - 1}, & close_t > close_{t - 1}   \\
-        0,               & close_t \le close_{t - 1} \\
+        C_t - C_{t - 1}, & C_t > C_{t - 1}   \\
+        0,               & C_t \le C_{t - 1} \\
     \end{cases}
     ,
     D = \begin{cases}
-        C_{t - 1} - C_t, & close_t < close_{t - 1}   \\
-        0,               & close_t \ge close_{t - 1} \\
+        C_{t - 1} - C_t, & C_t < C_{t - 1}   \\
+        0,               & C_t \ge C_{t - 1} \\
     \end{cases}
     \label{eq:du}
 \end{equation}
@@ -226,7 +255,7 @@ A nakonec dopočítat index:
 \subsection{MACD indikátor (Moving average convergence-divergence indicator)}
 Indikátor sbíhavosti a rozbíhavosti klouzavých průměrů se skládá z několika komponent. První je samotný MACD (\ref{eq:macd}), což je rozdíl dvou exponenciálních klouzavých průměrů, počítané
 za kratší a delší období. Další složkou je signální čára (\ref{eq:signal}), vypočítaná jako EMA právě onoho MACD. Poslední složka je histogram (\ref{eq:macdhist})
-ukazující rozdíl mezi MACD a signální čárou.
+ukazující rozdíl mezi MACD a signální čárou. Vizualizace tohoto indikátoru je vidět na obrázku \ref{fig:macd}
 
 \begin{equation}
     MACD = EMA(n_1) - EMA(n_2), n_2 > n_1
@@ -246,11 +275,19 @@ ukazující rozdíl mezi MACD a signální čárou.
 Signál pro nákup nebo prodej aktiva nastává v momentě, kdy MACD protne signální čáru. Pro zachycení vzestupného trendu musí MACD protnout signální čáru zespodu. Pro zachycení
 trendu sestupného je situace opačná, kdy MACD musí protnout signální čáru shora. % TODO: Dodelat obrazky
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{Figures/MACD.pdf}
+    \caption{Znázornění indikátoru MACD s popisem}
+    \label{fig:macd}
+\end{figure}
+
 \subsection{Stochastický oscilátor}
 Další ze skupiny oscilátorů je hojně využívaný stochastický oscilátor, rovněž určený k zachycení rychlosti změny ceny a identifikace překoupeného nebo přeprodaného trhu. Jeho
 hodnoty se typicky pohybují v rozmezí 0 až 100 (případně 0 až 1). Myšlena tohoto oscilátoru spočívá v úvaze, že ceny, před obratem trendu, mají tendenci se uzavírat blízko extrémů
 nedávných obchodů. Jako klíčové hodnoty pro označení překoupeného respektive přeprodaného trhu se považují 80 a 20. Ruku v ruce s tímto oscilátorem se taktéž využívá vyhlazovací
-klouzavý průměr periody o velikosti 3.
+klouzavý průměr periody o velikosti 3. Pro výpočet hodnot stochastický oscilátoru se používá rovnice \ref{eq:sto}, kde $L_{obd}$ a $H_{obd}$ značí nejnižší a nejvyšší cenu za specifikované
+období.
 
 \begin{equation}
     STO = 100 * \frac{C  - L_{obd}}{H_{obd} - L_{obd}}
@@ -258,10 +295,18 @@ klouzavý průměr periody o velikosti 3.
 \end{equation}
 
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/Stoch.pdf}
+    \caption{Stochastický oscilátor}
+    \label{fig:stoch}
+\end{figure}
+
 \subsection{Bollingerova pásma (BB, Bollinger Bands)}
 Poslední z indikátorů jsou Bollingerova pásma, měřící volatilitu trhu. Skládá se celkem ze 3 pásem - horní, střední a spodní pásmo. Tato pásma nejsou nic jiného než klouzavé průměry
 s drobnou změnou. Jako klouzavý průměr se nejčastěji využitá jednoduchý SMA, ale lze využít i jakýkoli jiný typ, například EMA. Horní a spodní pásmo se získá připočtením a odečtením
-(obvykle 2) násobku standardní odchylky $\sigma$ \ref{eq:bb}. Se snižující nebo zvyšující se volatilitou dochází k tzv. kontrakci nebo roztažení pásem. Pokud je volatilita poněkud nízká, budou mít
+(obvykle 2) násobku standardní odchylky $\sigma$ \ref{eq:bb}. Se snižující nebo zvyšující se volatilitou dochází k tzv. kontrakci nebo roztažení pásem (viditelné na obrázku \ref{fig:bb}).
+Pokud je volatilita poněkud nízká, budou mít
 pásma tendenci přibližovat se k sobě a dochází ke kontrakci. Opačným případem je roztažení. Signál překoupení aktiva nastává pokud se tržní cena přiblíží hornímu pásmu. Naopak přeprodání
 jesliže se cena nachází v blízkosti spodního pásma. Může dojít i k proražení těchto pásem, což může naznačovat extrémní tržní podmínky.
 
@@ -270,7 +315,12 @@ jesliže se cena nachází v blízkosti spodního pásma. Může dojít i k pror
     \label{eq:bb}
 \end{equation}
 
-\section{Výběr krytoměnových párů}
-\label{sec:ChoosingCryptopairs}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/Stoch.pdf}
+    \caption{Bollingerova pásma s vizualizací kontrakce a roztažení}
+    \label{fig:bb}
+\end{figure}
+
 
 \endinput
