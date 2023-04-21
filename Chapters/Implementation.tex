@@ -1,8 +1,6 @@
 \chapter{Implementace kryptobota}
 \label{chap:impl}
 
-% TODO: base/quote currency (podkladová/kotovaná měna) = dopsat toto rozdělení
-
 Hlavní cíl této diplomové práce spočívá v implementaci kryptobota. Tento kryptobot má vytvořené pravidla vycházející z předem provedené technické analýzy.
 Pravidla se následně aplikují na reálný trh a bot provádí obchody. Jeho postup a stav lze uživatelský přivětivě pozorovat z webové stránky, případně jeho akce
 zastavit, nebo dokonce kompletně opustit tržní pozici. Implementovaný kryptobot je schopen obchodovat na burze Binance, která je jedna z největších a nejpopulárnějších
@@ -114,9 +112,9 @@ Realizace prodejní fáze se potýká s podobnými problémy. Při použití př
 vést ke ztrátovému obchodu. Naopak pokud se použije aktivační cena, může dojít k rychlému skoku do klesajícího trendu, aktivační cena nebude nikdy proražena a prodejní fáze bude ukončena na základě
 časového limitu s obrovskou ztrátou. Existuje ještě jedna střední cesta a tím je příkaz \textsc{oco} (\enquote{One Cancels the Other}). Jedná se vlastně o kombinaci dvou příkazů, \textsc{limit} a
 \textsc{stop limit}. \textsc{oco} příkaz je speciální v tom, že pokud je 1 příkaz jakkoli ukončen, automaticky je zrušen i ten druhý. V tomto případě \textsc{limit} zastřešuje horní hranici, nad
-kterou dojde k prodeji, a \textsc{stop limit} spodní hranici v případě pádu tržní ceny. Vytvořený bot umí využít těchto \textsc{oco} příkazů v maximální prospěch periodickým kontrolováním tržní ceny
+kterou dojde k prodeji a \textsc{stop limit} spodní hranici v případě pádu tržní ceny. Vytvořený bot umí využít těchto \textsc{oco} příkazů v maximální prospěch periodickým kontrolováním tržní ceny
 a vlastním přepočtem procentuální změny. Pokud se cena dostatečně zvýší, zruší momentálně nastavený \textsc{oco} příkaz a zadá nový s cenami posunutými nahoru. K prodeji pak dojde pouze v případě poklesu tržní
-ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek. Teto metodě využití \textsc{oco} příkazů přezdívá autor \emph{peaking}.
+ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek. Teto metodě využití \textsc{oco} příkazů přezdívá autor zajištěné obchodování, neboli taky \emph{peaking}.
 
 \section{Komunikace s burzou}
 \label{subsec:exchanges-comm}
@@ -150,11 +148,11 @@ Koncové mohou občas podporují více parametrů, než jaké kryptobot reálně
 při odpovědích budou taktéž popsány v potřebné míře.
 
 \paragraph{Nový příkaz}
-Nejzákladnější a nejčastěji volaný koncový bod rozhraní slouží k vytvoření nového příkazu na burze.
+Nejzákladnější a nejčastěji volaný koncový bod rozhraní slouží k vytvoření nového příkazu na burze. Botem využívané parametry jsou popsány v tabulce \ref{tab:binance:new-order}.
 \newline
 \verb|POST /api/v3/order|
 \begin{center}
-    \begin{longtable}[h]{|l|m{4cm}|m{4cm}|m{4cm}|}
+    \begin{longtable}[h]{|l|C{4cm}|C{4cm}|m{4cm}|}
         \hline
         Parametr      & Povinný                                                                                         & Typ                                           & Popis                                  \\
         \hline
@@ -181,12 +179,12 @@ Nejzákladnější a nejčastěji volaný koncový bod rozhraní slouží k vytv
 \end{center}
 
 \paragraph{Zrušení příkazu}
-% TODO
-\hfill
+Další často využívaný koncový bod. Zrušení nastává pokud příkaz přesáhne svou maximální dobu trvání na straně bota. Parametry
+pro ukončení příkazu jsou v tabulce \ref{tab:binance:cancel-order}
 \newline
 \verb|DELETE /api/v3/order|
 \begin{center}
-    \begin{longtable}[h]{|l|m{4cm}|m{4cm}|m{4cm}|}
+    \begin{longtable}[h]{|l|C{4cm}|C{4cm}|m{4cm}|}
         \hline
         Parametr          & Povinný                        & Typ         & Popis                \\
         \hline
@@ -203,8 +201,8 @@ Nejzákladnější a nejčastěji volaný koncový bod rozhraní slouží k vytv
 \end{center}
 
 \paragraph{Nový OCO příkaz}
-% TODO
-\hfill
+Metoda zajištěného obchodování, nazvaná taky \emph{peaking}, využívá právě OCO příkazů pro kontrolu spodní i horní hranice při změně kurzu kryptoměnového páru.
+Parametry které kryptobot nastavuje jsou v tabulce \ref{tab:binance:new-oco}.
 \newline
 \verb|POST /api/v3/order/oco|
 \begin{center}
@@ -225,18 +223,40 @@ Nejzákladnější a nejčastěji volaný koncový bod rozhraní slouží k vytv
         \hline
         stopLimitPrice       & \tikzxmark              & Desetinný           & Limitní cena \textsc{stop loss} příkazu   \\
         \hline
-        stopLimitTimeInForce & Pokud je stopLimitPrice & ENUM(gtc, ioc, fok) &                                           \\
+        stopLimitTimeInForce & Pokud je stopLimitPrice & ENUM(gtc, ioc, fok) & Platnost příkazu \textsc{stop loss}       \\
         \hline
-        trailingDelta        & \tikzxmark              & Celočíselný         &                                           \\
+        trailingDelta        & \tikzxmark              & Celočíselný         & Změna od posledního extrému               \\
         \hline
         \caption{Parametry pro zrušení příkazu}
         \label{tab:binance:new-oco}
     \end{longtable}
 \end{center}
 
+\paragraph{Zrušení OCO příkazu}
+Pokud při použití zajištěného obchodování se cena posouvá pozitivně pro aktuální stranu obchodu (myšleno nákup nebo prodej), kryptobot zruší platný OCO příkaz
+na burze a nahradí ho novým. Pro zrušení OCO příkazu je poslán HTTP požadavek na následující koncový bod s parametry uvedenými v tabulce \ref{tab:binance:cancel-oco}.
+\newline
+\verb|DELETE /api/v3/orderList|
+\begin{center}
+    \begin{longtable}[h]{|l|C{4cm}|c|m{3.7cm}|}
+        \hline
+        Parametr          & Povinný                            & Typ         & Popis                \\
+        \hline
+        \hline
+        symbol            & \tikzcmark                         & Řetězec     & Název páru           \\
+        \hline
+        orderListId       & orderListId nebo listClientOrderId & Celočíselný & ID příkazu           \\
+        \hline
+        listClientOrderId & orderListId nebo listClientOrderId & Řetězec     & Klientské ID příkazu \\
+        \hline
+        \caption{Parametry pro zrušení příkazu}
+        \label{tab:binance:cancel-oco}
+    \end{longtable}
+\end{center}
+
 \subsection{Executioner}
-Komponenta executioner má na starosti obchodní příkazy. Konkrétně jejich zaslání na burzu a jejich zrušení a dohled na vlastní přepočet při použití výše popsané metody \emph{peaking}. Komponenta
-využívá asynchronní úlohy, mezi kterými přepíná.
+Komponenta executioner má na starosti obchodní příkazy. Konkrétně jejich zaslání na burzu a jejich zrušení a dohled na vlastní přepočet při použití výše popsané metody zajištěného obchodování. Komponenta
+využívá asynchronní úlohy. Přepínání mezi těmito úlohami řídí modul \verb|asyncio| vytvoření právě pro asynchronní programování.
 
 \subsubsection{Zaslání příkazu na burzu}
 Kontrola zaslání příkazu se provádí periodicky, každých pár vteřin. Celý cyklus je znázorněn na aktivitním diagramu \ref{figure:sending-trade-order}.
@@ -246,7 +266,6 @@ dostatku volných prostředků (podkladová měna kryptoměnového páru). Jestl
 se chtějí obchodovat. Před závěrečným zasláním příkazu na burzu dochází k poslední kontrole a to na pravidla samotného trhu (minimální nominální hodnota, minimální kvantita, \ldots).
 Konečně je příkaz odeslán pomocí REST API ke zpracování na Binance. Součástí odpovědi je pak jednoznačný identifikátor daného příkazu na Binance, ten se uloží do databáze. Tím končí jedna
 iterace zasílání příkazu.
-
 
 \begin{figure}
     \centering
@@ -264,6 +283,8 @@ Zvládnutí peakingu s sebou nese starost a vlastní přepočet změny kurzu. Ta
 Cyklicky co chvíli si stahuje z Binance momentální kurz kryptoměnového páru a spočítá procentuální přírůstek kurzu. Pouze v případě, že se jedná o pozitivní změnu vyšší než zadaná hranice, je
 aktuální \textsc{oco} příkaz zrušen a vytvořen nový s posunutými cenami nahoru. I v rámci této rychlé výměny příkazů se provádí stejné kontroly jako při normálním zasílání příkazu.
 
+\subsubsection{Nezajištěné obchodování}
+% TODO:
 
 \subsection{Stream listener}
 Úkolem stream listeneru je nepřetržité získávání zpráv o událostech od Binance. Vizuálně je proces naznačen na sekvenčním diagramu \ref{figure:listener}.
