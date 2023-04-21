@@ -117,7 +117,21 @@ a vlastním přepočtem procentuální změny. Pokud se cena dostatečně zvýš
 ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek. Teto metodě využití \textsc{oco} příkazů přezdívá autor zajištěné obchodování, neboli taky \emph{peaking}.
 
 \subsubsection{Platnost příkazu}
-% TODO:
+Binance neposkytuje maximální dobu platnosti příkazu ve smyslu předání časového razítka vypršení platnosti nebo maximální doby trvání. Jelikož příkazy mohou být vyplněny jen částečně, existují
+3 nastavení času platnosti:
+\begin{enumerate}
+    \item Good-Till-Cancel (GTC),
+    \item Immediate-Or-Cancel (IOC),
+    \item Fill-Or-Kill (FOK).
+\end{enumerate}
+Tyto nastavení se nevztahují na příkazy typu \textsc{market}. Příkaz s platností GTC bude platný tak dlouho, dokud nebude objednávka kompletně vyplněna nebo zrušena uživatelem. Oproti tomu v
+režimu IOC se matching engine pokusí ihned alespoň částečně vypořádat vypořádat objednávku na limitní cenové hladině s obchodovaným množstvím. Pokud se vyplní kompletní obchod, nic dalšího 
+se neděje. V případě částečného vypořádání je zbytek příkazu zrušen. Pokud na zadané cenové hladině není dostupné žádné obchodovatelné množství, je příkaz ihned zrušen.
+Poslední a zároveň nejpřísnější doba vypršení FOK vyžaduje okamžité plné zobchodování příkazu. Jestliže tomuto nemůže trh vyhovět, je příkaz stornován.
+
+Režim FOK je pro implementovaného kryptobota zbytečně přísný. Odzkoušeny byly režimy GTC a IOC, ale nepřinesly žádné velké rozdíly. Avšak to může být způsobeno malou obchodovanou kvantitou.
+V případě, kdy by bot obchodoval značně vyšší částky, byly by rozdíly v režimech platnosti příkazů znatelnější. V tomto případě se nabízí upřednostnit spíše platnost IOC, aby byly příkazy
+vypořádany dostatečně rychle. 
 
 \section{Komunikace s burzou}
 \label{subsec:exchanges-comm}
