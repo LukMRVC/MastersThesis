@@ -1,0 +1,44 @@
+{
+    "orderListId": 0,
+    "contingencyType": "OCO",
+    "listStatusType": "ALL_DONE",
+    "listOrderStatus": "ALL_DONE", // stav OCO příkazu
+    "listClientOrderId": "C3wyj4WVEktd7u9aVBRXcN", // Klientské ID OCO příkazu
+    "transactionTime": 1574040868128, // čas transakce
+    "symbol": "LTCBTC", // název kryptoměnového páru
+    "orders": [
+        {
+            "symbol": "LTCBTC",
+            "orderId": 2, // ID příkazu STOP_LOSS
+            "clientOrderId": "pO9ufTiFGg3nw2fOdgeOXa" // Klientské ID příkazu STOP_LOSS
+        },
+        {
+            "symbol": "LTCBTC",
+            "orderId": 3, // ID příkazu LIMIT_MAKER
+            "clientOrderId": "TXOvglzXuaubXAaENpaRCB" // Klientské ID příkazu LIMIT_MAKER
+        }
+    ],
+    "orderReports": [ // Reporty jednotlivých příkazů
+        {
+            "symbol": "LTCBTC",
+            "origClientOrderId": "pO9ufTiFGg3nw2fOdgeOXa",
+            "orderId": 2,
+            "orderListId": 0, // odkaz na ID OCO příkazu
+            "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
+            "price": "1.00000000", // cenová hodnota příkazu
+            "origQty": "10.00000000", // požadované množství base měny
+            "executedQty": "0.00000000", // zobchodované množství base měny
+            "cummulativeQuoteQty": "0.00000000", // množství quote měny
+            "status": "CANCELED", // stav příkazu
+            "timeInForce": "GTC", // vypršení příkazu
+            "type": "STOP_LOSS_LIMIT", // typ příkazu
+            "side": "BUY", // obchodní strana
+            "stopPrice": "1.00000000", // aktivační cena příkazu
+        },
+        {
+            "symbol": "LTCBTC",
+            "origClientOrderId": "TXOvglzXuaubXAaENpaRCB",
+            ...
+        }
+    ]
+}

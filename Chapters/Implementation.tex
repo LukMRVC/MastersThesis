@@ -32,7 +32,7 @@ se snahou uzavřít obchod s co nejnižší cenou. Další stoupání ceny je p�
 -- nastává prodejní fáze opět se snahou prodat, tentokrát za co nejvyšší cenu. Konkrétní realizace je pak popsána v sekci \ref{subsec:exchanges-comm}.
 
 
-\subsection{Výběr párů a realizace obchodních příkazů}
+\section{Výběr párů a realizace obchodních příkazů}
 \label{subsec:trade-orders}
 Vytvoření obchodních příkazů je starostí předchozího kroku, zabývající se technickou analýzou. Ovšem počet způsobů, jak tyto příkazy vytvořit není pouze jeden a je závislý právě na
 nastavení. Pro analýzu kopců a dolin jsou nezbytně důležité 2 parametry: velikost vzestupu a sestupu. Ty zastávají procentuální změnu, o kterou se musí aktuální cena zvednout nebo klesnou,
@@ -52,7 +52,7 @@ a způsobovat výkyvy ceny. Zároveň by obchody nemusely být vypořádané, je
 Informace o délce kopců a dolin slouží jako pomocník pro nastavení maximální doby, po kterou se má bot pokoušet nakoupit. A samozřejmě, ziskovost slouží jako hlavní indikátor
 pro výběr páru. Ovšem ziskovost záleží na vybraném stylu obchodování a opakování příkazu, které si zaslouží podrobnější popis.
 
-\subsubsection{Opakování příkazu}
+\subsection{Opakování příkazu}
 Samotný příkaz se skládá z několika opakování, neboli iterací (\ref{fig:trade-order-parts}). Každá iterace má 2 fáze -- nákupní a prodejní. Pro úplnost je ještě nutné definovat, co znamená ukončení jedné iterace.
 \begin{figure}[ht]
     \centering
@@ -89,14 +89,14 @@ už v momentě, kdy je úspěšně ukončena nákupní fáze. V rámci tohoto m�
 kopce. Jelikož se následně čeká na na procentuální \enquote{propad} ceny dolů, je vysoká pravděpodobnost, že tato pozice bude prodělečná. Další nežádoucí situací je příliš rychlé otevírání
 nových pozic a musí se limit buďto časově nebo maximálním počtem otevřených pozic v kaskádě. Bot v tomto případě podporuje obě možnosti.
 
-\subsubsection{Způsoby obchodování}
+\subsection{Způsoby obchodování}
 Implementovaný kryptobot rozlišuje 2 způsoby obchodování, fixní a složené úročení. Fixní způsob otevírá pozice na vždy stejnou obchodovanou částku. Ve své podstatě se jedná o jakýsi DCA. Pokud se
 povede utržit zisk, je již \enquote{odložen mimo}. V případě ztráty na obchodě je nutné ji kompenzovat, ať už ze ziskanych zisků nebo ze zásob.
 Složené úročení, jak již název napovídá, reinvestuje vše co bylo získáno nebo ztraceno. Účelem je takto maximalizovat zisk. Ovšem tento styl obchodování s sebou přináší riziko ovlivňování trhu. Jestliže
 by investovaná částka narostla do velkých rozměrů může obchod způsobit ovlivnění tržní ceny a snížit likviditu trhu. Proto je nutné tento složené úročení limitovat maximální investovanou částkou.
 
 
-\subsubsection{Skutečné obchodní příkazy}
+\subsection{Skutečné obchodní příkazy}
 Obchodování na základě kopců a dolin je pro burzy naprosto irelevantní. Burzy přijímají pouze příkazy popsané v části \ref{subsec:market-trade-orders}. Nezbytností je tedy napasovat scénáře
 obchodování do kombinací s těmito příkazy.
 
@@ -115,6 +115,9 @@ vést ke ztrátovému obchodu. Naopak pokud se použije aktivační cena, může
 kterou dojde k prodeji a \textsc{stop limit} spodní hranici v případě pádu tržní ceny. Vytvořený bot umí využít těchto \textsc{oco} příkazů v maximální prospěch periodickým kontrolováním tržní ceny
 a vlastním přepočtem procentuální změny. Pokud se cena dostatečně zvýší, zruší momentálně nastavený \textsc{oco} příkaz a zadá nový s cenami posunutými nahoru. K prodeji pak dojde pouze v případě poklesu tržní
 ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek. Teto metodě využití \textsc{oco} příkazů přezdívá autor zajištěné obchodování, neboli taky \emph{peaking}.
+
+\subsubsection{Platnost příkazu}
+% TODO:
 
 \section{Komunikace s burzou}
 \label{subsec:exchanges-comm}
@@ -253,6 +256,8 @@ na burze a nahradí ho novým. Pro zrušení OCO příkazu je poslán HTTP poža
         \label{tab:binance:cancel-oco}
     \end{longtable}
 \end{center}
+
+\lstinputlisting[label=src:cancelOco,caption={Obsah odpovedi na zrušení OCO příkazu}]{Sources/oco_cancel.json}
 
 \subsection{Executioner}
 Komponenta executioner má na starosti obchodní příkazy. Konkrétně jejich zaslání na burzu a jejich zrušení a dohled na vlastní přepočet při použití výše popsané metody zajištěného obchodování. Komponenta
