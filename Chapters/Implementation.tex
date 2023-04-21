@@ -157,29 +157,35 @@ Nejzákladnější a nejčastěji volaný koncový bod rozhraní slouží k vytv
 \begin{center}
     \begin{longtable}[h]{|l|C{4cm}|C{4cm}|m{4cm}|}
         \hline
-        Parametr      & Povinný                                                                                         & Typ                                           & Popis                                  \\
+        Parametr         & Povinný                                                                                         & Typ                                           & Popis                                  \\
         \hline
         \hline
-        symbol        & \tikzcmark                                                                                      & Řetězec                                       & Název páru                             \\
+        symbol           & \tikzcmark                                                                                      & Řetězec                                       & Název páru                             \\
         \hline
-        side          & \tikzcmark                                                                                      & ENUM(buy, sell)                               & Nákup, prodej                          \\
+        side             & \tikzcmark                                                                                      & ENUM(buy, sell)                               & Nákup, prodej                          \\
         \hline
-        type          & \tikzcmark                                                                                      & ENUM(\textsc{limit, market, stop loss limit}) & Typ příkazu                            \\
+        type             & \tikzcmark                                                                                      & ENUM(\textsc{limit, market, stop loss limit}) & Typ příkazu                            \\
         \hline
-        timeInForce   & \textsc{limit, stop loss limit, take profit limit}                                              & ENUM(gtc, ioc, fok)                           & Platnost příkazu                       \\
+        timeInForce      & \textsc{limit, stop loss limit, take profit limit}                                              & ENUM(gtc, ioc, fok)                           & Platnost příkazu                       \\
         \hline
-        quantity      & \textsc{limit, market, stop loss, stop loss limit, take profit, take profit limit, limit maker} & Desetinný                                     & Množství base měny k nakoupení/prodeji \\
+        quantity         & \textsc{limit, market, stop loss, stop loss limit, take profit, take profit limit, limit maker} & Desetinný                                     & Množství base měny k nakoupení/prodeji \\
         \hline
-        price         & \textsc{limit, stop loss limit, take profit limit, limit maker}                                 & Desetinný                                     & Cena                                   \\
+        price            & \textsc{limit, stop loss limit, take profit limit, limit maker}                                 & Desetinný                                     & Cena                                   \\
         \hline
-        stopPrice     & \textsc{stop loss, stop loss limit, take profit, take profit limit}                             & Desetinný                                     & Aktivační cena                         \\
+        stopPrice        & \textsc{stop loss, stop loss limit, take profit, take profit limit}                             & Desetinný                                     & Aktivační cena                         \\
         \hline
-        trailingDelta & \textsc{stop loss, stop loss limit, take profit, take profit limit}                             & Celočíselný                                   & Změna od extrému                       \\
+        trailingDelta    & \textsc{stop loss, stop loss limit, take profit, take profit limit}                             & Celočíselný                                   & Změna od extrému                       \\
+        \hline
+        newOrderRespType & \tikzxmark                                                                                      & ENUM(ack, result, full)                       & Velikost odpovědi                      \\
         \hline
         \caption{Parametry pro zadání nového příkazu}
         \label{tab:binance:new-order}
     \end{longtable}
 \end{center}
+Velikost odpovědi serveru burzy se dá nastavit ve 3 režimech v tomto pořadí od nejmenší po největší: \verb|ACK, RESULT, FULL|. Implementovaný kryptobot konkrétně využívá režim
+odpovědi \verb|RESULT|. Odpověď tedy příchází ve formátu znázorněn na \ref{src:newOrder}.
+
+\lstinputlisting[label=src:newOrder,caption={Odpovědi založení nového příkazu}]{Sources/new_order.json}
 
 \paragraph{Zrušení příkazu}
 Další často využívaný koncový bod. Zrušení nastává pokud příkaz přesáhne svou maximální dobu trvání na straně bota. Parametry
@@ -202,6 +208,7 @@ pro ukončení příkazu jsou v tabulce \ref{tab:binance:cancel-order}
         \label{tab:binance:cancel-order}
     \end{longtable}
 \end{center}
+Odpověď na požadavky zrušení příkazu kopírují formát při zadávání nových příkazů a je viditelný na \ref{src:newOrder}.
 
 \paragraph{Nový OCO příkaz}
 Metoda zajištěného obchodování, nazvaná taky \emph{peaking}, využívá právě OCO příkazů pro kontrolu spodní i horní hranice při změně kurzu kryptoměnového páru.
@@ -235,6 +242,10 @@ Parametry které kryptobot nastavuje jsou v tabulce \ref{tab:binance:new-oco}.
     \end{longtable}
 \end{center}
 
+Odpověď na zaslaný příkaz je ve formátu JSON zobrazen na \ref{src:newOCO}.
+
+\lstinputlisting[label=src:newOCO,caption={Obsah odpovědi na zrušení OCO příkazu}]{Sources/new_oco.json}
+
 \paragraph{Zrušení OCO příkazu}
 Pokud při použití zajištěného obchodování se cena posouvá pozitivně pro aktuální stranu obchodu (myšleno nákup nebo prodej), kryptobot zruší platný OCO příkaz
 na burze a nahradí ho novým. Pro zrušení OCO příkazu je poslán HTTP požadavek na následující koncový bod s parametry uvedenými v tabulce \ref{tab:binance:cancel-oco}.
@@ -256,8 +267,31 @@ na burze a nahradí ho novým. Pro zrušení OCO příkazu je poslán HTTP poža
         \label{tab:binance:cancel-oco}
     \end{longtable}
 \end{center}
+Získaná odpověď strukturou odpovídá stejné zprávě jako při zaslání nového OCO příkazu, lze ji tedy vidět výše na \ref{src:newOCO}.
 
-\lstinputlisting[label=src:cancelOco,caption={Obsah odpovedi na zrušení OCO příkazu}]{Sources/oco_cancel.json}
+\paragraph{Průměrná cena}
+Získávání průměrné tržní ceny se využívá pro zajištěné a nezajištěné obchodování. Vyžaduje pouze jediný parametr, jak lze vidět na tabulce \ref{tab:binance:avg-price}.
+\newline
+\verb|GET /api/v3/avgPrice|
+\begin{center}
+    \begin{longtable}[h]{|l|C{4cm}|c|m{3.7cm}|}
+        \hline
+        Parametr & Povinný    & Typ     & Popis      \\
+        \hline
+        \hline
+        symbol   & \tikzcmark & Řetězec & Název páru \\
+        \hline
+        \caption{Parametry pro ziskání průměrné ceny}
+        \label{tab:binance:avg-price}
+    \end{longtable}
+\end{center}
+Odpověď lze vidět na \ref{src:avgPrice}.
+
+\lstinputlisting[label=src:avgPrice,caption={Odpověď na požadavek průměrné ceny}]{Sources/avg_price.json}
+
+
+\subsubsection{Tržní pravidla}
+% TODO:
 
 \subsection{Executioner}
 Komponenta executioner má na starosti obchodní příkazy. Konkrétně jejich zaslání na burzu a jejich zrušení a dohled na vlastní přepočet při použití výše popsané metody zajištěného obchodování. Komponenta

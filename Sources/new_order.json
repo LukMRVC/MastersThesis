@@ -1,0 +1,16 @@
+{
+    "symbol": "BTCUSDT", // kryptoměnový pár
+    "orderId": 28, // ID příkazu
+    "orderListId": -1, // ID OCO příkazu, vždy -1 pokud není součástí OCO
+    "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP", // Klientské ID příkazu
+    "transactTime": 1507725176595, // čas zavedení příkazu na burzu
+    "price": "0.00000000", // nastavená cena
+    "origQty": "10.00000000", // množství base měny k obchodu
+    "executedQty": "10.00000000", // zobchodované množství base měny
+    "cummulativeQuoteQty": "10.00000000", // zobchodované množství quote měny
+    "status": "FILLED", // stav příkazu
+    "timeInForce": "GTC", // doba vypršení
+    "type": "MARKET", // typ příkazu
+    "side": "SELL", // strana obchodu
+    "workingTime": 1507725176595, // čas, kdy byl příakz zpracován matching enginem
+}

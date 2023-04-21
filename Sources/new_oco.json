@@ -3,7 +3,7 @@
     "contingencyType": "OCO",
     "listStatusType": "ALL_DONE",
     "listOrderStatus": "ALL_DONE", // stav OCO příkazu
-    "listClientOrderId": "C3wyj4WVEktd7u9aVBRXcN", // Klientské ID OCO příkazu
+    "listClientOrderId": "C3wyj4WVEktd7u9aVBRXcN", // Klientské ID
     "transactionTime": 1574040868128, // čas transakce
     "symbol": "LTCBTC", // název kryptoměnového páru
     "orders": [
