@@ -4,32 +4,32 @@
 Fenomén Bitcoinu, který jako první odstartoval kryptoměnový boom, způsobil várku mnoha nových
 kryptoměn, založených buďto na podobných principech a technologiích, nebo s novými inovativními myšlenkami.
 Spolu s kryptoměnami přišlo spoustu nového názvosloví, byly nimi inspirovány NFT\footnote{Non-fungible tokens} a vzniklo
-nové odvětví digitálních finance, označované jako DeFi (decentralizované finance).
-Tato kapitola postupně popíše, co to jsou kryptoměny, s využítím jakých technologiích fungují, jak jsou ověřovány
+nové odvětví digitálních financí, označováno jako DeFi (decentralizované finance).
+Tato kapitola postupně popíše co to jsou kryptoměny, s využítím jakých technologiích fungují, jak jsou ověřovány
 a obchodovány na burzách.
 
 
 \section{Coiny, chytré kontrakty a tokeny}
 \label{sec:CoinsTokensSmartContracts}
 Často se lze setkat s pojmy \enquote{token} nebo \enquote{coin}. Obojí se označuje za kryptoměnu a mnohdy se zaměnují
-za jednu a stejnou věc. Jak token, tak i coin žijí na blockchainu.
+za jednu a tu stejnou věc. Jak token, tak i coin žijí na blockchainu.
 Koncept blockchainu je vysvětlen v následují sekci. Co je to vlastně token nebo coin? Jak již bylo zmíněno, obojí využívá
 blockchain, avšak hlavní rozdíl spočívá v tom, co reprezentují. Coin označuje kryptoměnu používanou k uchovávání
-nebo směny hodnoty. Jako příklad možné považovat například známí Bitcoin. Token slouží k digitální reprezentaci
+nebo směny hodnoty. Jako příklad je možné považovat například známí Bitcoin. Token slouží k digitální reprezentaci
 aktiva, které se dá směnit pomocí blockchainu. Token může reprezentovat nejen fyzickou věc, jako například zlato, ale i
-duševní vlastnictví. Důvodem, proč se tyto pojmy často zaměnují, je že token může reprezentovat \emph{coin} na jiném blockchainu.
+duševní vlastnictví. Důvodem, proč se tyto pojmy často zaměnují je, že token může reprezentovat \emph{coin} na jiném blockchainu.
 
-Myšlenka chytrých kontraktů poprvné zazněla už v roce 1997. Chytrý kontrakt měl odstranit potřebu důvěry třetí strany, při
-jednání, nebo "sjednání smlouvy", s někým druhým. Tímto typickým problémem je skupinové financování (crowdfunding). Prostřednictvím
+Myšlenka chytrých kontraktů poprvné zazněla už v roce 1997. Chytrý kontrakt měl odstranit potřebu důvěry třetí strany při
+jednání nebo \enquote{sjednání smlouvy} s někým druhým. Typickým problémem je skupinové financování (crowdfunding). Prostřednictvím
 nějakého poskytovale si kdokoli může vytvořit svůj projekt a požádat veřejnost o pomoc k dosažení finančního cíle. Jesliže se najde dostatek
-jednolivců, ochotných přispět na onen projekt a vysbírá se dostatek finančích prostředků, peníze popotují k zadavateli a ten s touto podporou
-svůj projekt uskuteční. V opačném případě, kdy se nepodaří splnit minimální finační cíl, měly by se peníze vrátit zpět všem, kteří přispěli.
+jednolivců, ochotných přispět na daný projekt a vysbírá se dostatek finančích prostředků, peníze popotují k zadavateli a ten s touto podporou
+svůj projekt uskuteční. V opačném případě, kdy se nepodaří dosáhnout minimální finační podpory, se peníze musí vrátit zpět všem investorům.
 
-Chytré kontrakty na blockchainu jsou vlastně malé programy, napsány ve speciálním programovacím jazyce, plnící přesně tuto funkci prostředníka.
-Jakmile je jednou chytrý kontrakt publikován, je neměnný a distribuovaný síti. Skutečnost, že je kontrakt distribuovaný
-taktéž znamená, že jeho platnost je ověřována všemi členy na daní síti.
-Jelikož se jedná o program, jakmile je např. dosaženo nějakého cíle, okamžitě se vykoná finální akce. Z předchozího příkladu veřejného
-financování, by se dal chytrý kontrakt naprogramovat tak, aby kontrakt držel všechny přijaté platby dokud není dosaženo minimální částky.
+Chytré kontrakty na blockchainu jsou v podstatě malé programy, napsány ve speciálním programovacím jazyce, plnící přesně tuto funkci prostředníka.
+Jakmile je jednou chytrý kontrakt publikován, je neměnný a distribuovaný sítí. Skutečnost, že je kontrakt distribuovaný
+taktéž znamená, že jeho platnost je ověřována všemi členy na dané síti.
+Jelikož se jedná o program, jakmile je dosaženo konkrétního cíle, okamžitě se vykoná finální akce. Z předchozího příkladu veřejného
+financování, by se dal chytrý kontrakt naprogramovat tak, aby držel všechny přijaté platby dokud není dosaženo minimální částky.
 Tento proces je však naprosto transparentní a automatizovaný.
 
 
@@ -46,24 +46,26 @@ Nechť existují 4 osoby, Alice, Bob, Ctirad a David. Tyto osoby, aby si nemusel
 pro kohokoli z této čtveřice dostupnou. Pokud má Alice zaplatit Bobovi 20 Kč, zapíšou si údaj o této transakci do účetní knihy. Vždy na
 konci měsíce se všichni 4 sejdou a opravdové peníze mezi sebou vymění. V tento moment se naráží na první závažnou chybu v tomto systému.
 Účetní kniha je veřejně dostupná a každý do ní může zapsat jakoukoli transakci. Nic nebrání tomu, aby si David do účetní knihy zapsal, že
-mu mají všichni zaplatit 10 Kč a tyto záznamy nejdou ověřit a nedá se jim věřit. Řešení této situace spočívá právě v použití kryptografie,
+mu mají všichni zaplatit 10 Kč. Tyto záznamy nejdou ověřit a jsou nedůvěryhodné. Řešení této situace spočívá v použití kryptografie,
 konkrétně digitálních podpisů. Ke každému záznamu bude muset být přiložen podpis o tom, že osobá předávající peníze tuto transakci předem
 viděla a schválila. Digitální podpisy se zakládají na dvojici privátního a veřejného klíče. Je nutné privátní klíč udržet v tajnosti,
 pouze pro sebe. Samotný podpis můžeme chápat jako funkci, která na základě vstupní zprávy a privátního klíče, vygeneruje číslo o pevné velikosti,
 nejčastěji 256 bitů. Výhodou digitálního podpisu je právě to, že je závislý na vstupu. Pokud se jakkoli změní, je vygenerovaný podpis
-naprosto odlišný. Aby šlo ověřit, že podpis je skutečně platně podepsaný osobou vlastnící privátní klíč, existuje druhá funkce, schopná
+naprosto odlišný. Aby šlo ověřit, že podpis je skutečně platně podepsán osobou vlastnící privátní klíč, existuje druhá funkce, schopná
 toto ověření provést. Ověření probíhá na základě původní vstupní zprávy, podpisu a veřejného klíče. Výstupem této funkce je pravdivostní
 hodnota říkající, zda-li podpis dané zprávy byl vygenerován za použití přidruženého privátního klíče. Tímto je skoro vyřešen problém ověření
-pravdivosti transakce v účetní knize. Aby se předešlo falšování pouhým kopírovaním předešlého podepsaného záznamu, přiřadí se k záznamu
+pravdivosti transakce v účetní knize. Aby se předešlo falšování pouhým kopírovaním předešlého už podepsaného záznamu, přiřazuje se záznamu
 transakce taktéž její číselné pořadí.
 
 Nyní nastává další problém. Co se stane, pokud Ctirad nasbírá na účetní knize obrovské dluhy a na konci měsíce se prostě neukáže a uteče?
 Pořád je nutná určitá část důvěry. Řešení je jednoduché. Je potřeba mít na úplném začátku knihy záznamy o tom, že všichni 4 dostanou
-určitou částku peněz, kterou nejdříve všichni vloží do nějakého tajného trezoru. Dále už jen stačí jednoduše nedovolit nikomu přidávat
-nový záznám o transakci, jestliže si už to nemůže dovolit.
+určitou část peněz, kterou nejdříve vloží do tajného trezoru. Dále už jen stačí jednoduše nedovolit nikomu přidávat
+nový záznám o transakci, pokud na to nemá prostředky.
 
-Zbývá poslední překážka a to správa o samotnou digitální účetní knihu. Ta někde musí existovat a musí být poskytována všem. To ale pořád
-znamená centrální umístění. Ke zbavení se této obtíže a úplné decentralizace, dostane každý účastník svou kopii účetní knihy. V digitálním světě
+Zbývá poslední překážka a to správa o samotnou digitální účetní knihu. Ta musí někde existovat a musí být všem poskytovaná. To ale pořád
+implikuje
+
+ centrální umístění. Ke zbavení se této obtíže a úplné decentralizace, dostane každý účastník svou kopii účetní knihy. V digitálním světě
 to znamená, že
 každý účastník bude mít nějaké zařízení, na kterém bude mít kompletní kopii digitální účetní knihy a bude zveřejněna všem ostatním účastníkům,
 na jakékoliv síti. Nyní, když všichni mají svou vlastní kopii, musí si umět navzájem vyměnovat informace o proběhlých transakcích a to formou
@@ -83,7 +85,7 @@ téměr kdokoli. Pravidla pro přidávání nonce se mohou lišit v závislosti 
 
 Zde je také vhodné zodpovědět otázku, jak vlastně kryptoměna vzniká. V uvedené analogii si 4 osoby vložili peníze do společného banku.
 Ve světě blockchainu je to takzvaným Genesis blokem (někdy také nazýván \enquote{Block 0}). Jako Genesis blok se označuje úplně první
-vytěžený, na který všechny ostatní bloky v blockchainu navazují. Těžbou bloků se zde myslí právě nalezení nonce, který se přidává do patičky
+vytěžený blok, na který všechny ostatní bloky v blockchainu navazují. Těžbou bloků se zde myslí právě nalezení nonce, který se přidává do patičky
 bloku. Těžař jako odměnu za vynaložené usílí a výpočetní výkonu dostává kryptoměnu ve formě speciální transakce přidané na konci vytěženého bloku.
 Maximální velikost odměny je specifikována protokolem, kterým těžba probíhá a těžaři respektují.
 
@@ -93,15 +95,14 @@ Ověřování na základě proof-of-work má 2 zásadní nevýhody. První z nic
 Jelikož vyšší výpočetní výkon znamená vyšší šanci na úspěch při těžbě bloků, stává se, že těžaři se spojují do tzv. \enquote{mining pools}.
 V těchto poolech je odměna za vytěžení bloku rozdělena mezi jednotlivé účastníky. Jestliže však mining pool naroste do rozměru, kdy by tvořil
 alespoň 51 \% výpočetního výkonu kryptoměnové sítě, teoreticky bude tento pool schopen tvořit nové bloky s falešnými transakcemi. Tato situace
-bývá označována jako \enquote{51\% útok} a při provedení tohoto útoku dochází ke kolapsu kryptoměny. K dosažení tohoto útoku je nicméně
-nutno mít nemálo prostředků.
+bývá označována jako \enquote{51\% útok} a při jeho úspěšném provedení dochází ke kolapsu kryptoměny. Nicméně k jeho úspěšnému dosažení je potřeba velké množství prostředků.
 
 Druhým problémem proof-of-work je vysoká energetická náročnost. V době psaní této práce se odhaduje roční energetická náročnost těžby pouze Bitcoinu
 na 88,5 TWh \cite{crypto:energy-consumption-bitcon}. Pro srovnání, celá Česká republika za rok 2021 spotřebovala okolo 466 TWh \cite{crypto:energy-consumption-czechia}.
 Tato spotřeba zatěžuje jak rozvodné elektrické sítě tak i těžaře.
 
 Převážně z důvodu velké spotřeby elektřiny v roce 2012 byl představen alternativní přístup k ověřování transakcí, označovaný jako proof-of-stake (dále jen PoS).
-PoS upravuje tradiční terminologii, těžaře nahrazuje \emph{validátory} a namísto \enquote{těžby} bloků se bloky \emph{\enquote{razí}}. PoS je
+PoS upravuje tradiční terminologii, těžaře nahrazuje \emph{validátory} a namísto \enquote{těžby} jsou bloky \emph{\enquote{raženy}}. PoS je
 postaven na konsenzu mezi účastníky v síti. Bloky jsou ověřovány náhodně vybranými validátory, kteří jednotlivé transakce ověří a označí za platné.
 Tento validovaný blok je následně přidán do blockchainu. Aby se z účastníka stal validátor, stačí se jednoduše do sítě nabídnout a vložit určitou
 \enquote{sázku} (stake). Výše této sázky ovlivňuje pravděpodobnost výběru při selekci validátorů k ověření bloku. Pokud by validátor označil
