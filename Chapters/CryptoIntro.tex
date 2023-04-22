@@ -102,7 +102,7 @@ na 88,5 TWh \cite{crypto:energy-consumption-bitcon}. Pro srovnání, celá Česk
 Tato spotřeba zatěžuje jak rozvodné elektrické sítě tak i těžaře.
 
 Převážně z důvodu velké spotřeby elektřiny v roce 2012 byl představen alternativní přístup k ověřování transakcí, označovaný jako proof-of-stake (dále jen PoS).
-PoS upravuje tradiční terminologii, těžaře nahrazuje \emph{validátory} a namísto \enquote{těžby} jsou bloky \emph{\enquote{raženy}}. PoS je
+PoS upravuje tradiční terminologii, těžaře nahrazuje \emph{validátory} a namísto \enquote{těžby} jsou bloky \emph{\enquote{raženy}}. PoS je 
 postaven na konsenzu mezi účastníky v síti. Bloky jsou ověřovány náhodně vybranými validátory, kteří jednotlivé transakce ověří a označí za platné.
 Tento validovaný blok je následně přidán do blockchainu. Aby se z účastníka stal validátor, stačí se jednoduše do sítě nabídnout a vložit určitou
 \enquote{sázku} (stake). Výše této sázky ovlivňuje pravděpodobnost výběru při selekci validátorů k ověření bloku. Pokud by validátor označil
@@ -113,7 +113,7 @@ Na proof-of-stake již funguje celá řada kryptoměn, mezi největší se řad�
 
 Nově vznikají další metody jak dosáhnout společného konsenzu na blockchainu. Jedním z těchto nových způsobů je proof-of-authority (PoA). I tato
 metoda využívá validátory, nicméně tito validátoři ručí svou vlastní reputací a důvěryhodností. Validátoři jsou předem vybráni autoritou a mají
-za úkol ověřovat a přidávat nové bloky do blockchainu. Tento algoritmus pro dosažení konsenzu je vhodnější spíše pro privátní blockchainové sítě,
+za úkol ověřovat a přidávat nové bloky do blockchainu. Tento algoritmus pro dosažení konsenzu je vhodnější spíše pro soukromé blockchainové sítě,
 jelikož v něm pracuje omezený počet validátorů a neumožňuje velkou decentralizaci.
 
 Dalším algoritmem je delegovaný proof-of-stake (DPoS). Omezený počet validátorů bloků je volen účastníky sítě. Váha volebního hlasu
@@ -125,7 +125,7 @@ své vlastní kryptoměny, o kterou, v případě pochybení, přijdou.
 \section{Kryptoměnové burzy}
 \label{sec:Exchanges}
 Dříve, když byly kryptoměny na svém počátku neexistovalo mnoho možností jak tuto digitální měnu získat. Volby byly buďto měnu vytěžit, nebo
-si na internetovém fóru dohodnout P2P obchod. Jedním z takových internetových fór byl Bitcointalk, který založil sám Satoshi Nakamoto právě proto,
+si na internetovém fóru dohodnout P2P obchod. Jedním z takových internetových fór byl Bitcointalk, který založil sám 123 Satoshi Nakamoto právě proto,
 aby se něm vedla diskuze ohledně Bitcoinu. P2P obchody mohly být riskantní, jelikož obchod byl domluvený s cizincem přes internetové fóru, kterému
 se uživatel rozhodl důvěřovat. V roce 2010 se začali objevovat první směnárny, největší z nich se stala Mt. Gox. Tato směnárna se starala o více jak polovinu
 všech světových bitcoinových transakcí, avšak kvůli častým bezpečnostním průlomům a vykrádání musela v roce 2014 ukončit činnost.
@@ -135,27 +135,31 @@ kryptoměny obchodovat, podobně jako například na akciovém trhu. Jako dalš�
 může zdát jako jakýsi ekvivalent termínovaného vkladu v té podobě, že člověk zastaví svá aktvita na nějakou určitou dobu. Na konci tohoto období dostane
 odměnu v podobně coinů, nebo v případě termínovaných vkladů, peněz. V realitě se ale termínovaný vklad od stakingu ve své podstatě liší. U termínovaného
 vkladu dává zákazník bance určitou částku peněz k obchodu a investicím. Banka jako odměnu vyplatí část peněz zpět ve formě předem domluveného úroku.
-Na druhou stranu, staking je aktivní podílení se na ověřování transakcí na \emph{proof-of-stake} blockchainu popsané v předchozí části
+Staking je aktivní podílení se na ověřování transakcí na \emph{proof-of-stake} blockchainu popsané v předchozí části
 \ref{proof-of-stake-subsection}. Tak jako u proof-of-work existují mining pooly, tak i u proof-of-stake vznikají staking pooly, ve kterých uživatelé
 blockchainu společně vloží své coiny a stanou se validátorem. Odměnu si pak rozdělí podle vložených coinů. Burzy v tomto ohledu velice zjednodušují
 celý princip stakingu, jelikož tyto pooly řídí na pozadí a uživatel si pouze vybírá, se kterým coinem chce stakovat a na jak dlouhou dobu. Navíc k tomu
 burza může uživateli poskytnout lepší odhady o získané odměně, risku apod.
 
 K vizualizaci trendů a aktuální tržní ceny využívají burzy grafické znázornění ve formě grafů. Typicky poskytují 3 typy grafů --- spojnicový, sloupcový a svíčkový.
-Investoři si samozřejmě mohou vybrat nejvíce vyhovující jejich gestu. Rozdíly mezi grafy nejsou pouze vizuální, avšak také v množství informací, jaké z nich lze vyčíst.
-Obvykle se v těchto grafech zobrazují ceny kryptoměn za nějak veliké časové okno (1 minuta, 1 hodina, \ldots). Oproti spojnicovému grafu dokáže sloupcový a svíčkový
-zobrazit otevírací, nejvyšší, nejnižší a závěrečnou cenu kryptoměny v daném okně.
+Investoři si samozřejmě mohou vybrat nejvíce vyhovující jejich gestu. Rozdíly mezi grafy nejsou pouze vizuální, ale liší se také množství informací, jaké z nich lze vyčíst.
+Obvykle se v těchto grafech zobrazují ceny kryptoměn za určité časové okno (1 minuta, 1 hodina, \ldots). Oproti spojnicovému grafu dokáže sloupcový a svíčkový
+zobrazit otevírací (open), nejvyšší (high), nejnižší (low) a závěrečnou (close) cenu kryptoměny v daném okně.
 
 \subsection{Obchodování kryptoměn}
-Obchodování kryptoměnových párů má vesměs stejný princip jako forexový trh. Obchodník směňuje jednu měnu za druhou a snaží se vydělat na rozdílů jejich tržních cen.
-Měnové páry se pak označují jako podkladová (angl. base) a kotovaná (angl. quote) měna. Zapisují se ve formátu {BBB/QQQ}, tedy například při zápise
-EUR/USD je euro podkladová měna a dolar je měna kotovaná. Podkladová měna je vždy rovna 1, tzn. pokud je kurz EUR/USD roven $1,2$ znamená to, že za nákup 1 eura
-obchodník zaplatí $1,2$ dolaru. Vždy tedy platí, že během nakupování se platí kotovanou měnou za měnu podkladovou, při prodeji se prodává podkladová měna a získává
-měna kotovaná. Dále v této práci mohou být tyto názvy použity i v jejich anglickém překladu.
+Obchodování kryptoměnových párů má vesměs stejný princip jako forexový trh. Obchodník směňuje jednu měnu za druhou a snaží se vydělat na rozdílu jejich tržních cen.
+Jednotlivé měny v páru jsou označovány jako podkladová (angl. base) a kotovaná (angl. quote) měna. Zapisují se ve formátu {BBB/QQQ}, tedy například při zápise
+EUR/USD je euro podkladová měna a dolar kotovaná. Podkladová měna je vždy rovna 1, tzn. pokud je kurz EUR/USD roven $1,2$ znamená to, že za nákup 1 eura
+obchodník zaplatí $1,2$ dolaru. Vždy tedy platí:
+\begin{itemize}
+    \item během nakupování se platí kotovanou měnou za měnu podkladovou,
+    \item při prodeji se prodává podkladová měna a získává měna kotovaná.
+\end{itemize}
+Dále v této práci mohou být tyto názvy použity i v jejich anglickém překladu.
 
 \begin{figure}[ht]
     \centering
-    \subfloat[\centering Spojnivový graf]{{\includegraphics[width=0.45\textwidth]{Figures/linechart.pdf}}}
+    \subfloat[\centering Spojnicový graf]{{\includegraphics[width=0.45\textwidth]{Figures/linechart.pdf}}}
     \qquad
     \subfloat[\centering Sloupcový graf]{{\includegraphics[width=0.45\textwidth]{Figures/barchart.pdf}}}
 
@@ -163,7 +167,7 @@ měna kotovaná. Dále v této práci mohou být tyto názvy použity i v jejich
     \qquad
     \subfloat[\centering Svíčka]{{\includegraphics[width=0.45\textwidth]{Figures/candle.pdf}}}
 
-    \caption{Používané grafy pro a popis svíčky}
+    \caption{Používané grafy a popis svíčky}
     \label{fig:most-used-charts}
 \end{figure}
 
