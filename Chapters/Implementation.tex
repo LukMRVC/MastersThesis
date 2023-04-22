@@ -164,7 +164,7 @@ Poslední ochranou je ochrana časová. Dalším parametrem, nazvaný \verb|recv
 Koncové mohou občas podporují více parametrů, než jaké kryptobot reálně používá. Pro lepší přehlednost budou uvedeny a popsány parametry, které jsou doopravdy využity. Návratové zprávy získávané
 při odpovědích budou taktéž popsány v potřebné míře.
 
-\paragraph{Nový příkaz}
+\paragraph*{Nový příkaz}
 Nejzákladnější a nejčastěji volaný koncový bod rozhraní slouží k vytvoření nového příkazu na burze. Botem využívané parametry jsou popsány v tabulce \ref{tab:binance:new-order}.
 \newline
 \verb|POST /api/v3/order|
@@ -201,7 +201,7 @@ odpovědi \verb|RESULT|. Odpověď tedy příchází ve formátu znázorněn na 
 
 \lstinputlisting[label=src:newOrder,caption={Odpovědi založení nového příkazu}]{Sources/new_order.json}
 
-\paragraph{Zrušení příkazu}
+\paragraph*{Zrušení příkazu}
 Další často využívaný koncový bod. Zrušení nastává pokud příkaz přesáhne svou maximální dobu trvání na straně bota. Parametry
 pro ukončení příkazu jsou v tabulce \ref{tab:binance:cancel-order}
 \newline
@@ -224,7 +224,7 @@ pro ukončení příkazu jsou v tabulce \ref{tab:binance:cancel-order}
 \end{center}
 Odpověď na požadavky zrušení příkazu kopírují formát při zadávání nových příkazů a je viditelný na \ref{src:newOrder}.
 
-\paragraph{Nový OCO příkaz}
+\paragraph*{Nový OCO příkaz}
 Metoda zajištěného obchodování, nazvaná taky \emph{peaking}, využívá právě OCO příkazů pro kontrolu spodní i horní hranice při změně kurzu kryptoměnového páru.
 Parametry které kryptobot nastavuje jsou v tabulce \ref{tab:binance:new-oco}.
 \newline
@@ -260,7 +260,7 @@ Odpověď na zaslaný příkaz je ve formátu JSON zobrazen na \ref{src:newOCO}.
 
 \lstinputlisting[label=src:newOCO,caption={Obsah odpovědi na zrušení OCO příkazu}]{Sources/new_oco.json}
 
-\paragraph{Zrušení OCO příkazu}
+\paragraph*{Zrušení OCO příkazu}
 Pokud při použití zajištěného obchodování se cena posouvá pozitivně pro aktuální stranu obchodu (myšleno nákup nebo prodej), kryptobot zruší platný OCO příkaz
 na burze a nahradí ho novým. Pro zrušení OCO příkazu je poslán HTTP požadavek na následující koncový bod s parametry uvedenými v tabulce \ref{tab:binance:cancel-oco}.
 \newline
@@ -283,7 +283,7 @@ na burze a nahradí ho novým. Pro zrušení OCO příkazu je poslán HTTP poža
 \end{center}
 Získaná odpověď strukturou odpovídá stejné zprávě jako při zaslání nového OCO příkazu, lze ji tedy vidět výše na \ref{src:newOCO}.
 
-\paragraph{Průměrná cena}
+\paragraph*{Průměrná cena}
 Získávání průměrné tržní ceny se využívá pro zajištěné a nezajištěné obchodování. Vyžaduje pouze jediný parametr, jak lze vidět na tabulce \ref{tab:binance:avg-price}.
 \newline
 \verb|GET /api/v3/avgPrice|
@@ -303,12 +303,92 @@ Odpověď lze vidět na \ref{src:avgPrice}.
 
 \lstinputlisting[label=src:avgPrice,caption={Odpověď na požadavek průměrné ceny}]{Sources/avg_price.json}
 
-
 \subsubsection{Tržní pravidla}
-% TODO:
+Každý kryptoměnový pár na burze Binance má svou vlastní sadu obchodních pravidel sdružených do tzv \emph{filtrů}. Celkem může existovat až 13 filtrů pro každý pár, nicméně kryptobot na některé
+pravidla nemůže nikdy narazit, jelikož nevyužívá například tzv. iceberg příkazy. V této práci tedy budou zahrnuta jen pravidla, na která bot musí reagovat.
+
+
+\paragraph*{PRICE\_FILTER}
+Definuje základní cenová pravidla při zadávání příkazů. Pokud hodnota pravidla (\ref{tab:binance:price_filter}) je rovna 0, tak se toto pravidla bere jako neaktivní a nemusí se na něj brát ohled.
+\begin{center}
+    \begin{longtable}[h]{|l|l|l|}
+        \hline
+        Název pravidla & Význam                                     & Splnění pravidla           \\
+        \hline
+        minPrice       & Minimální povolená cena                    & $ cena \geq  minPrice $    \\ 
+        \hline
+        maxPrice       & Maximální povolená cena                    & $ cena \leq maxPrice $     \\ 
+        \hline
+        tickSize       & Interval, o který lze měnit zadávanou cenu & $price \bmod tickSize = 0$ \\ 
+        \hline
+        \caption{Parametry pro zrušení příkazu}
+        \label{tab:binance:price_filter}
+    \end{longtable}
+\end{center}
+
+\paragraph*{PERCENT\_PRICE}
+Taktéž upravuje příkazové cenové rozpětí, nicméně tento rozsah zakládá na průměrné ceně předchozích obchodů. Pravidla lze vidět v tabulce \ref{tab:binance:percent_price}
+\footnote{$WMA_{cena}$ označuje vážený klouzavý průměr ceny}.
+\begin{center}
+    \begin{longtable}[h]{|l|l|l|}
+        \hline
+        Název pravidla & Význam                               & Splnění pravidla                           \\
+        \hline
+        multiplierUp   & Násobitel horní hranice              & $ cena \leq multiplierUp * WMA_{cena} $    \\ 
+        \hline
+        multiplierDown & Násobitel spodní hranice             & $ cena \geq  multiplierDown * WMA_{cena} $ \\ 
+        \hline
+        avgPriceMins   & Počet minut, za které je počítán WMA &                                            \\ 
+        \hline
+        \caption{Parametry pro zrušení příkazu}
+        \label{tab:binance:percent_price}
+    \end{longtable}
+\end{center}
+
+\paragraph*{LOT\_SIZE}
+Zadává platný rozsah obchodované kvantity, neboli lotu. Jak projít tímto filtrem je vidět v tabulce \ref{tab:binance:lot_filter}.
+\begin{center}
+    \begin{longtable}[h]{|l|l|l|}
+        \hline
+        Název pravidla & Význam                              & Splnění pravidla         \\
+        \hline
+        minQty         & Minimální povolený lot              & $ lot \geq minQty $      \\ 
+        \hline
+        maxQty         & Maximální povolený lot              & $ lot \leq  maxQty $     \\ 
+        \hline
+        stepSize       & Velikost, o kterou se smí lot měnit & $lot \bmod stepSize = 0$ \\ 
+        \hline
+        \caption{Parametry pro zrušení příkazu}
+        \label{tab:binance:lot_filter}
+    \end{longtable}
+\end{center}
+
+\paragraph*{MIN\_NOTIONAL}
+Definuje minimální obchodovanou nominální hodnotu. Nominální hodnotou se rozumí součin ceny a lotu. Tento filtr je přednostně kontrolován vůči příkazům typu \textsc{limit}, nicméně
+může být použit i na typ \textsc{market}. Jelikož při použití příkazu \textsc{market} se nezadává požadovaná cena, počítá se nominální hodnota s průměrnou cenou za posledních X minut
+specifikovaných přesněji v pravidle (\ref{tab:binance:notional_filter}).
+\begin{center}
+    \begin{longtable}[h]{|l|l|l|}
+        \hline
+        Název pravidla & Význam                              & Splnění pravidla                \\
+        \hline
+        minNotional    & Minimální nominální hotnota         & $ cena * lot \geq minNotional $ \\ 
+        \hline
+        applyToMarket  & Platí i pro \textsc{market} příkazy &                                 \\ 
+        \hline
+        avgPriceMins   & Počet minut, za které je počítán MA &                                 \\ 
+        \hline
+        \caption{Parametry pro zrušení příkazu}
+        \label{tab:binance:notional_filter}
+    \end{longtable}
+\end{center}
+
+\paragraph*{MAX\_NUM\_ALGO\_ORDERS}
+Tento filtr upřesňuje maximální povolený počet aktivních \enquote{algo} příkazů na daný kryptoměnový pár. Algo příkazem se myslí konkrétně příkazy typu
+\textsc{stop loss, stop loss limit, take profit, take profit limit}. OCO příkazy taktéž snižují uživatelovu kvótu na maximální počet algo příkazů. 
 
 \subsection{Executioner}
-Komponenta executioner má na starosti obchodní příkazy. Konkrétně jejich zaslání na burzu a jejich zrušení a dohled na vlastní přepočet při použití výše popsané metody zajištěného obchodování. Komponenta
+Komponenta executioner má na starosti obchodní příkazy. Konkrétně jejich zaslání na burzu a jejich zrušení a dohled na vlastní přepočet při použití metod zajištěného a nezajištěného obchodování. Komponenta
 využívá asynchronní úlohy. Přepínání mezi těmito úlohami řídí modul \verb|asyncio| vytvoření právě pro asynchronní programování.
 
 \subsubsection{Zaslání příkazu na burzu}
