@@ -184,7 +184,7 @@ Rekurzivní rovnice pro výpočet je vyobrazena \ref{eq:ema}. Pro časové pohyb
 Výhodou exponenciálního klouzavého průměru je větší důraz na čerstvější data, čím může lépe reagovat na změny trhu.
 
 \begin{equation}
-    SMA_t = \frac{C_t + C_{t - 1} + ... + C_{t - (n - 1)}}{n}
+    SMA_t = \frac{C_t + C_{t - 1} + \cdots + C_{t - (n - 1)}}{n}
     \label{eq:sma}
 \end{equation}
 
@@ -194,7 +194,7 @@ Výhodou exponenciálního klouzavého průměru je větší důraz na čerstvě
 \end{equation}
 
 \begin{equation}
-    EMA_t = \frac{C_t + (1 - \alpha) * C_{t-1} + (1 - \alpha)^2 * C_{t-2} + \ldots + (1 - \alpha)^t * C_0}{1 + (1 - \alpha) + (1 - \alpha)^2 + \ldots + (1 - \alpha)^t}
+    EMA_t = \frac{C_t + (1 - \alpha) * C_{t-1} + (1 - \alpha)^2 * C_{t-2} + \cdots + (1 - \alpha)^t * C_0}{1 + (1 - \alpha) + (1 - \alpha)^2 + \cdots + (1 - \alpha)^t}
     \label{eq:ema-rolling}
 \end{equation}
 % TODO: Pridat ukázky SMA a EMA
@@ -308,7 +308,7 @@ s drobnou změnou. Jako klouzavý průměr se nejčastěji využitá jednoduchý
 (obvykle 2) násobku standardní odchylky $\sigma$ \ref{eq:bb}. Se snižující nebo zvyšující se volatilitou dochází k tzv. kontrakci nebo roztažení pásem (viditelné na obrázku \ref{fig:bb}).
 Pokud je volatilita poněkud nízká, budou mít
 pásma tendenci přibližovat se k sobě a dochází ke kontrakci. Opačným případem je roztažení. Signál překoupení aktiva nastává pokud se tržní cena přiblíží hornímu pásmu. Naopak přeprodání
-jesliže se cena nachází v blízkosti spodního pásma. Může dojít i k proražení těchto pásem, což může naznačovat extrémní tržní podmínky.
+jestliže se cena nachází v blízkosti spodního pásma. Může dojít i k proražení těchto pásem, což může naznačovat extrémní tržní podmínky.
 
 \begin{equation}
     Band_{up + down} = MA \pm K\sigma

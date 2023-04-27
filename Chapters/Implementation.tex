@@ -459,6 +459,19 @@ Jednotlivé části obchodu získávané \emph{Stream listenerem} se vkládají 
 záznam ohledně ukončení obchodu, korektně se zaktualizuje související záznam z \emph{trade\_order\_progress}, spojený cizím klíčem. Po provedení aktualizace je opětovně volána procedura aktualizující
 \emph{trade\_order\_iteration} a následně i samotná \emph{trade\_order}.
 
+
+\section{Možná budoucí vylepšení}
+Potenciál možných rozšíření je veliký. Implementace technické analýzy se může nadále rozšiřovat o další indikátory, jako je například MACD. Tyto indikátory lze počítat na aktuálních datech získávané z burzy.
+Kryptobot by tak mohl být rozšířen a dělat chytřejší rozhodnutí o tom, zda-li je opravdu nejlepší chvíle zaslání obchodního příkazu nebo se jedná o falešný trend.
+
+Dalším nabízejícím se rozšířením je napojení na více kryptoměnových burz. Aktuálně je kryptobot schopen obchodovat pouze na jedné burze. Nicméně na ni není plně vázaný a což proces napojení na další
+burzy značně zjednoduše.
+
+Fundamentální analýza má taktéž potenciál na vylepšení kryptobota. Jak pozitivní tak i negativní zprávy ohledně kryptoměn mohou ovlivňovat jejich tržní hodnotu. Kolísání této hodnoty nabízí možnost
+výdělku.
+
+Z důvodu problematiky je množina vylepšení velká. Využít by šlo i technik strojového učení k detekci trendů nebo grafových vzorů. Takto pokročilá vylepšení by už ale vyžadovala mnohem delší expertizu
+
 \begin{center}
     \small
     \begin{longtable}{ |l|c|c|p{0.3\linewidth}| }

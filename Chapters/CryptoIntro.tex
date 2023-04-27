@@ -5,25 +5,25 @@ Fenomén Bitcoinu, který jako první odstartoval kryptoměnový boom, způsobil
 kryptoměn, založených buďto na podobných principech a technologiích, nebo s novými inovativními myšlenkami.
 Spolu s kryptoměnami přišlo spoustu nového názvosloví, byly nimi inspirovány NFT\footnote{Non-fungible tokens} a vzniklo
 nové odvětví digitálních financí, označováno jako DeFi (decentralizované finance).
-Tato kapitola postupně popíše co to jsou kryptoměny, s využítím jakých technologiích fungují, jak jsou ověřovány
+Tato kapitola postupně popíše co to jsou kryptoměny, s využitím jakých technologiích fungují, jak jsou ověřovány
 a obchodovány na burzách.
 
 
 \section{Coiny, chytré kontrakty a tokeny}
 \label{sec:CoinsTokensSmartContracts}
-Často se lze setkat s pojmy \enquote{token} nebo \enquote{coin}. Obojí se označuje za kryptoměnu a mnohdy se zaměnují
+Často se lze setkat s pojmy \enquote{token} nebo \enquote{coin}. Obojí se označuje za kryptoměnu a mnohdy se zaměňují
 za jednu a tu stejnou věc. Jak token, tak i coin žijí na blockchainu.
 Koncept blockchainu je vysvětlen v následují sekci. Co je to vlastně token nebo coin? Jak již bylo zmíněno, obojí využívá
 blockchain, avšak hlavní rozdíl spočívá v tom, co reprezentují. Coin označuje kryptoměnu používanou k uchovávání
 nebo směny hodnoty. Jako příklad je možné považovat například známí Bitcoin. Token slouží k digitální reprezentaci
 aktiva, které se dá směnit pomocí blockchainu. Token může reprezentovat nejen fyzickou věc, jako například zlato, ale i
-duševní vlastnictví. Důvodem, proč se tyto pojmy často zaměnují je, že token může reprezentovat \emph{coin} na jiném blockchainu.
+duševní vlastnictví. Důvodem, proč se tyto pojmy často zaměňují je, že token může reprezentovat \emph{coin} na jiném blockchainu.
 
-Myšlenka chytrých kontraktů poprvné zazněla už v roce 1997. Chytrý kontrakt měl odstranit potřebu důvěry třetí strany při
+Myšlenka chytrých kontraktů poprvé zazněla už v roce 1997. Chytrý kontrakt měl odstranit potřebu důvěry třetí strany při
 jednání nebo \enquote{sjednání smlouvy} s někým druhým. Typickým problémem je skupinové financování (crowdfunding). Prostřednictvím
-nějakého poskytovale si kdokoli může vytvořit svůj projekt a požádat veřejnost o pomoc k dosažení finančního cíle. Jesliže se najde dostatek
-jednolivců, ochotných přispět na daný projekt a vysbírá se dostatek finančích prostředků, peníze popotují k zadavateli a ten s touto podporou
-svůj projekt uskuteční. V opačném případě, kdy se nepodaří dosáhnout minimální finační podpory, se peníze musí vrátit zpět všem investorům.
+nějakého poskytovala si kdokoli může vytvořit svůj projekt a požádat veřejnost o pomoc k dosažení finančního cíle. Jestliže se najde dostatek
+jednotlivců, ochotných přispět na daný projekt a vysbírá se dostatek finančních prostředků, peníze poputují k zadavateli a ten s touto podporou
+svůj projekt uskuteční. V opačném případě, kdy se nepodaří dosáhnout minimální finanční podpory, se peníze musí vrátit zpět všem investorům.
 
 Chytré kontrakty na blockchainu jsou v podstatě malé programy, napsány ve speciálním programovacím jazyce, plnící přesně tuto funkci prostředníka.
 Jakmile je jednou chytrý kontrakt publikován, je neměnný a distribuovaný sítí. Skutečnost, že je kontrakt distribuovaný
@@ -39,28 +39,28 @@ Hlavní motivace kryptoměn je možnost platit pomocí Internetu bez toho, aniž
 být ověřený a důvěryhodný prostředník. Může se však stát, že i tato centrální autorita nesplní své závazky vůči oběma stranám.
 
 V roce 2008 zveřejnil neznámý autor, či skupina autorů, pod názvem Satoshi Nakamoto kryptoměnu Bitcoin a s ní i systém bezpečného
-ověřování plateb bez nutnosti centrální autority. Dva nejdůležitější faktory tohoto zabezpečení spočívají v počítáčové kryptografii
-a distribuci dat. Co to teda vlastně je blockchain a jak funguje je vysvětleno na následujícím příkladu.
+ověřování plateb bez nutnosti centrální autority. Dva nejdůležitější faktory tohoto zabezpečení spočívají v počítačové kryptografii
+a distribuci dat. Co to tedy vlastně je blockchain a jak funguje je vysvětleno na následujícím příkladu.
 
 Nechť existují 4 osoby, Alice, Bob, Ctirad a David. Tyto osoby, aby si nemusely pořád předávat peníze, si vedou jednotnou digitální účetní knihu,
 pro kohokoli z této čtveřice dostupnou. Pokud má Alice zaplatit Bobovi 20 Kč, zapíšou si údaj o této transakci do účetní knihy. Vždy na
 konci měsíce se všichni 4 sejdou a opravdové peníze mezi sebou vymění. V tento moment se naráží na první závažnou chybu v tomto systému.
 Účetní kniha je veřejně dostupná a každý do ní může zapsat jakoukoli transakci. Nic nebrání tomu, aby si David do účetní knihy zapsal, že
 mu mají všichni zaplatit 10 Kč. Tyto záznamy nejdou ověřit a jsou nedůvěryhodné. Řešení této situace spočívá v použití kryptografie,
-konkrétně digitálních podpisů. Ke každému záznamu bude muset být přiložen podpis o tom, že osobá předávající peníze tuto transakci předem
+konkrétně digitálních podpisů. Ke každému záznamu bude muset být přiložen podpis o tom, že osoba předávající peníze tuto transakci předem
 viděla a schválila. Digitální podpisy se zakládají na dvojici privátního a veřejného klíče. Je nutné privátní klíč udržet v tajnosti,
 pouze pro sebe. Samotný podpis můžeme chápat jako funkci, která na základě vstupní zprávy a privátního klíče, vygeneruje číslo o pevné velikosti,
 nejčastěji 256 bitů. Výhodou digitálního podpisu je právě to, že je závislý na vstupu. Pokud se jakkoli změní, je vygenerovaný podpis
 naprosto odlišný. Aby šlo ověřit, že podpis je skutečně platně podepsán osobou vlastnící privátní klíč, existuje druhá funkce, schopná
 toto ověření provést. Ověření probíhá na základě původní vstupní zprávy, podpisu a veřejného klíče. Výstupem této funkce je pravdivostní
 hodnota říkající, zda-li podpis dané zprávy byl vygenerován za použití přidruženého privátního klíče. Tímto je skoro vyřešen problém ověření
-pravdivosti transakce v účetní knize. Aby se předešlo falšování pouhým kopírovaním předešlého už podepsaného záznamu, přiřazuje se záznamu
+pravdivosti transakce v účetní knize. Aby se předešlo falšování pouhým kopírováním předešlého už podepsaného záznamu, přiřazuje se záznamu
 transakce taktéž její číselné pořadí.
 
 Nyní nastává další problém. Co se stane, pokud Ctirad nasbírá na účetní knize obrovské dluhy a na konci měsíce se prostě neukáže a uteče?
 Pořád je nutná určitá část důvěry. Řešení je jednoduché. Je potřeba mít na úplném začátku knihy záznamy o tom, že všichni 4 dostanou
 určitou část peněz, kterou nejdříve vloží do tajného trezoru. Dále už jen stačí jednoduše nedovolit nikomu přidávat
-nový záznám o transakci, pokud na to nemá prostředky.
+nový záznam o transakci, pokud na to nemá prostředky.
 
 Zbývá poslední překážka a to správa o samotnou digitální účetní knihu. Ta musí někde existovat a musí být všem poskytovaná. To ale pořád
 implikuje
@@ -80,8 +80,8 @@ obsahovat hash předchozího bloku. Tímto dochází ke zřetězení bloků (odt
 
 Takto funguje princip ověřování transakcí na základě tzv. proof-of-work. Věří se vždy tomu blockchainu, do kterého bylo dáno nejvíce
 výpočetní síly, tzn. tomu nejdelšímu řetězu bloků. V reálném světě účastníkem v nějaké kryptoměnové síti jsou počítače, zvané nody.
-Na nodech se ukládá blockchain a jak již avizováno, věří se vždy tomu nejdelšímu řetezu bloků. Svůj vlastní node si může u sebe doma spustit
-téměr kdokoli. Pravidla pro přidávání nonce se mohou lišit v závislosti na kryptoměně.
+Na nodech se ukládá blockchain a jak již avizováno, věří se vždy tomu nejdelšímu retezu bloků. Svůj vlastní node si může u sebe doma spustit
+téměř kdokoli. Pravidla pro přidávání nonce se mohou lišit v závislosti na kryptoměně.
 
 Zde je také vhodné zodpovědět otázku, jak vlastně kryptoměna vzniká. V uvedené analogii si 4 osoby vložili peníze do společného banku.
 Ve světě blockchainu je to takzvaným Genesis blokem (někdy také nazýván \enquote{Block 0}). Jako Genesis blok se označuje úplně první
@@ -233,13 +233,13 @@ s nejdelší možnou dobou až pár hodin. Často využívají i \emph{pákovéh
 K rozhodování o otevření pozic se opírají o \emph{technickou analýzu}, která bude detailněji popsána v kapitole \ref{chap:TechnicalAnalysis}.
 
 \subsubsection{Swing trading}
-Swing tradeři sporadicky otevírají a zavírají pozice na trhu, přičemž své pozice drží i v období několida dnů, nebo týdnů. Čekají na větší cenové
+Swing tradeři sporadicky otevírají a zavírají pozice na trhu, přičemž své pozice drží i v období několika dnů, nebo týdnů. Čekají na větší cenové
 výkyvy (doslova zhoupnutí ceny, odtud název swing trading) a tomu odpovídá i delší doba trvání obchodu. Využívají technickou analýzu ale i fundament
 daného aktiva a snaží se odhadnout dlouhodobější trendy.
 
 \subsubsection{Buy-and-hold}
 Tato poslední metoda obchodování je čistě dlouhodobá a jedná se pouze o nákupy aktiv. Převážně oblíbená v krypto komunitě dostala tato strategie přezdívku HODL.
-Vyhybáním prodeje se investoři snaží mířit na výhledový zisk z držení. Podle motivace a filozofie HODLerů je vždy skvělá příležitost nakoupit kryptoměnu a za
+Vyhýbáním prodeje se investoři snaží mířit na výhledový zisk z držení. Podle motivace a filozofie HODLerů je vždy skvělá příležitost nakoupit kryptoměnu a za
 žádných okolností neprodávat, ale držet své coiny u sebe.
 
 \endinput
