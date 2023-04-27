@@ -29,7 +29,7 @@ ziskové páry nevadí, že se stahují a analyzují data s denní zpožděním.
 % TODO: Obrázek kopců a doliny s vizualizací nástupní a sestupní hrany
 Scénář obchodování pro strategii kopců a dolin je následující: v momentě, kdy se dosáhlo minima, cena se odráží a začíná stoupat. Tím je započata nákupní fáze
 se snahou uzavřít obchod s co nejnižší cenou. Další stoupání ceny je příznivou situací, během které se zhodnocuje investice. Dosáhnutím lokálního maxima se trend láme a začíná klesat
--- nastává prodejní fáze opět se snahou prodat, tentokrát za co nejvyšší cenu. Konkrétní realizace je pak popsána v sekci \ref{subsec:exchanges-comm}.
+-- nastává prodejní fáze opět se snahou prodat, tentokrát za co nejvyšší cenu. Konkrétní realizace je pak popsána v sekci~\ref{subsec:exchanges-comm}.
 
 
 \section{Výběr párů a realizace obchodních příkazů}
@@ -80,6 +80,10 @@ Proto byla vymyšlena druhá metoda opakování.
     \subfloat[\centering Opakování obchodu v sekvenci]{{\includegraphics[width=0.45\textwidth]{Figures/sequence.pdf}}\label{subfig:sequence}}
     \qquad
     \subfloat[\centering Opakování obchodu v kaskádě]{{\includegraphics[width=0.45\textwidth]{Figures/cascade.pdf}}\label{subfig:cascade}}
+    
+    \subfloat[\centering Opakování v sekvenci - časová osa]{{\includegraphics[width=0.45\textwidth]{Figures/sekvence-timeline.pdf}}\label{subfig:sequence-timeline}}
+    \qquad
+    \subfloat[\centering Opakování v kaskádě - časová osa]{{\includegraphics[width=0.45\textwidth]{Figures/kaskada-timeline.pdf}}\label{subfig:cascade-timeline}}
     \caption{Strategie opakování obchodu}
     \label{fig:trade-repeat}
 \end{figure}
@@ -97,7 +101,7 @@ by investovaná částka narostla do velkých rozměrů může obchod způsobit 
 
 
 \subsection{Skutečné obchodní příkazy}
-Obchodování na základě kopců a dolin je pro burzy naprosto irelevantní. Burzy přijímají pouze příkazy popsané v části \ref{subsec:market-trade-orders}. Nezbytností je tedy napasovat scénáře
+Obchodování na základě kopců a dolin je pro burzy naprosto irelevantní. Burzy přijímají pouze příkazy popsané v části~\ref{subsec:market-trade-orders}. Nezbytností je tedy napasovat scénáře
 obchodování do kombinací s těmito příkazy.
 
 Zachycení začátku vzestupného trendu a tedy i začínajícího kopce se dá realizovat jednoduše s použitím příkazu \textsc{trailing stop-limit}. Důležitý
@@ -140,7 +144,8 @@ nutné převést na reálné hodnoty, především limitní a aktivační ceny. 
 Předtím, než se popíšou tyto 2 komponenty, bude čtenáři přiblíženo API burzy Binance.
 
 \subsection{Binance API}
-Binance poskytuje aplikační rozhraní přes protokol HTTPS a do budoucna se chystá i rozhraní založené na websocketech. Pro komunikace si uživatel musí zajistit dvojici klíčů, \emph{API} klíč 
+Binance poskytuje aplikační rozhraní přes protokol HTTPS a do budoucna se chystá i rozhraní založené na websocketech.
+Pro komunikace si uživatel musí zajistit dvojici klíčů, \emph{API} klíč 
 a \emph{secret} klíč.
 Základní URL pro zasílání požadavků je \verb|https://api.binance.com|.
 Všechny potřebné informace ke koncovým bodům rozhraní jsou popsány v dokumentaci, avšak pro potřeby kryptobota bude zde přiblíženo jak rozhraní obecně, tak i pár konkrétních koncových bodů.
@@ -165,7 +170,7 @@ Koncové mohou občas podporují více parametrů, než jaké kryptobot reálně
 při odpovědích budou taktéž popsány v potřebné míře.
 
 \paragraph*{Nový příkaz}
-Nejzákladnější a nejčastěji volaný koncový bod rozhraní slouží k vytvoření nového příkazu na burze. Botem využívané parametry jsou popsány v tabulce \ref{tab:binance:new-order}.
+Nejzákladnější a nejčastěji volaný koncový bod rozhraní slouží k vytvoření nového příkazu na burze. Botem využívané parametry jsou popsány v tabulce~\ref{tab:binance:new-order}.
 \newline
 \verb|POST /api/v3/order|
 \begin{center}
@@ -197,13 +202,13 @@ Nejzákladnější a nejčastěji volaný koncový bod rozhraní slouží k vytv
     \end{longtable}
 \end{center}
 Velikost odpovědi serveru burzy se dá nastavit ve 3 režimech v tomto pořadí od nejmenší po největší: \verb|ACK, RESULT, FULL|. Implementovaný kryptobot konkrétně využívá režim
-odpovědi \verb|RESULT|. Odpověď tedy příchází ve formátu znázorněn na \ref{src:newOrder}.
+odpovědi \verb|RESULT|. Odpověď tedy příchází ve formátu znázorněn na~\ref{src:newOrder}.
 
 \lstinputlisting[label=src:newOrder,caption={Odpovědi založení nového příkazu}]{Sources/new_order.json}
 
 \paragraph*{Zrušení příkazu}
 Další často využívaný koncový bod. Zrušení nastává pokud příkaz přesáhne svou maximální dobu trvání na straně bota. Parametry
-pro ukončení příkazu jsou v tabulce \ref{tab:binance:cancel-order}
+pro ukončení příkazu jsou v tabulce~\ref{tab:binance:cancel-order}
 \newline
 \verb|DELETE /api/v3/order|
 \begin{center}
@@ -222,11 +227,11 @@ pro ukončení příkazu jsou v tabulce \ref{tab:binance:cancel-order}
         \label{tab:binance:cancel-order}
     \end{longtable}
 \end{center}
-Odpověď na požadavky zrušení příkazu kopírují formát při zadávání nových příkazů a je viditelný na \ref{src:newOrder}.
+Odpověď na požadavky zrušení příkazu kopírují formát při zadávání nových příkazů a je viditelný na~\ref{src:newOrder}.
 
 \paragraph*{Nový OCO příkaz}
 Metoda zajištěného obchodování, nazvaná taky \emph{peaking}, využívá právě OCO příkazů pro kontrolu spodní i horní hranice při změně kurzu kryptoměnového páru.
-Parametry které kryptobot nastavuje jsou v tabulce \ref{tab:binance:new-oco}.
+Parametry které kryptobot nastavuje jsou v tabulce~\ref{tab:binance:new-oco}.
 \newline
 \verb|POST /api/v3/order/oco|
 \begin{center}
@@ -251,18 +256,18 @@ Parametry které kryptobot nastavuje jsou v tabulce \ref{tab:binance:new-oco}.
         \hline
         trailingDelta        & \tikzxmark              & Celočíselný         & Změna od posledního extrému               \\
         \hline
-        \caption{Parametry pro zrušení příkazu}
+        \caption{Parametry pro vytvoření nového OCO příkazu}
         \label{tab:binance:new-oco}
     \end{longtable}
 \end{center}
 
-Odpověď na zaslaný příkaz je ve formátu JSON zobrazen na \ref{src:newOCO}.
+Odpověď na zaslaný příkaz je ve formátu JSON zobrazen na~\ref{src:newOCO}.
 
 \lstinputlisting[label=src:newOCO,caption={Obsah odpovědi na zrušení OCO příkazu}]{Sources/new_oco.json}
 
 \paragraph*{Zrušení OCO příkazu}
 Pokud při použití zajištěného obchodování se cena posouvá pozitivně pro aktuální stranu obchodu (myšleno nákup nebo prodej), kryptobot zruší platný OCO příkaz
-na burze a nahradí ho novým. Pro zrušení OCO příkazu je poslán HTTP požadavek na následující koncový bod s parametry uvedenými v tabulce \ref{tab:binance:cancel-oco}.
+na burze a nahradí ho novým. Pro zrušení OCO příkazu je poslán HTTP požadavek na následující koncový bod s parametry uvedenými v tabulce~\ref{tab:binance:cancel-oco}.
 \newline
 \verb|DELETE /api/v3/orderList|
 \begin{center}
@@ -277,14 +282,14 @@ na burze a nahradí ho novým. Pro zrušení OCO příkazu je poslán HTTP poža
         \hline
         listClientOrderId & orderListId nebo listClientOrderId & Řetězec     & Klientské ID příkazu \\
         \hline
-        \caption{Parametry pro zrušení příkazu}
+        \caption{Parametry pro zrušení OCO příkazu}
         \label{tab:binance:cancel-oco}
     \end{longtable}
 \end{center}
-Získaná odpověď strukturou odpovídá stejné zprávě jako při zaslání nového OCO příkazu, lze ji tedy vidět výše na \ref{src:newOCO}.
+Získaná odpověď strukturou odpovídá stejné zprávě jako při zaslání nového OCO příkazu, lze ji tedy vidět výše na~\ref{src:newOCO}.
 
 \paragraph*{Průměrná cena}
-Získávání průměrné tržní ceny se využívá pro zajištěné a nezajištěné obchodování. Vyžaduje pouze jediný parametr, jak lze vidět na tabulce \ref{tab:binance:avg-price}.
+Získávání průměrné tržní ceny se využívá pro zajištěné a nezajištěné obchodování. Vyžaduje pouze jediný parametr, jak lze vidět na tabulce~\ref{tab:binance:avg-price}.
 \newline
 \verb|GET /api/v3/avgPrice|
 \begin{center}
@@ -295,11 +300,11 @@ Získávání průměrné tržní ceny se využívá pro zajištěné a nezajiš
         \hline
         symbol   & \tikzcmark & Řetězec & Název páru \\
         \hline
-        \caption{Parametry pro ziskání průměrné ceny}
+        \caption{Parametry pro získání průměrné ceny}
         \label{tab:binance:avg-price}
     \end{longtable}
 \end{center}
-Odpověď lze vidět na \ref{src:avgPrice}.
+Odpověď lze vidět na~\ref{src:avgPrice}.
 
 \lstinputlisting[label=src:avgPrice,caption={Odpověď na požadavek průměrné ceny}]{Sources/avg_price.json}
 
@@ -321,13 +326,13 @@ Definuje základní cenová pravidla při zadávání příkazů. Pokud hodnota 
         \hline
         tickSize       & Interval, o který lze měnit zadávanou cenu & $price \bmod tickSize = 0$ \\ 
         \hline
-        \caption{Parametry pro zrušení příkazu}
+        \caption{Pravidla cenového filtru}
         \label{tab:binance:price_filter}
     \end{longtable}
 \end{center}
 
 \paragraph*{PERCENT\_PRICE}
-Taktéž upravuje příkazové cenové rozpětí, nicméně tento rozsah zakládá na průměrné ceně předchozích obchodů. Pravidla lze vidět v tabulce \ref{tab:binance:percent_price}
+I tento filtr, jako předchozí, upravuje příkazové cenové rozpětí, nicméně tento rozsah zakládá na průměrné ceně předchozích obchodů. Pravidla lze vidět v tabulce~\ref{tab:binance:percent_price}
 \footnote{$WMA_{cena}$ označuje vážený klouzavý průměr ceny}.
 \begin{center}
     \begin{longtable}[h]{|l|l|l|}
@@ -340,13 +345,13 @@ Taktéž upravuje příkazové cenové rozpětí, nicméně tento rozsah zaklád
         \hline
         avgPriceMins   & Počet minut, za které je počítán WMA &                                            \\ 
         \hline
-        \caption{Parametry pro zrušení příkazu}
+        \caption{Pravidla procentuálního cenového filtru}
         \label{tab:binance:percent_price}
     \end{longtable}
 \end{center}
 
 \paragraph*{LOT\_SIZE}
-Zadává platný rozsah obchodované kvantity, neboli lotu. Jak projít tímto filtrem je vidět v tabulce \ref{tab:binance:lot_filter}.
+Zadává platný rozsah obchodované kvantity, neboli lotu. Jak projít tímto filtrem je vidět v tabulce~\ref{tab:binance:lot_filter}.
 \begin{center}
     \begin{longtable}[h]{|l|l|l|}
         \hline
@@ -358,7 +363,7 @@ Zadává platný rozsah obchodované kvantity, neboli lotu. Jak projít tímto f
         \hline
         stepSize       & Velikost, o kterou se smí lot měnit & $lot \bmod stepSize = 0$ \\ 
         \hline
-        \caption{Parametry pro zrušení příkazu}
+        \caption{Pravidla velikosti lotu}
         \label{tab:binance:lot_filter}
     \end{longtable}
 \end{center}
@@ -372,13 +377,13 @@ specifikovaných přesněji v pravidle (\ref{tab:binance:notional_filter}).
         \hline
         Název pravidla & Význam                              & Splnění pravidla                \\
         \hline
-        minNotional    & Minimální nominální hotnota         & $ cena * lot \geq minNotional $ \\ 
+        minNotional    & Minimální nominální hodnota         & $ cena * lot \geq minNotional $ \\ 
         \hline
         applyToMarket  & Platí i pro \textsc{market} příkazy &                                 \\ 
         \hline
         avgPriceMins   & Počet minut, za které je počítán MA &                                 \\ 
         \hline
-        \caption{Parametry pro zrušení příkazu}
+        \caption{Pravidla nominální hodnoty}
         \label{tab:binance:notional_filter}
     \end{longtable}
 \end{center}

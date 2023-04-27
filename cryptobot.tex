@@ -33,19 +33,31 @@
 \ThesisAssignmentFileName{assignment.pdf}
 
 % Pokud nechceme nikomu dekovat makro zapoznamkujeme.
-\Acknowledgement{Rád bych na tomto místě poděkoval všem, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla.}
+\Acknowledgement{Na tomto místě bych chtěl velice poděkovat všem, kteří mi pomohli při tvorbě této práce. Především patří můj vděk vedoucímu této diplomové práce, Ing. Radoslavovi Fasugovi, PhD., který věnoval mnoho času zodpovídáním otázek a konzultacemi. Poděkování patří taktéž mé přítelkyni a mé rodině za trpělivost a podporu.}
 
-\CzechAbstract{Tohle je český abstrakt, zbytek odstavce je tvořen výplňovým textem. Naší si rozmachu potřebami s posílat v poskytnout ty má plot. Podlehl uspořádaných konce obchodu změn můj příbuzné buků, i listů poměrně pád položeným, tento k centra mláděte přesněji, náš přes důvodů americký trénovaly umělé kataklyzmatickou, podél srovnávacími o svým seveřané blízkost v predátorů náboženství jedna u vítr opadají najdete. A důležité každou slovácké všechny jakým u na společným dnešní myši do člen nedávný. Zjistí hází vymíráním výborná.}
+\CzechAbstract{Diplomová práce cílí na vytvoření kryptoměnového bota. Popisuje kryptoměny a zmiňuje jakým způsobem se aktuálně kryptoměny obchodují.
+Součástí práce je krátký úvod do technické analýzy včetně popisu několika grafových vzorů a technických indikátorů jakožto možný způsob pro analýzu kryptoměnových
+párů a automatizování obchodování.
+Dále lze v práci přečíst srovnání několika vybraných existujích kryptobotů a legislativní rámec týkající se kryptoměn.
+V praktické části je popsán implementovaný kryptobot, který na základě vytvořených obchodních příkazů uskutečňuje reálné obchody na burze. Výsledný kryptobot byl napsán v jazyce Python
+a pro persistenci dat využívá SŘBD MySQL.}
 
-\CzechKeywords{typografie; \LaTeX; diplomová práce}
+\CzechKeywords{kryptoměny; kopce a doliny; burza; technická analýza; Python; kryptobot}
 
-\EnglishAbstract{This is English abstract. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Fusce tellus odio, dapibus id fermentum quis, suscipit id erat. Aenean placerat. Vivamus ac leo pretium faucibus. Duis risus. Fusce consectetuer risus a nunc. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. Aliquam erat volutpat. Donec vitae arcu. Nullam lectus justo, vulputate eget mollis sed, tempor sed magna. Curabitur ligula sapien, pulvinar a vestibulum quis, facilisis vel sapien. Vestibulum fermentum tortor id mi. Etiam bibendum elit eget erat. Pellentesque pretium lectus id turpis. Nulla quis diam.}
+\EnglishAbstract{The thesis aims to create a cryptocurrency trading bot.
+It describes cryptocurrencies and mentions how cryptocurrencies are currently traded.
+The thesis includes a brief introduction to technical analysis, including a description of several chart patterns and technical indicators as a possible way to analyze
+cryptocurrency pairs and automate trading.
+In addition, the thesis compares several selected existing crypto-bots and the legislative framework regarding cryptocurrencies.
+The practical part describes the implemented crypto-bot, which executes real trades on the exchange based on created trading orders.
+The resulting crypto-bot was written in Python and uses MySQL as a database management system for data persistence.
+}
 
-\EnglishKeywords{typography; \LaTeX; master thesis}
+\EnglishKeywords{cryptocurrency; peak and valley, exchange; technical analysis, Python; cryptobot}
 
-% \AddAcronym{DVD}{Digital Versatile Disc}
-% \AddAcronym{TNT}{Trinitrotoluen}
-% \AddAcronym{UML}{Unified Modeling Language}
+\AddAcronym{GTC}{Good-Till-Cancel}
+\AddAcronym{FOK}{Fill-Or-Kill}
+\AddAcronym{IOC}{Immediate-Or-Cancel}
 % \AddAcronym{HTML}{Hyper Text Markup Language}
 % \AddAcronym{TUG}{\TeX{} Users Group}
 
@@ -78,7 +90,7 @@
 \input{Chapters/Cryptobots.tex}
 \input{Chapters/LawsAndRegulations.tex}
 \input{Chapters/Implementation.tex}
-% \input{Chapters/Conclusion.tex}
+\input{Chapters/Conclusion.tex}
 
 % Seznam literatury
 \printbibliography[title={Literatura}, heading=bibintoc]
