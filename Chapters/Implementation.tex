@@ -1,35 +1,38 @@
 \chapter{Implementace kryptobota}
 \label{chap:impl}
 
-Hlavní cíl této diplomové práce spočívá v implementaci kryptobota. Tento kryptobot má vytvořené pravidla vycházející z předem provedené technické analýzy.
-Pravidla se následně aplikují na reálný trh a bot provádí obchody. Jeho postup a stav lze uživatelský přivětivě pozorovat z webové stránky, případně jeho akce
+Hlavní cíl této diplomové práce spočívá v implementaci kryptobota. Tento kryptobot má vytvořená pravidla vycházející z předem provedené technické analýzy.
+Pravidla se následně aplikují na reálný trh a bot provádí obchody. Jeho postup a stav lze uživatelský přívětivě pozorovat skrze webové stránky, případně jeho akce
 zastavit, nebo dokonce kompletně opustit tržní pozici. Implementovaný kryptobot je schopen obchodovat na burze Binance, která je jedna z největších a nejpopulárnějších
 světových burz.
 
 \section{Fungování kryptobota}
-Pro kompletní fungování je zapotřebí několika kroků. Každý z těchto kroků je vysoce důležitý a výpadek jakékoli části může mít kritické dopady. Proto je každá část systému navržena
-a implementována co nejrobustněji a počítá s možností nedostupných služeb, případně databáze. Prvním krokem, který bude vzápětí popsán podrobněji se stahování dat. Navazující
-je technická analýza. Z analýzy vycházejí příkazy k obchodování. Ty budou taktéž podrobněji popsány. Poslední krok je následná realizace příkazů, komunikace s burzou
-a vyhodnocování výsledků obchodování.
+Pro kompletní fungování je zapotřebí několika kroků. Každý z těchto kroků je vysoce důležitý a výpadek jakékoli části může mít kritické dopady na fungování a potenciální ziskovost obchodování.
+Proto je každá část systému navržena
+a implementována co nejrobustněji a počítá s možností nedostupných služeb, případně databáze. Prvním krokem, který bude popsán podrobněji je stahování dat, následuje
+technická analýza. Z analýzy vycházejí příkazy k obchodování. Ty budou taktéž podrobněji popsány. Poslední krok je následná realizace příkazů, komunikace s burzou
+a vyhodnocování výsledků obchodování (backtesting).
 
 \subsection{Historická data}
 Úplným základem bota jsou historická data a jejich získávání je projektem jiného studenta. Burza Binance tato data poskytuje bezplatně a volně ke stažení, prakticky komukoli.
 Lze si stáhnout svíčky,
 jednotlivé obchody nebo agregované obchody. Svíčky jsou poskytovaný v granularitách od 1 vteřiny až po celý den. Z tohoto zdroje Binance zpřístupňuje data s jednodenním
-zpožděním. Pro potřebu bota v rámci této práce se stahují minutové svíčky se zmiňovaným jednodenním zpožděním. Důvod proč je toto dostačující je uveden dále v této práci.
+zpožděním. Často však svíčky nejsou dostupné i několik dní, což zkresluje výsledky doporučení pro obchodování.
+Pro potřebu bota v rámci této práce se stahují minutové svíčky se zmiňovaným jednodenním zpožděním. Důvod proč je toto dostačující je uveden dále v této práci.
 Náležitě se musí ošetřit situace, kdy není server Binance dostupný nebo chybí data svicek kryptoměnového páru. Pokud k tomuto dojde, systém si zařadí do fronty svých úloh opětovnou
 akci stažení potřebných dat. Jakmile jsou svíčky na lokálním serveru, provádí se importování do databáze. Po úspěšném zapsání do databáze následuje technická analýza.
 
 \subsection{Technická analýza}
-Fundamentální krok kryptobota je samotné provedení technické analýzy ve spolupráci s backtestingem. Z tohoto vyplývají nastavení obchodních příkazů se prokazuje výhodné
-a má cenu je obchodovat. Řešeni vytvořené v rámci je založené na rozboru kopců a dolin vytvořených zavíracími cenami svíček. Kolísání cen nahoru a dolů by ve spojitém grafu
+Fundamentální krok kryptobota je samotné provedení technické analýzy ve spolupráci s backtestingem. Z tohoto postupu vznikají nastavení obchodních příkazů, které jsou výhodné
+a má smysl je obchodovat. Řešeni vytvořené v rámci je založené na rozboru kopců a dolin generovanými zavíracími cenami svíček. Kolísání cen nahoru a dolů by ve spojitém grafu
 tvořilo čáru, ve kterých lze identifikovat lokální minima a maxima. Právě tyto lokální extrémy tvoří kopce a doliny. Cílem analýzy je pak odhalit kryptoměnové páry s dostatečně
-velkým počtem těchto extrémů včetně jejich rozpětí. Jestliže by rozpětí bylo příliš malé, nemusely by být obchody ziskové. Z důvodu, že se takto snaží odhalit dlouhodobě
-ziskové páry nevadí, že se stahují a analyzují data s denní zpožděním. Toto řešení není založené na okamžité reakci, nýbrž na vidině dlouhodobé ziskovosti.
+velkým počtem těchto extrémů včetně velikosti jejich rozpětí. Jestliže by rozpětí růstu kopců bylo příliš malé, nemusely by být obchody dostatečně ziskové. Analýza kopců a dolin se takto
+snaží odhalit dlouhodobě
+ziskové páry. Proto nevadí, že se stahují a analyzují data s denní zpožděním. Toto řešení není založené na okamžité reakci, nýbrž na předpokladu dlouhodobé ziskovosti.
 
 % TODO: Obrázek kopců a doliny s vizualizací nástupní a sestupní hrany
 Scénář obchodování pro strategii kopců a dolin je následující: v momentě, kdy se dosáhlo minima, cena se odráží a začíná stoupat. Tím je započata nákupní fáze
-se snahou uzavřít obchod s co nejnižší cenou. Další stoupání ceny je příznivou situací, během které se zhodnocuje investice. Dosáhnutím lokálního maxima se trend láme a začíná klesat
+se snahou uzavřít obchod s co nejnižší nákupní cenou. Další stoupání ceny je příznivou situací, během které se zhodnocuje investice. Dosáhnutím lokálního maxima se trend láme a začíná klesat
 -- nastává prodejní fáze opět se snahou prodat, tentokrát za co nejvyšší cenu. Konkrétní realizace je pak popsána v sekci~\ref{subsec:exchanges-comm}.
 
 
@@ -44,8 +47,8 @@ práce. (\ref{tab:tradeOrder}, \ref{tab:tradeOrderIteration}, \ref{tab:tradeOrde
     \label{fig:er-diag}
 \end{figure}
 
-Většina abstraktnější logiky rozhodování je schována v databázových procedurách. Tyto procedury jsou navíc volány taktéž triggery, případně periodicky v rámci databázové události (event), které
-databázový systém MySQL nabízí. Na tabulky \emph{trade\_order\_iteration} a \emph{trade\_order\_progress} jsou navázany \emph{after insert} a \emph{after update} triggery. V momentě, kdy je vložen
+Většina abstraktnější logiky rozhodování je obsažena v databázových procedurách. Tyto procedury jsou navíc volány taktéž triggery, případně periodicky v rámci databázové události (event), které
+databázový systém MySQL nabízí. Na tabulky \emph{trade\_order\_iteration} a \emph{trade\_order\_progress} jsou navázány \emph{after insert} a \emph{after update} triggery. V momentě, kdy je vložen
 nový záznam iterace, automaticky je skrze trigger zavolána procedura, která vytvoří nový záznam do tabulky \emph{trade\_order\_progress}. S touto tabulkou už pak pracuje \emph{Executioner}, který
 příkaz zašle na burzu.
 
@@ -56,26 +59,26 @@ záznam ohledně ukončení obchodu, korektně se zaktualizuje související zá
 
 \section{Výběr párů a realizace obchodních příkazů}
 \label{subsec:trade-orders}
-Vytvoření obchodních příkazů je starostí předchozího kroku, zabývající se technickou analýzou. Ovšem počet způsobů, jak tyto příkazy vytvořit není pouze jeden a je závislý právě na
-nastavení. Pro analýzu kopců a dolin jsou nezbytně důležité 2 parametry: velikost vzestupu a sestupu. Ty zastávají procentuální změnu, o kterou se musí aktuální cena zvednout nebo klesnou,
+Vytvoření obchodních příkazů je starostí předchozího kroku, zabývající se technickou analýzou. Ovšem počet způsobů, jak tyto příkazy vytvořit není pouze jeden a je závislý na konkrétním
+nastavení. Pro analýzu kopců a dolin jsou nezbytně důležité dva parametry: velikosti vzestupu a sestupu. Ty zastávají procentuální změnu, o kterou se musí aktuální cena zvednout, nebo klesnout,
 aby se situace v časovém okně označily jako dolina, respektive kopec. Díky těmto dvěma jednoduchým parametrům lze získat důležité informace o kryptoměnovém páru, konkrétně:
 \begin{itemize}
     \item délka kopce,
     \item délka doliny,
-    \item ziskovost.
+    \item ziskovost jednotlivých stoupání.
 \end{itemize}
-Společně z dat získaných ze svíček (počet obchodů, objemy obchodů, \ldots) a statisticky získaných dat (medián a průměr objemu obchodů) se vydolují další rozhodující   informace.
-Těmi je poměr počtu obchodů, poměr velikost objemu obchodů a počet obchodů vykonaných za den. Během backtestingu se simuluje obchodování o velikosti o mediánu obchodů. Jestliže
+Společně z dat získaných ze svíček (počet obchodů, objemy obchodů, \ldots) a statisticky dopočtených dat (medián a průměr objemu obchodů) se vydolují další rozhodující   informace.
+Těmi je poměr počtu obchodů, poměr velikost objemu obchodů a počet obchodů vykonaných za den. Během backtestingu se simuluje obchodování o velikosti mediánu obchodů. Jestliže
 algoritmus odhalí například 200 kopců během jednoho dne, znamenalo by to vykonání 200 obchodů. Toto číslo se dá do poměru s celkovým počtem vykonaných obchodů na kryptoměnovém páru.
 Obdobně se získá poměr velikosti objemů jednotlivých obchodů. Tyto poměry, společně s celkovým počtem obchodů, jsou důležité z pohledu ovlivňování trhu a zachování likvidity.
 Pokud by velikost těchto poměrů byla příliš velká, bylo by obchodování daného kryptoměnového páru riskantní, jelikož každý obchod kryptobota by mohl výrazně ovlivnit situaci na trhu
-a způsobovat výkyvy ceny. Zároveň by obchody nemusely být vypořádané, jednoduše protože by se trh stával nelikvidním a rozpětí mezi poptávkou a nabídkou by se rozšířilo.
+a způsobovat výkyvy ceny. Zároveň by obchody nemusely být vypořádány, jednoduše protože by se trh stával nelikvidním a rozpětí mezi poptávkou a nabídkou by se rozšířilo.
 
 Informace o délce kopců a dolin slouží jako pomocník pro nastavení maximální doby, po kterou se má bot pokoušet nakoupit. A samozřejmě, ziskovost slouží jako hlavní indikátor
-pro výběr páru. Ovšem ziskovost záleží na vybraném stylu obchodování a opakování příkazu, které si zaslouží podrobnější popis.
+pro výběr páru, které je doporučeno obchodovat. Ovšem ziskovost záleží na vybraném stylu obchodování a opakování příkazu, které si zaslouží podrobnější popis.
 
 \subsection{Opakování příkazu}
-Samotný příkaz se skládá z několika opakování, neboli iterací (\ref{fig:trade-order-parts}). Každá iterace má 2 fáze -- nákupní a prodejní. Pro úplnost je ještě nutné definovat, co znamená ukončení jedné iterace.
+Samotný příkaz se skládá z několika opakování, neboli iterací (obrázek \ref{fig:trade-order-parts}). Každá iterace má 2 fáze -- nákupní a prodejní. Pro úplnost je ještě nutné definovat, co znamená ukončení jedné iterace.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.5\textwidth]{Figures/trade-order-parts.pdf}
@@ -90,10 +93,10 @@ Ukončení iterace nastává ve 2 případech:
 Prodejní fáze je uzavřena opět ve 2 situacích:
 \begin{enumerate}
     \item úspěšný prodej,
-    \item překročením maximální doby a prodej příkazem \textsc{market}.
+    \item překročením maximální doby prodeje a prodej zbývajících aktiv příkazem typu \textsc{market}.
 \end{enumerate}
 
-Existují 2 řešené postupy pro opakování příkazů. Prvních z nich je jednoduše v sekvenci (\ref{subfig:sequence}), kdy se před začátkem iterace $n_i$ čeká na ukončení iterace $n_{i - 1}$, přičemž $i$ je pořadové
+Existují 2 řešené postupy pro opakování příkazů. Prvních z nich je opakování v sekvenci (obrázek \ref{subfig:sequence}), kdy se před začátkem iterace $n_i$ čeká na ukončení iterace $n_{i - 1}$, přičemž $i$ je pořadové
 číslo iterace. Výhodou tohoto přístupu je jednoduché sledování aktuálního stavu otevřené pozici na trhu. Avšak nevýhoda je šance na zanedbání dlouhého kopce a nevyužití případné ziskové situace.
 Proto byla vymyšlena druhá metoda opakování.
 
@@ -110,37 +113,40 @@ Proto byla vymyšlena druhá metoda opakování.
     \label{fig:trade-repeat}
 \end{figure}
 
-Schopnost iterace v kaskádě (\ref{subfig:cascade}) s sebou přináší řešení na dlouhé kopce, ve kterých cena roste delší dobu. Kaskáda se oproti sekvenci liší v možnosti spuštění následujícího opakování příkazu
-už v momentě, kdy je úspěšně ukončena nákupní fáze. V rámci tohoto může docházet k více otevřeným pozicím na trhu. Nevýhodou je opět eventuální otevření pozice těsně před koncem stoupání
-kopce. Jelikož se následně čeká na na procentuální \enquote{propad} ceny dolů, je vysoká pravděpodobnost, že tato pozice bude prodělečná. Další nežádoucí situací je příliš rychlé otevírání
-nových pozic a musí se limit buďto časově nebo maximálním počtem otevřených pozic v kaskádě. Bot v tomto případě podporuje obě možnosti.
+Schopnost obchodovat iterace v kaskádě (\ref{subfig:cascade}) s sebou přináší řešení na dlouhé kopce, ve kterých cena roste delší dobu. Kaskáda se oproti sekvenci liší v možnosti spuštění
+následujícího opakování příkazu
+už v momentě, kdy je úspěšně ukončena nákupní fáze iterace předchozí. V rámci tohoto postupu může docházet k více otevřeným pozicím na trhu. Nevýhodou je opět eventuální otevření pozice těsně před koncem stoupání
+kopce. Jelikož se následně čeká na procentuální \enquote{propad} ceny dolů, je vysoká pravděpodobnost, že tato pozice bude prodělečná. Další nežádoucí situací je příliš rychlé otevírání
+nových pozic a musí se stanovit limit buďto časově nebo maximálním počtem otevřených pozic v kaskádě. Bot v tomto případě podporuje obě možnosti.
 
 \subsection{Způsoby obchodování}
-Implementovaný kryptobot rozlišuje 2 způsoby obchodování, fixní a složené úročení. Fixní způsob otevírá pozice na vždy stejnou obchodovanou částku. Ve své podstatě se jedná o jakýsi DCA. Pokud se
-povede utržit zisk, je již \enquote{odložen mimo}. V případě ztráty na obchodě je nutné ji kompenzovat, ať už ze ziskanych zisků nebo ze zásob.
-Složené úročení, jak již název napovídá, reinvestuje vše co bylo získáno nebo ztraceno. Účelem je takto maximalizovat zisk. Ovšem tento styl obchodování s sebou přináší riziko ovlivňování trhu. Jestliže
-by investovaná částka narostla do velkých rozměrů může obchod způsobit ovlivnění tržní ceny a snížit likviditu trhu. Proto je nutné tento složené úročení limitovat maximální investovanou částkou.
+Implementovaný kryptobot rozlišuje 2 způsoby obchodování, a to fixní a složené úročení. Fixní způsob otevírá pozice vždy na stejnou obchodovanou částku. Ve své podstatě se jedná o jakýsi DCA. Pokud se
+povede utržit zisk, je již \enquote{odložen mimo}. V případě ztráty v obchodě je nutné ji kompenzovat, ať už ze získaných zisků nebo ze zásob.
+Složené úročení, jak již název napovídá, reinvestuje vše, hodnotu původního vkladu zvýšenou o zisk nebo sníženou o ztrátu z předchozí iterace.
+Účelem je takto maximalizovat zisk. Ovšem tento styl obchodování s sebou přináší riziko ovlivňování trhu. Jestliže
+by investovaná částka narostla do velkých objemů může obchod způsobit ovlivnění tržní ceny a snížit likviditu trhu. Proto je nutné tento složené úročení limitovat maximální investovanou částkou.
 
 
 \subsection{Skutečné obchodní příkazy}
-Obchodování na základě kopců a dolin je pro burzy naprosto irelevantní. Burzy přijímají pouze příkazy popsané v části~\ref{subsec:market-trade-orders}. Nezbytností je tedy napasovat scénáře
-obchodování do kombinací s těmito příkazy.
+Obchodování na základě kopců a dolin je pro burzy naprosto irelevantní. Burzy přijímají pouze příkazy popsané v části~\ref{subsec:market-trade-orders}. Nezbytností je tedy napárovat scénáře
+obchodování na kombinací s těmito příkazy.
 
 Zachycení začátku vzestupného trendu a tedy i začínajícího kopce se dá realizovat jednoduše s použitím příkazu \textsc{trailing stop-limit}. Důležitý
-je právě onen \emph{trailing}, který na počítá procentuální změnu tržní ceny. Problémové může být krátkodobé zachvění ceny, které by způsobilo zařazení příkazu do orderbooku, ale ve skutečnosti
-by trh pokračoval v klesajícím trendu. Možnost, jak se tomuto vyvarovat nabízí nepovinná \emph{stop} neboli \enquote{aktivační} cena. Teprve v momentě, kdy je proražena stop cena se začíná počítat trailing
+je právě onen \emph{trailing}, který počítá procentuální změnu tržní ceny. Problémové může být krátkodobé zachvění ceny, které by způsobilo zařazení příkazu do orderbooku, ale ve skutečnosti
+by trh pokračoval v klesajícím trendu. Možnost, jak se tomuto jevu vyvarovat nabízí nepovinná \emph{stop} neboli \enquote{aktivační} cena. Teprve v momentě, kdy je proražena stop cena se začíná počítat trailing
 delta. Avšak v této situaci nastává komplikace s reálnou burzou: stop cena a limitní cena nelze zadat jako procento aktuálního kurzu, ale musí to být konkrétní hodnoty. Pokud by v nákupní fázi
 byla použita stop cena, může dojít k okolnostem, během kterých tržní cena výrazně klesne. Jakmile se odrazí a tržní cena opět stoupne, nedojde k nákupu, neboť se čeká, dokud se neprotne hranice
-aktivační ceny. Nejenže tedy by nákup trval dlouhou dobu, ale výrazná část kopce by se \enquote{zaspala} a to rozhodně není žádoucí. Přestože bot poskytuje možnost nakoupit příkazy \textsc{market,
+aktivační ceny. Nejenže by nákup trval dlouhou dobu, ale výrazná část kopce by se \enquote{ignorovala} a to rozhodně není žádoucí. Přestože bot poskytuje možnost nakoupit příkazy typu \textsc{market,
     limit, trailing stop-limit}, skutečně se používá pouze \textsc{trailing stop-limit} bez použití aktivační ceny.
 
-Realizace prodejní fáze se potýká s podobnými problémy. Při použití příkazu \textsc{trailing stop-limit} bez aktivační ceny může dojít k drobnému záchvěvu ceny a předčasným prodejem, což může
+Realizace prodejní fáze se potýká s podobnými problémy. Při použití příkazu \textsc{trailing stop-limit} bez aktivační ceny může dojít k drobnému záchvěvu ceny a předčasnému prodeji, což může
 vést ke ztrátovému obchodu. Naopak pokud se použije aktivační cena, může dojít k rychlému skoku do klesajícího trendu, aktivační cena nebude nikdy proražena a prodejní fáze bude ukončena na základě
-časového limitu s obrovskou ztrátou. Existuje ještě jedna střední cesta a tím je příkaz \textsc{oco} (\enquote{One Cancels the Other}). Jedná se vlastně o kombinaci dvou příkazů, \textsc{limit} a
-\textsc{stop limit}. \textsc{oco} příkaz je speciální v tom, že pokud je 1 příkaz jakkoli ukončen, automaticky je zrušen i ten druhý. V tomto případě \textsc{limit} zastřešuje horní hranici, nad
-kterou dojde k prodeji a \textsc{stop limit} spodní hranici v případě pádu tržní ceny. Vytvořený bot umí využít těchto \textsc{oco} příkazů v maximální prospěch periodickým kontrolováním tržní ceny
-a vlastním přepočtem procentuální změny. Pokud se cena dostatečně zvýší, zruší momentálně nastavený \textsc{oco} příkaz a zadá nový s cenami posunutými nahoru. K prodeji pak dojde pouze v případě poklesu tržní
-ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek. Teto metodě využití \textsc{oco} příkazů přezdívá autor zajištěné obchodování, neboli taky \emph{peaking}.
+časového limitu s obrovskou ztrátou. Existuje ještě jedna střední cesta a tím je příkaz \textsc{OCO} (\enquote{One-Cancels-the-Other}). Jedná se vlastně o kombinaci dvou příkazů, \textsc{limit} a
+\textsc{stop limit}. \textsc{OCO} příkaz je speciální v tom, že pokud je 1 příkaz jakkoli ukončen (vyplněním nebo zrušením), automaticky je zrušen i příkaz související.
+V tomto případě \textsc{limit} zastřešuje horní hranici, nad
+kterou dojde k prodeji a \textsc{stop limit} spodní hranici v případě pádu tržní ceny. Vytvořený bot umí využít těchto \textsc{OCO} příkazů v maximální prospěch periodickým kontrolováním tržní ceny
+a vlastním přepočtem procentuální změny. Pokud se cena dostatečně zvýší, zruší momentálně nastavený \textsc{OCO} příkaz a zadá nový s cenami posunutými nahoru. K prodeji pak dojde pouze v případě poklesu tržní
+ceny na hranici příkazu \textsc{stop limit} nebo pokud by kryptobot zasáhl výpadek. Teto metodě využití \textsc{OCO} příkazů přezdívá autor zajištěné obchodování, neboli taky \emph{peaking}.
 
 \subsubsection{Platnost příkazu}
 Binance neposkytuje maximální dobu platnosti příkazu ve smyslu předání časového razítka vypršení platnosti nebo maximální doby trvání. Jelikož příkazy mohou být vyplněny jen částečně, existují
@@ -150,20 +156,21 @@ Binance neposkytuje maximální dobu platnosti příkazu ve smyslu předání č
     \item Immediate-Or-Cancel (IOC),
     \item Fill-Or-Kill (FOK).
 \end{enumerate}
-Tyto nastavení se nevztahují na příkazy typu \textsc{market}. Příkaz s platností GTC bude platný tak dlouho, dokud nebude objednávka kompletně vyplněna nebo zrušena uživatelem. Oproti tomu v
-režimu IOC se matching engine pokusí ihned alespoň částečně vypořádat vypořádat objednávku na limitní cenové hladině s obchodovaným množstvím. Pokud se vyplní kompletní obchod, nic dalšího
+Tyto nastavení se nevztahují na příkazy typu \textsc{market}. Příkaz s platností GTC bude platný tak dlouho, dokud nebude objednávka kompletně vyplněna (nakoupen nebo prodán celý požadovaný objem aktiv)
+nebo zrušena uživatelem. Oproti tomu v
+režimu IOC se matching engine pokusí ihned alespoň částečně vypořádat objednávku na limitní cenové hladině s obchodovaným množstvím. Pokud se vyplní kompletní obchod, nic dalšího
 se neděje. V případě částečného vypořádání je zbytek příkazu zrušen. Pokud na zadané cenové hladině není dostupné žádné obchodovatelné množství, je příkaz ihned zrušen.
 Poslední a zároveň nejpřísnější doba vypršení FOK vyžaduje okamžité plné zobchodování příkazu. Jestliže tomuto nemůže trh vyhovět, je příkaz stornován.
 
-Režim FOK je pro implementovaného kryptobota zbytečně přísný. Odzkoušeny byly režimy GTC a IOC, ale nepřinesly žádné velké rozdíly. Avšak to může být způsobeno malou obchodovanou kvantitou.
+Režim FOK je pro implementovaného kryptobota zbytečně přísný. Odzkoušeny byly režimy GTC a IOC, ale nepřinesly žádné velké rozdíly. Avšak to může být způsobeno malým objemem obchodovaného aktiva.
 V případě, kdy by bot obchodoval značně vyšší částky, byly by rozdíly v režimech platnosti příkazů znatelnější. V tomto případě se nabízí upřednostnit spíše platnost IOC, aby byly příkazy
-vypořádany dostatečně rychle.
+vypořádány dostatečně rychle.
 
-\section{Komunikace s burzou}
+\section{Komunikace s burzou Binance}
 \label{subsec:exchanges-comm}
 Přestože většina logiky kryptobota je realizovaná v databázi pomocí uložených procedur a funkcí, nelze všechno takto provést. Obchodní příkazy kryptobota obsahují abstrakci, kterou je
-nutné převést na reálné hodnoty, především limitní a aktivační ceny. Komunikace s burzou probíhá s pomocí 2 samostatných komponent. Obě mají trochu jiný účel a zaslouží si vlastní krátkou sekci.
-Předtím, než se popíšou tyto 2 komponenty, bude čtenáři přiblíženo API burzy Binance.
+nutné převést na reálné hodnoty, především limitní a aktivační ceny. Komunikace s burzou probíhá s pomocí dvou samostatných komponent. Obě mají trochu jiný účel a zaslouží si vlastní krátkou sekci.
+Předtím, než se popíšou tyto komponenty, bude čtenáři přiblíženo API burzy Binance.
 
 \subsection{Binance API}
 Binance poskytuje aplikační rozhraní přes protokol HTTPS a do budoucna se chystá i rozhraní založené na websocketech.
@@ -172,9 +179,9 @@ a \emph{secret} klíč.
 Základní URL pro zasílání požadavků je \verb|https://api.binance.com|.
 Všechny potřebné informace ke koncovým bodům rozhraní jsou popsány v dokumentaci, avšak pro potřeby kryptobota bude zde přiblíženo jak rozhraní obecně, tak i pár konkrétních koncových bodů.
 
-\subsubsection{Zabezpeční}
+\subsubsection{Zabezpečení}
 API klíčů může mít uživatel klidně více a skrze webové rozhraní lze na každý klíč nastavit jiná práva a omezení na konkrétní IP adresy. Tedy pokud uživatel zašle požadavek z jiné IP adresy než-li
-zadané v systému, nebude Binance takovýto požadavek registrovat a odpoví chybovou hláškou. Navíc si Binance chrání své rozhraní omezením počtem volání koncových bodů (rate limiting). Tato omezení
+té, která je zadané v systému, nebude Binance takovýto požadavek registrovat a odpoví chybovým hlášením. Navíc si Binance chrání své rozhraní omezením počtu volání koncových bodů (rate limiting). Tato omezení
 jsou platná buďto na IP adresy nebo na identifikátor účtu uživatele.
 
 Pro citlivé koncové body, které vykonávají akce na burze (vytváření příkazů, detail zůstatku, výběry, \ldots) vyžaduje API 2 zabezpečující prvky:
@@ -188,7 +195,7 @@ Poslední ochranou je ochrana časová. Dalším parametrem, nazvaný \verb|recv
 časové razítko. Pokud server Binance nestihne vykonat požadavek v zadaném časovém okně, je celý požadavek zamítnut.
 
 \subsubsection{Popis koncových bodů}
-Koncové mohou občas podporují více parametrů, než jaké kryptobot reálně používá. Pro lepší přehlednost budou uvedeny a popsány parametry, které jsou doopravdy využity. Návratové zprávy získávané
+Koncové body mohou občas podporovat více parametrů, než jaké kryptobot reálně používá. Pro lepší přehlednost budou uvedeny a popsány parametry, které jsou reálně využity. Návratové zprávy získávané
 při odpovědích budou taktéž popsány v potřebné míře.
 
 \paragraph*{Nový příkaz}
@@ -224,12 +231,12 @@ Nejzákladnější a nejčastěji volaný koncový bod rozhraní slouží k vytv
     \end{longtable}
 \end{center}
 Velikost odpovědi serveru burzy se dá nastavit ve 3 režimech v tomto pořadí od nejmenší po největší: \verb|ACK, RESULT, FULL|. Implementovaný kryptobot konkrétně využívá režim
-odpovědi \verb|RESULT|. Odpověď tedy příchází ve formátu znázorněn na~\ref{src:newOrder}.
+odpovědi \verb|RESULT|. Odpověď tedy přichází ve formátu znázorněn v kódu~\ref{src:newOrder}.
 
 \lstinputlisting[label=src:newOrder,caption={Odpovědi založení nového příkazu}]{Sources/new_order.json}
 
 \paragraph*{Zrušení příkazu}
-Další často využívaný koncový bod. Zrušení nastává pokud příkaz přesáhne svou maximální dobu trvání na straně bota. Parametry
+Další často využívaný koncový bod. Zrušení nastává, pokud příkaz přesáhne svou maximální dobu trvání na straně bota. Parametry
 pro ukončení příkazu jsou v tabulce~\ref{tab:binance:cancel-order}
 \newline
 \verb|DELETE /api/v3/order|
@@ -253,7 +260,7 @@ Odpověď na požadavky zrušení příkazu kopírují formát při zadávání 
 
 \paragraph*{Nový OCO příkaz}
 Metoda zajištěného obchodování, nazvaná taky \emph{peaking}, využívá právě OCO příkazů pro kontrolu spodní i horní hranice při změně kurzu kryptoměnového páru.
-Parametry které kryptobot nastavuje jsou v tabulce~\ref{tab:binance:new-oco}.
+Parametry, které kryptobot nastavuje jsou v tabulce~\ref{tab:binance:new-oco}.
 \newline
 \verb|POST /api/v3/order/oco|
 \begin{center}
@@ -308,7 +315,7 @@ na burze a nahradí ho novým. Pro zrušení OCO příkazu je poslán HTTP poža
         \label{tab:binance:cancel-oco}
     \end{longtable}
 \end{center}
-Získaná odpověď strukturou odpovídá stejné zprávě jako při zaslání nového OCO příkazu, lze ji tedy vidět výše na~\ref{src:newOCO}.
+Získaná odpověď strukturou odpovídá stejné zprávě jako při zaslání nového OCO příkazu, lze ji tedy vidět výše v kódu~\ref{src:newOCO}.
 
 \paragraph*{Průměrná cena}
 Získávání průměrné tržní ceny se využívá pro zajištěné a nezajištěné obchodování. Vyžaduje pouze jediný parametr, jak lze vidět na tabulce~\ref{tab:binance:avg-price}.
@@ -373,7 +380,7 @@ I tento filtr, jako předchozí, upravuje příkazové cenové rozpětí, nicmé
 \end{center}
 
 \paragraph*{LOT\_SIZE}
-Zadává platný rozsah obchodované kvantity, neboli lotu. Jak projít tímto filtrem je vidět v tabulce~\ref{tab:binance:lot_filter}.
+Zadává platný rozsah obchodované kvantity neboli lotu. Jak projít tímto filtrem je vidět v tabulce~\ref{tab:binance:lot_filter}.
 \begin{center}
     \begin{longtable}[h]{|l|l|l|}
         \hline
@@ -440,8 +447,8 @@ je na Binance, přes API, zaslána žádost o zrušení toho příkazu. Pokud se
 
 \subsubsection{Peaking}
 Zvládnutí peakingu s sebou nese starost a vlastní přepočet změny kurzu. Tato změna se počítá od kurzu v momentě zasílání posledního příkazu. Peaking běží v rámci komponenty jako samostatná úloha.
-Cyklicky co chvíli si stahuje z Binance momentální kurz kryptoměnového páru a spočítá procentuální přírůstek kurzu. Pouze v případě, že se jedná o pozitivní změnu vyšší než zadaná hranice, je
-aktuální \textsc{oco} příkaz zrušen a vytvořen nový s posunutými cenami nahoru. I v rámci této rychlé výměny příkazů se provádí stejné kontroly jako při normálním zasílání příkazu.
+Cyklicky v krátkých časových intervalech si stahuje z Binance momentální kurz kryptoměnového páru a spočítá procentuální přírůstek kurzu. Pouze v případě, že se jedná o pozitivní změnu vyšší než zadaná hranice, je
+aktuální \textsc{OCO} příkaz zrušen a vytvořen nový s posunutými cenami nahoru. I v rámci této rychlé výměny příkazů se provádí stejné kontroly jako při normálním zasílání příkazu.
 
 \subsubsection{Nezajištěné obchodování}
 % TODO:
@@ -449,14 +456,14 @@ aktuální \textsc{oco} příkaz zrušen a vytvořen nový s posunutými cenami 
 \subsection{Stream listener}
 Úkolem stream listeneru je nepřetržité získávání zpráv o událostech od Binance. Vizuálně je proces naznačen na sekvenčním diagramu \ref{figure:listener}.
 Spojení s burzou se navazuje pomocí technologie \emph{websocketů}. Ačkoli websockety nabízí možnost plně duplexní komunikace, Binance
-neumožňuje zasílání příkazů přes tento komunikační kanál. Jedná se tedy pouze o pasivní naslouchání. Aby bylo spojení dovoleno, je zapotřebí si vyžádat spojení se speciálním klíčem v URL parametru.
+neumožňuje zasílání příkazů přes tento komunikační kanál. Jedná se tedy pouze o pasivní naslouchání. Aby bylo spojení povoleno, je zapotřebí si vyžádat spojení se speciálním klíčem v URL parametru.
 Tento klíč lze získat voláním REST API a je nutné ho nadále označovat za aktivní (taktéž voláním REST API). Z přicházejí zprávy o 3 událostech:
 \begin{enumerate}
     \item aktualizace účtu,
     \item aktualizace zůstatku,
     \item aktualizace příkazu.
 \end{enumerate}
-Aktualizace účtu nastává v momentě, kdy se jakkoli změní zůstatek na účtu, např. zablokováním aktiv v rámci obchodování. Aktualizace zůstatku je zaslána jakmile nastane vklad, výběr nebo převod z účtu.
+Aktualizace účtu nastává v momentě, kdy se jakkoli změní zůstatek na účtu, např. zablokováním aktiv v rámci obchodování. Aktualizace zůstatku je zaslána, jakmile nastane vklad, výběr nebo převod z účtu.
 Aktualizace příkazu, jak již název napovídá, je přijat při změně stavu příkazu způsobeným třeba zrušením příkazu, vypršením nebo vyplněním. Kryptobot reaguje na události týkající se aktualizací příkazů
 a aktualizace účtu. Každá aktualizace příkazu je ihned uložena do databáze.
 
@@ -484,6 +491,7 @@ výdělku.
 
 Z důvodu problematiky je množina vylepšení velká. Využít by šlo i technik strojového učení k detekci trendů nebo grafových vzorů. Takto pokročilá vylepšení by už ale vyžadovala mnohem delší expertizu
 
+    {\iffalse}
 \begin{center}
     \small
     \begin{longtable}{ |l|c|c|p{0.3\linewidth}| }
@@ -626,4 +634,5 @@ Z důvodu problematiky je množina vylepšení velká. Využít by šlo i techni
     \end{longtable}
 \end{center}
 
+{\fi}
 \endinput
