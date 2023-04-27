@@ -13,7 +13,8 @@ je technická analýza. Z analýzy vycházejí příkazy k obchodování. Ty bud
 a vyhodnocování výsledků obchodování.
 
 \subsection{Historická data}
-Úplným základem bota jsou historická data. Naštěstí burza Binance tato data poskytuje bezplatně a volně ke stažení, prakticky komukoli. Lze si stáhnout svíčky,
+Úplným základem bota jsou historická data a jejich získávání je projektem jiného studenta. Burza Binance tato data poskytuje bezplatně a volně ke stažení, prakticky komukoli.
+Lze si stáhnout svíčky,
 jednotlivé obchody nebo agregované obchody. Svíčky jsou poskytovaný v granularitách od 1 vteřiny až po celý den. Z tohoto zdroje Binance zpřístupňuje data s jednodenním
 zpožděním. Pro potřebu bota v rámci této práce se stahují minutové svíčky se zmiňovaným jednodenním zpožděním. Důvod proč je toto dostačující je uveden dále v této práci.
 Náležitě se musí ošetřit situace, kdy není server Binance dostupný nebo chybí data svicek kryptoměnového páru. Pokud k tomuto dojde, systém si zařadí do fronty svých úloh opětovnou
@@ -32,6 +33,27 @@ se snahou uzavřít obchod s co nejnižší cenou. Další stoupání ceny je p�
 -- nastává prodejní fáze opět se snahou prodat, tentokrát za co nejvyšší cenu. Konkrétní realizace je pak popsána v sekci~\ref{subsec:exchanges-comm}.
 
 
+\section{Datová struktura}
+Fungování kryptobota je nejvíce závislé na 4 relacích. Jejich ER diagram lze vidět na obrázku \ref{fig:er-diag}. Jednotlivé popisy sloupců těchto tabulek se nacházejí v příloze této
+práce. (\ref{tab:tradeOrder}, \ref{tab:tradeOrderIteration}, \ref{tab:tradeOrderProgress}, \ref{tab:tradeOrderProgressPart})
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/er-trade-order.pdf}
+    \caption{ER diagram důležitých entit}
+    \label{fig:er-diag}
+\end{figure}
+
+Většina abstraktnější logiky rozhodování je schována v databázových procedurách. Tyto procedury jsou navíc volány taktéž triggery, případně periodicky v rámci databázové události (event), které
+databázový systém MySQL nabízí. Na tabulky \emph{trade\_order\_iteration} a \emph{trade\_order\_progress} jsou navázany \emph{after insert} a \emph{after update} triggery. V momentě, kdy je vložen
+nový záznam iterace, automaticky je skrze trigger zavolána procedura, která vytvoří nový záznam do tabulky \emph{trade\_order\_progress}. S touto tabulkou už pak pracuje \emph{Executioner}, který
+příkaz zašle na burzu.
+
+Jednotlivé části obchodu získávané \emph{Stream listenerem} se vkládají do tabulky \emph{trade\_order\_progress\_part}. I pro tuto tabulku existuje after insert trigger. Jakmile je detekován
+záznam ohledně ukončení obchodu, korektně se zaktualizuje související záznam z \emph{trade\_order\_progress}, spojený cizím klíčem. Po provedení aktualizace je opětovně volána procedura aktualizující
+\emph{trade\_order\_iteration} a následně i samotná \emph{trade\_order}.
+
+
 \section{Výběr párů a realizace obchodních příkazů}
 \label{subsec:trade-orders}
 Vytvoření obchodních příkazů je starostí předchozího kroku, zabývající se technickou analýzou. Ovšem počet způsobů, jak tyto příkazy vytvořit není pouze jeden a je závislý právě na
@@ -42,7 +64,7 @@ aby se situace v časovém okně označily jako dolina, respektive kopec. Díky 
     \item délka doliny,
     \item ziskovost.
 \end{itemize}
-Společně z dat získaných ze svíček (počet obchodů, objemy obchodů, \ldots) a statisticky získaných dat (medián a průměr objemu obchodů) se vydolují další rozhodující informace.
+Společně z dat získaných ze svíček (počet obchodů, objemy obchodů, \ldots) a statisticky získaných dat (medián a průměr objemu obchodů) se vydolují další rozhodující   informace.
 Těmi je poměr počtu obchodů, poměr velikost objemu obchodů a počet obchodů vykonaných za den. Během backtestingu se simuluje obchodování o velikosti o mediánu obchodů. Jestliže
 algoritmus odhalí například 200 kopců během jednoho dne, znamenalo by to vykonání 200 obchodů. Toto číslo se dá do poměru s celkovým počtem vykonaných obchodů na kryptoměnovém páru.
 Obdobně se získá poměr velikosti objemů jednotlivých obchodů. Tyto poměry, společně s celkovým počtem obchodů, jsou důležité z pohledu ovlivňování trhu a zachování likvidity.
@@ -80,7 +102,7 @@ Proto byla vymyšlena druhá metoda opakování.
     \subfloat[\centering Opakování obchodu v sekvenci]{{\includegraphics[width=0.45\textwidth]{Figures/sequence.pdf}}\label{subfig:sequence}}
     \qquad
     \subfloat[\centering Opakování obchodu v kaskádě]{{\includegraphics[width=0.45\textwidth]{Figures/cascade.pdf}}\label{subfig:cascade}}
-    
+
     \subfloat[\centering Opakování v sekvenci - časová osa]{{\includegraphics[width=0.45\textwidth]{Figures/sekvence-timeline.pdf}}\label{subfig:sequence-timeline}}
     \qquad
     \subfloat[\centering Opakování v kaskádě - časová osa]{{\includegraphics[width=0.45\textwidth]{Figures/kaskada-timeline.pdf}}\label{subfig:cascade-timeline}}
@@ -129,13 +151,13 @@ Binance neposkytuje maximální dobu platnosti příkazu ve smyslu předání č
     \item Fill-Or-Kill (FOK).
 \end{enumerate}
 Tyto nastavení se nevztahují na příkazy typu \textsc{market}. Příkaz s platností GTC bude platný tak dlouho, dokud nebude objednávka kompletně vyplněna nebo zrušena uživatelem. Oproti tomu v
-režimu IOC se matching engine pokusí ihned alespoň částečně vypořádat vypořádat objednávku na limitní cenové hladině s obchodovaným množstvím. Pokud se vyplní kompletní obchod, nic dalšího 
+režimu IOC se matching engine pokusí ihned alespoň částečně vypořádat vypořádat objednávku na limitní cenové hladině s obchodovaným množstvím. Pokud se vyplní kompletní obchod, nic dalšího
 se neděje. V případě částečného vypořádání je zbytek příkazu zrušen. Pokud na zadané cenové hladině není dostupné žádné obchodovatelné množství, je příkaz ihned zrušen.
 Poslední a zároveň nejpřísnější doba vypršení FOK vyžaduje okamžité plné zobchodování příkazu. Jestliže tomuto nemůže trh vyhovět, je příkaz stornován.
 
 Režim FOK je pro implementovaného kryptobota zbytečně přísný. Odzkoušeny byly režimy GTC a IOC, ale nepřinesly žádné velké rozdíly. Avšak to může být způsobeno malou obchodovanou kvantitou.
 V případě, kdy by bot obchodoval značně vyšší částky, byly by rozdíly v režimech platnosti příkazů znatelnější. V tomto případě se nabízí upřednostnit spíše platnost IOC, aby byly příkazy
-vypořádany dostatečně rychle. 
+vypořádany dostatečně rychle.
 
 \section{Komunikace s burzou}
 \label{subsec:exchanges-comm}
@@ -145,7 +167,7 @@ Předtím, než se popíšou tyto 2 komponenty, bude čtenáři přiblíženo AP
 
 \subsection{Binance API}
 Binance poskytuje aplikační rozhraní přes protokol HTTPS a do budoucna se chystá i rozhraní založené na websocketech.
-Pro komunikace si uživatel musí zajistit dvojici klíčů, \emph{API} klíč 
+Pro komunikace si uživatel musí zajistit dvojici klíčů, \emph{API} klíč
 a \emph{secret} klíč.
 Základní URL pro zasílání požadavků je \verb|https://api.binance.com|.
 Všechny potřebné informace ke koncovým bodům rozhraní jsou popsány v dokumentaci, avšak pro potřeby kryptobota bude zde přiblíženo jak rozhraní obecně, tak i pár konkrétních koncových bodů.
@@ -160,7 +182,7 @@ Pro citlivé koncové body, které vykonávají akce na burze (vytváření př�
     \item HTTP požadavek musí obsahovat hlavičku \verb|X-MBX-APIKEY|,
     \item Součástí požadavku musí být parametr \verb|signature|
 \end{enumerate} .
-Obsahem hlavičky \verb|X-MBX-APIKEY| je uživatelův API klíč. Druhé je nutnost přiložení parametru \verb|signature|, což je zpráva zajišťující kryptografickou autentizace na základě 
+Obsahem hlavičky \verb|X-MBX-APIKEY| je uživatelův API klíč. Druhé je nutnost přiložení parametru \verb|signature|, což je zpráva zajišťující kryptografickou autentizace na základě
 algoritmu \verb|HMAC-SHA256|. Jako klíč této do tohoto algoritmu vstupuje uživatelův \emph{secret} klíč, hodnotou je pak počet zasílaných parametrů.
 Poslední ochranou je ochrana časová. Dalším parametrem, nazvaný \verb|recvWindow|, uživatel určuje jak dlouho (v milisekundách) je požadavek platný. V každém požadavku na API je přiloženo
 časové razítko. Pokud server Binance nestihne vykonat požadavek v zadaném časovém okně, je celý požadavek zamítnut.
@@ -320,11 +342,11 @@ Definuje základní cenová pravidla při zadávání příkazů. Pokud hodnota 
         \hline
         Název pravidla & Význam                                     & Splnění pravidla           \\
         \hline
-        minPrice       & Minimální povolená cena                    & $ cena \geq  minPrice $    \\ 
+        minPrice       & Minimální povolená cena                    & $ cena \geq  minPrice $    \\
         \hline
-        maxPrice       & Maximální povolená cena                    & $ cena \leq maxPrice $     \\ 
+        maxPrice       & Maximální povolená cena                    & $ cena \leq maxPrice $     \\
         \hline
-        tickSize       & Interval, o který lze měnit zadávanou cenu & $price \bmod tickSize = 0$ \\ 
+        tickSize       & Interval, o který lze měnit zadávanou cenu & $price \bmod tickSize = 0$ \\
         \hline
         \caption{Pravidla cenového filtru}
         \label{tab:binance:price_filter}
@@ -339,11 +361,11 @@ I tento filtr, jako předchozí, upravuje příkazové cenové rozpětí, nicmé
         \hline
         Název pravidla & Význam                               & Splnění pravidla                           \\
         \hline
-        multiplierUp   & Násobitel horní hranice              & $ cena \leq multiplierUp * WMA_{cena} $    \\ 
+        multiplierUp   & Násobitel horní hranice              & $ cena \leq multiplierUp * WMA_{cena} $    \\
         \hline
-        multiplierDown & Násobitel spodní hranice             & $ cena \geq  multiplierDown * WMA_{cena} $ \\ 
+        multiplierDown & Násobitel spodní hranice             & $ cena \geq  multiplierDown * WMA_{cena} $ \\
         \hline
-        avgPriceMins   & Počet minut, za které je počítán WMA &                                            \\ 
+        avgPriceMins   & Počet minut, za které je počítán WMA &                                            \\
         \hline
         \caption{Pravidla procentuálního cenového filtru}
         \label{tab:binance:percent_price}
@@ -357,11 +379,11 @@ Zadává platný rozsah obchodované kvantity, neboli lotu. Jak projít tímto f
         \hline
         Název pravidla & Význam                              & Splnění pravidla         \\
         \hline
-        minQty         & Minimální povolený lot              & $ lot \geq minQty $      \\ 
+        minQty         & Minimální povolený lot              & $ lot \geq minQty $      \\
         \hline
-        maxQty         & Maximální povolený lot              & $ lot \leq  maxQty $     \\ 
+        maxQty         & Maximální povolený lot              & $ lot \leq  maxQty $     \\
         \hline
-        stepSize       & Velikost, o kterou se smí lot měnit & $lot \bmod stepSize = 0$ \\ 
+        stepSize       & Velikost, o kterou se smí lot měnit & $lot \bmod stepSize = 0$ \\
         \hline
         \caption{Pravidla velikosti lotu}
         \label{tab:binance:lot_filter}
@@ -377,11 +399,11 @@ specifikovaných přesněji v pravidle (\ref{tab:binance:notional_filter}).
         \hline
         Název pravidla & Význam                              & Splnění pravidla                \\
         \hline
-        minNotional    & Minimální nominální hodnota         & $ cena * lot \geq minNotional $ \\ 
+        minNotional    & Minimální nominální hodnota         & $ cena * lot \geq minNotional $ \\
         \hline
-        applyToMarket  & Platí i pro \textsc{market} příkazy &                                 \\ 
+        applyToMarket  & Platí i pro \textsc{market} příkazy &                                 \\
         \hline
-        avgPriceMins   & Počet minut, za které je počítán MA &                                 \\ 
+        avgPriceMins   & Počet minut, za které je počítán MA &                                 \\
         \hline
         \caption{Pravidla nominální hodnoty}
         \label{tab:binance:notional_filter}
@@ -390,7 +412,7 @@ specifikovaných přesněji v pravidle (\ref{tab:binance:notional_filter}).
 
 \paragraph*{MAX\_NUM\_ALGO\_ORDERS}
 Tento filtr upřesňuje maximální povolený počet aktivních \enquote{algo} příkazů na daný kryptoměnový pár. Algo příkazem se myslí konkrétně příkazy typu
-\textsc{stop loss, stop loss limit, take profit, take profit limit}. OCO příkazy taktéž snižují uživatelovu kvótu na maximální počet algo příkazů. 
+\textsc{stop loss, stop loss limit, take profit, take profit limit}. OCO příkazy taktéž snižují uživatelovu kvótu na maximální počet algo příkazů.
 
 \subsection{Executioner}
 Komponenta executioner má na starosti obchodní příkazy. Konkrétně jejich zaslání na burzu a jejich zrušení a dohled na vlastní přepočet při použití metod zajištěného a nezajištěného obchodování. Komponenta
@@ -449,16 +471,6 @@ Aby bot měl dostupné vždy korektní informace provádí stream listener při 
 stáhne potřebné data skrze API a uloží je. Druhým opatřením, kterým stream listener disponuje, je ukládání zpráv do vyrovnávací paměti, pokud by došlo k výpadku databáze.
 
 
-\subsection{Databázové procedury}
-Většina abstraktnější logiky rozhodování je schována v databázových procedurách. Tyto procedury jsou navíc volány taktéž triggery, případně periodicky v rámci databázové události (event), které
-databázový systém MySQL nabízí. Na tabulky \emph{trade\_order\_iteration} a \emph{trade\_order\_progress} jsou navázany \emph{after insert} a \emph{after update} triggery. V momentě, kdy je vložen
-nový záznam iterace, automaticky je skrze trigger zavolána procedura, která vytvoří nový záznam do tabulky \emph{trade\_order\_progress}. S touto tabulkou už pak pracuje \emph{Executioner}, který
-příkaz zašle na burzu.
-
-Jednotlivé části obchodu získávané \emph{Stream listenerem} se vkládají do tabulky \emph{trade\_order\_progress\_part}. I pro tuto tabulku existuje after insert trigger. Jakmile je detekován
-záznam ohledně ukončení obchodu, korektně se zaktualizuje související záznam z \emph{trade\_order\_progress}, spojený cizím klíčem. Po provedení aktualizace je opětovně volána procedura aktualizující
-\emph{trade\_order\_iteration} a následně i samotná \emph{trade\_order}.
-
 
 \section{Možná budoucí vylepšení}
 Potenciál možných rozšíření je veliký. Implementace technické analýzy se může nadále rozšiřovat o další indikátory, jako je například MACD. Tyto indikátory lze počítat na aktuálních datech získávané z burzy.
@@ -477,7 +489,7 @@ Z důvodu problematiky je množina vylepšení velká. Využít by šlo i techni
     \begin{longtable}{ |l|c|c|p{0.3\linewidth}| }
         \hline
         Sloupec TOT                           & View                      & Příklad             & Poznámka                                                     \\
-        \hline                                &                           &                     &                                                              \\ 
+        \hline                                &                           &                     &                                                              \\
         pairname                              & pairname                  & JOEBUSD             &                                                              \\
         source                                & \tikzxmark                & peak\_valley        &                                                              \\
         rank\_trading                         & \tikzxmark                & 9999                &                                                              \\
