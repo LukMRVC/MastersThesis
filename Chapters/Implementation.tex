@@ -451,7 +451,22 @@ Cyklicky v krátkých časových intervalech si stahuje z Binance momentální k
 aktuální \textsc{OCO} příkaz zrušen a vytvořen nový s posunutými cenami nahoru. I v rámci této rychlé výměny příkazů se provádí stejné kontroly jako při normálním zasílání příkazu.
 
 \subsubsection{Nezajištěné obchodování}
-% TODO:
+Metoda nezajištěného obchodování se snaží simulovat trailingové obchodování na straně kryptobota. Vlastní implementaci trailingu bot podporuje, jelikož ne všechny kryptoměnové burzy podporují tento typ příkazu.
+Nevýhoda tohoto je vyšší náchylnost vůči selhání systému a to jak ze strany burzy tak i samotného kryptobota. Nicméně trailingové obchodování je důležitým nástrojem ziskového obchodování.
+
+Samotná simulace trailingu je založená na počítání změny průměrného kurzu kryptoměnového páru. Byly vyzkoušeny dva přístupy:
+\begin{enumerate}
+    \item získání průměrné ceny skrze API Binance,
+    \item vlastní průměrování kurzu.
+\end{enumerate}
+Důvodem průměrování je vyhlazování náhlých změn, které mohou být způsobeny obchody s velkým objemem.
+V rámci prvního pokusu se bot periodicky dotazoval API Binance o získával informaci a průměrném kurzu daného páru. Pro většinu párů je tento průměr počítán za 5 minutové období. Tato skutečnost má za následek, že
+je průměr příliš \enquote{pomalý}, tedy pomaleji reaguje na změny v aktuální tržní hodnotě. V důsledku má toto i dopad na ziskovost obchodů prováděných kryptobotem, jelikož obchodní příkaz je na burzu zadán pozdě.
+Z tohoto důvodu bylo implementováno vlastní průměrování. Pomocí websocketů je kryptobot schopen se napojit na stream posílající zprávy o změně kurzu. Jakmile je obdrženo maximum zpráv (aktuálně nastaveno na 12) je
+poslední zpráva zahozena a nová je přidána. Následně jsou přijaté kurzy zprůměrovány. Výsledný průměr je porovnán vůči posledního extrému. Překročí-li nastavenou procentuální změnu, je na burzu zaslán příkaz typu
+\textsc{limit}, po jehož ukončení je fáze iterace ukončena.
+
+Během testování a obchodování se druhý přístup vlastního průměrování ukázal jako ziskovější. To může být způsobeno právě rychlejší reakcí na změny tržní ceny kryptoměnového páru.
 
 \subsection{Stream listener}
 Úkolem stream listeneru je nepřetržité získávání zpráv o událostech od Binance. Vizuálně je proces naznačen na sekvenčním diagramu \ref{figure:listener}.
@@ -478,6 +493,64 @@ Aby bot měl dostupné vždy korektní informace provádí stream listener při 
 stáhne potřebné data skrze API a uloží je. Druhým opatřením, kterým stream listener disponuje, je ukládání zpráv do vyrovnávací paměti, pokud by došlo k výpadku databáze.
 
 
+\section{Webové rozhraní}
+Vytvořené webové rozhraní slouží k jednoduššímu posouzení aktuálního stavu kryptobota. Poskytuje 3 základní pohledy:
+\begin{enumerate}
+    \item pohled na stav obchodovaných kryptoměn a navržených párů z technické analýzy (obrázek~\ref{fig:web:market-dashboard}),
+    \item pohled na stav databáze a běžících procesů (obrázek~\ref{fig:web:jobs-dashboard}),
+    \item pohled na stav obchodních příkazu (obrázek~\ref{fig:web:trade-dashboard}).
+\end{enumerate}
+Zadávání nových příkazů je rovněž umožněno skrze formulář viditelný na obrázku~\ref{fig:web:new-order}. Uživatel jednoduše zadá název kryptoměnového páru, nastaví způsob opakování obchodů a způsob investice,
+specifikuje dobu prodlev, maximální dobu trvání jednotlivých fází iterací, počet iterací a parametry obchodů. Výsledek obchodování je pak zobrazen na detailu obchodního příkazu (obrázek~\ref{fig:web:trade-order}).
+Na detailech (obrázky \ref{subfig:web:desc}, \ref{subfig:web:iterations}, \ref{subfig:web:candles}) je pak postupně vidět konkrétní nastavení obchodního příkazu včetně celkových statistik ziskovosti, průběh jednotlivých
+iterací včetně stavu konkrétních fází a nakonec svíčkový graf zaměřený na období, ve kterém byly prováděny obchody. Na svíčkovém grafu jsou rozsahové anotace vyjadřující ziskový nebo ztrátový obchod. Pro uživatele
+webového rozhraní je tento graf interaktivní a může prohlížet jak si kryptobot se zadaným příkazem vedl.
+
+\begin{figure}[b]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Figures/web/market-dashboard.png}
+    \caption{Stránka zobrazující stav kryptoměn a navržených párů}
+    \label{fig:web:market-dashboard}
+\end{figure}
+
+\begin{figure}[b]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Figures/web/jobs-dashboard.png}
+    \caption{Stránka zobrazující stav databáze a procesů}
+    \label{fig:web:jobs-dashboard}
+\end{figure}
+
+\begin{figure}[b]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Figures/web/trade-dashboard.png}
+    \caption{Stránka zobrazující stav obchodních příkazů}
+    \label{fig:web:trade-dashboard}
+\end{figure}
+
+\begin{figure}[b]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Figures/web/new-order.png}
+    \caption{Formulář pro zadání nového obchodního příkazu kryptobota}
+    \label{fig:web:new-order}
+\end{figure}
+
+\begin{figure}[b]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Figures/web/trade-order.png}
+    \caption{Výsledky obchodního příkazu}
+    \label{fig:web:trade-order}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \subfloat[\centering Nastavení obchodního příkazu]{{\includegraphics[width=0.45\textwidth]{Figures/web/trade-order-detail-desc.png}}\label{subfig:web:desc}}
+    \qquad
+    \subfloat[\centering Průběh iterací]{{\includegraphics[width=0.45\textwidth]{Figures/web/trade-order-detail-iterations.png}}\label{subfig:web:iterations}}
+
+    \subfloat[\centering Svíčkový graf s anotacemi průběhu iterací]{{\includegraphics[width=0.45\textwidth]{Figures/web/trade-order-detail-candles.png}}\label{subfig:web:candles}}
+    \caption{Detaily stránky výsledků obchodního příkazu}
+    \label{fig:web:trade-order-details}
+\end{figure}
 
 \section{Možná budoucí vylepšení}
 Potenciál možných rozšíření je veliký. Implementace technické analýzy se může nadále rozšiřovat o další indikátory, jako je například MACD. Tyto indikátory lze počítat na aktuálních datech získávané z burzy.
