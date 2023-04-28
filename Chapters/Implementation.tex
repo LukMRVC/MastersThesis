@@ -7,11 +7,18 @@ zastavit, nebo dokonce kompletně opustit tržní pozici. Implementovaný krypto
 světových burz.
 
 \section{Fungování kryptobota}
-Pro kompletní fungování je zapotřebí několika kroků. Každý z těchto kroků je vysoce důležitý a výpadek jakékoli části může mít kritické dopady na fungování a potenciální ziskovost obchodování.
-Proto je každá část systému navržena
+Pro kompletní fungování je zapotřebí několika kroků. Každý z těchto kroků (znázorněné na obrázku~\ref{fig:bot-schema}) je vysoce důležitý a výpadek jakékoli části může
+mít kritické dopady na fungování a potenciální ziskovost obchodování. Proto je každá část systému navržena
 a implementována co nejrobustněji a počítá s možností nedostupných služeb, případně databáze. Prvním krokem, který bude popsán podrobněji je stahování dat, následuje
 technická analýza. Z analýzy vycházejí příkazy k obchodování. Ty budou taktéž podrobněji popsány. Poslední krok je následná realizace příkazů, komunikace s burzou
 a vyhodnocování výsledků obchodování (backtesting).
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/bot-schema.pdf}
+    \caption{Blokové schéma fungování kryptobota}
+    \label{fig:bot-schema}
+\end{figure}
 
 \subsection{Historická data}
 Úplným základem bota jsou historická data a jejich získávání je projektem jiného studenta. Burza Binance tato data poskytuje bezplatně a volně ke stažení, prakticky komukoli.
@@ -38,7 +45,7 @@ se snahou uzavřít obchod s co nejnižší nákupní cenou. Další stoupání 
 
 \section{Datová struktura}
 Fungování kryptobota je nejvíce závislé na 4 relacích. Jejich ER diagram lze vidět na obrázku \ref{fig:er-diag}. Jednotlivé popisy sloupců těchto tabulek se nacházejí v příloze této
-práce. (\ref{tab:tradeOrder}, \ref{tab:tradeOrderIteration}, \ref{tab:tradeOrderProgress}, \ref{tab:tradeOrderProgressPart})
+práce (\ref{tab:tradeOrder}, \ref{tab:tradeOrderIteration}, \ref{tab:tradeOrderProgress}, \ref{tab:tradeOrderProgressPart}).
 
 \begin{figure}[h]
     \centering
@@ -170,7 +177,7 @@ vypořádány dostatečně rychle.
 \label{subsec:exchanges-comm}
 Přestože většina logiky kryptobota je realizovaná v databázi pomocí uložených procedur a funkcí, nelze všechno takto provést. Obchodní příkazy kryptobota obsahují abstrakci, kterou je
 nutné převést na reálné hodnoty, především limitní a aktivační ceny. Komunikace s burzou probíhá s pomocí dvou samostatných komponent. Obě mají trochu jiný účel a zaslouží si vlastní krátkou sekci.
-Předtím, než se popíšou tyto komponenty, bude čtenáři přiblíženo API burzy Binance.
+Předtím, než se popíšou tyto komponenty, bude čtenáři přiblíženo API burzy Binance. \cite{binance:docs}
 
 \subsection{Binance API}
 Binance poskytuje aplikační rozhraní přes protokol HTTPS a do budoucna se chystá i rozhraní založené na websocketech.
