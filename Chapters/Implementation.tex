@@ -497,7 +497,7 @@ a aktualizace účtu. Každá aktualizace příkazu je ihned uložena do databá
 \end{figure}
 
 Aby bot měl dostupné vždy korektní informace provádí stream listener při svém spuštění kontrolu příkazů z databáze vůči burze. Pokud detekuje, že v databázi chybí nějaké informace z důvodu nějakého výpadku,
-stáhne potřebné data skrze API a uloží je. Druhým opatřením, kterým stream listener disponuje, je ukládání zpráv do vyrovnávací paměti, pokud by došlo k výpadku databáze.
+stáhne potřebná data skrze API a uloží je. Druhým opatřením, kterým stream listener disponuje, je ukládání zpráv do vyrovnávací paměti, pokud by došlo k výpadku databáze.
 
 
 \section{Webové rozhraní}
@@ -554,7 +554,7 @@ webového rozhraní je tento graf interaktivní a může prohlížet jak si kryp
     \qquad
     \subfloat[\centering Průběh iterací]{{\includegraphics[width=0.45\textwidth]{Figures/web/trade-order-detail-iterations.png}}\label{subfig:web:iterations}}
 
-    \subfloat[\centering Svíčkový graf s anotacemi průběhu iterací]{{\includegraphics[width=0.45\textwidth]{Figures/web/trade-order-detail-candles.png}}\label{subfig:web:candles}}
+    \subfloat[\centering Svíčkový graf s anotacemi průběhu iterací]{{\includegraphics[width=0.8\textwidth]{Figures/web/trade-order-detail-candles.png}}\label{subfig:web:candles}}
     \caption{Detaily stránky výsledků obchodního příkazu}
     \label{fig:web:trade-order-details}
 \end{figure}
@@ -566,7 +566,7 @@ Kryptobot by tak mohl být rozšířen a dělat chytřejší rozhodnutí o tom, 
 Dalším nabízejícím se rozšířením je napojení na více kryptoměnových burz. Aktuálně je kryptobot schopen obchodovat pouze na jedné burze. Nicméně na ni není plně vázaný a což proces napojení na další
 burzy značně zjednoduše.
 
-Fundamentální analýza má taktéž potenciál na vylepšení kryptobota. Jak pozitivní tak i negativní zprávy ohledně kryptoměn mohou ovlivňovat jejich tržní hodnotu. Kolísání této hodnoty nabízí možnost
+Fundamentální analýza má taktéž potenciál na vylepšení kryptobota. Jak pozitivní, tak i negativní zprávy ohledně kryptoměn mohou ovlivňovat jejich tržní hodnotu. Kolísání této hodnoty nabízí možnost
 výdělku.
 
 Z důvodu problematiky je množina vylepšení velká. Využít by šlo i technik strojového učení k detekci trendů nebo grafových vzorů. Takto pokročilá vylepšení by už ale vyžadovala mnohem delší expertizu

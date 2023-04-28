@@ -62,13 +62,13 @@ Pořád je nutná určitá část důvěry. Řešení je jednoduché. Je potřeb
 určitou část peněz, kterou nejdříve vloží do tajného trezoru. Dále už jen stačí jednoduše nedovolit nikomu přidávat
 nový záznam o transakci, pokud na to nemá prostředky.
 
-Zbývá poslední překážka a to správa o samotnou digitální účetní knihu. Ta musí někde existovat a musí být všem poskytovaná. To ale pořád
+Zbývá poslední překážka, a to správa o samotnou digitální účetní knihu. Ta musí někde existovat a musí být všem poskytovaná. To ale pořád
 implikuje
 
 centrální umístění. Ke zbavení se této obtíže a úplné decentralizace, dostane každý účastník svou kopii účetní knihy. V digitálním světě
 to znamená, že
 každý účastník bude mít nějaké zařízení, na kterém bude mít kompletní kopii digitální účetní knihy a bude zveřejněna všem ostatním účastníkům,
-na jakékoliv síti. Nyní, když všichni mají svou vlastní kopii, musí si umět navzájem vyměňovat informace o proběhlých transakcích a to formou
+na jakékoliv síti. Nyní, když všichni mají svou vlastní kopii, musí si umět navzájem vyměňovat informace o proběhlých transakcích, a to formou
 zpráv posílaných po síti. Aby měli všichni účastníci jistotu, že přijímají stejné zprávy a ve stejném pořadí jako ostatní, vyvstává finální
 ověřovací krok. Účetní kniha se rozdělí do jednotlivých bloků, obsahujících \emph{N} transakcí. Na závěr každého bloku se přidá speciální
 číslo --- \emph{nonce}. Přidání \emph{nonce} se řídí určitým pravidlem, které říká, že prvních \emph{M} čísel hashe bloku budou samé nuly.
@@ -182,7 +182,7 @@ Druhý pilíř je systém, který se stará o párování těchto prodejních a 
 a provede mezi nimi obchod. Ať už jeden obchod, kdy se vypořádávají shodné objemy pro nákup a prodej, nebo více obchodů v případě nerovnoměrného objemu pro nákup a prodej.
 
 Moderní burzy poskytují 2 odlišné typy příkazů. Příkaz typu \textsc{market} jde ihned na order book a otevírá pozici na momentální tržní ceně aktiva. Pokud uživatel
-pošle/zadá tento příkaz, je okamžitě vykonán a to jak v prodejní tak i případné nákupní fázi obchodování. Druhým příkazem, který nabízí možnost automatizace
+pošle/zadá tento příkaz, je okamžitě vykonán, a to jak v prodejní tak i případné nákupní fázi obchodování. Druhým příkazem, který nabízí možnost automatizace
 je \textsc{limit}.
 Limit se zadává s hraniční cenou, za kterou je uživatel aktivum ochotný nakoupit nebo prodat. Matching engine se snaží spárovat limit tak, aby byla splněna podmínka
 hraniční ceny se spárovaným příkazem. Tato situace je jak pro prodej, tak i pro nákup zachycena na obrázcích \ref{subfig:limit-buy} a \ref{subfig:limit-sell}.
