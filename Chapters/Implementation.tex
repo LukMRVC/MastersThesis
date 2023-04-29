@@ -468,9 +468,9 @@ Samotná simulace trailingu je založená na počítání změny průměrného k
 \end{enumerate}
 Důvodem průměrování je vyhlazování náhlých změn, které mohou být způsobeny obchody s velkým objemem.
 V rámci prvního pokusu se bot periodicky dotazoval API Binance o získával informaci a průměrném kurzu daného páru. Pro většinu párů je tento průměr počítán za 5 minutové období. Tato skutečnost má za následek, že
-je průměr příliš \enquote{pomalý}, tedy pomaleji reaguje na změny v aktuální tržní hodnotě. V důsledku má toto i dopad na ziskovost obchodů prováděných kryptobotem, jelikož obchodní příkaz je na burzu zadán pozdě.
-Z tohoto důvodu bylo implementováno vlastní průměrování. Pomocí websocketů je kryptobot schopen se napojit na stream posílající zprávy o změně kurzu. Jakmile je obdrženo maximum zpráv (aktuálně nastaveno na 12) je
-poslední zpráva zahozena a nová je přidána. Následně jsou přijaté kurzy zprůměrovány. Výsledný průměr je porovnán vůči posledního extrému. Překročí-li nastavenou procentuální změnu, je na burzu zaslán příkaz typu
+je průměr příliš \enquote{pomalý}, tedy pomaleji reaguje na změny v aktuální tržní hodnotě. Důsledkem je dopad na ziskovost obchodů prováděných kryptobotem, jelikož obchodní příkaz je na burzu zadán pozdě.
+Z tohoto důvodu bylo implementováno vlastní průměrování. Pomocí websocketů se kryptobot napojí na stream posílající zprávy o změně kurzu. Jakmile je obdrženo maximum zpráv (aktuálně nastaveno na 12) je
+poslední zpráva zahozena a nová je přidána. Následně jsou přijaté kurzy zprůměrovány. Výsledný průměr je porovnán vůči poslednímu extrému. Překročí-li nastavenou procentuální změnu, je na burzu zaslán příkaz typu
 \textsc{limit}, po jehož ukončení je fáze iterace ukončena.
 
 Během testování a obchodování se druhý přístup vlastního průměrování ukázal jako ziskovější. To může být způsobeno právě rychlejší reakcí na změny tržní ceny kryptoměnového páru.
@@ -507,7 +507,7 @@ Vytvořené webové rozhraní slouží k jednoduššímu posouzení aktuálního
     \item pohled na stav databáze a běžících procesů (obrázek~\ref{fig:web:jobs-dashboard}),
     \item pohled na stav obchodních příkazu (obrázek~\ref{fig:web:trade-dashboard}).
 \end{enumerate}
-Zadávání nových příkazů je rovněž umožněno skrze formulář viditelný na obrázku~\ref{fig:web:new-order}. Uživatel jednoduše zadá název kryptoměnového páru, nastaví způsob opakování obchodů a způsob investice,
+Zadávání nových příkazů je umožněno skrz formulář viditelný na obrázku~\ref{fig:web:new-order}. Uživatel jednoduše zadá název kryptoměnového páru, nastaví způsob opakování obchodů a způsob investice,
 specifikuje dobu prodlev, maximální dobu trvání jednotlivých fází iterací, počet iterací a parametry obchodů. Výsledek obchodování je pak zobrazen na detailu obchodního příkazu (obrázek~\ref{fig:web:trade-order}).
 Na detailech (obrázky \ref{subfig:web:desc}, \ref{subfig:web:iterations}, \ref{subfig:web:candles}) je pak postupně vidět konkrétní nastavení obchodního příkazu včetně celkových statistik ziskovosti, průběh jednotlivých
 iterací včetně stavu konkrétních fází a nakonec svíčkový graf zaměřený na období, ve kterém byly prováděny obchody. Na svíčkovém grafu jsou rozsahové anotace vyjadřující ziskový nebo ztrátový obchod. Pro uživatele
@@ -561,7 +561,7 @@ webového rozhraní je tento graf interaktivní a může prohlížet jak si kryp
 
 \section{Možná budoucí vylepšení}
 Potenciál možných rozšíření je veliký. Implementace technické analýzy se může nadále rozšiřovat o další indikátory, jako je například MACD. Tyto indikátory lze počítat na aktuálních datech získávané z burzy.
-Kryptobot by tak mohl být rozšířen a dělat chytřejší rozhodnutí o tom, zda-li je opravdu nejlepší chvíle zaslání obchodního příkazu nebo se jedná o falešný trend.
+Kryptobot by tak mohl být rozšířen a dělat chytřejší rozhodnutí o tom, zda je opravdu nejlepší chvíle zaslání obchodního příkazu nebo se jedná o falešný trend.
 
 Dalším nabízejícím se rozšířením je napojení na více kryptoměnových burz. Aktuálně je kryptobot schopen obchodovat pouze na jedné burze. Nicméně na ni není plně vázaný a což proces napojení na další
 burzy značně zjednoduše.
@@ -569,7 +569,8 @@ burzy značně zjednoduše.
 Fundamentální analýza má taktéž potenciál na vylepšení kryptobota. Jak pozitivní, tak i negativní zprávy ohledně kryptoměn mohou ovlivňovat jejich tržní hodnotu. Kolísání této hodnoty nabízí možnost
 výdělku.
 
-Z důvodu problematiky je množina vylepšení velká. Využít by šlo i technik strojového učení k detekci trendů nebo grafových vzorů. Takto pokročilá vylepšení by už ale vyžadovala mnohem delší expertizu
+Vzhledem k rozsáhlé problematice automatizovaného obchodování je množina vylepšení velká. Využít by šlo i technik strojového učení k detekci trendů nebo grafových vzorů.
+Takto pokročilá vylepšení by už ale vyžadovala mnohem delší expertizu
 
     {\iffalse}
 \begin{center}
